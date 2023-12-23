@@ -1,0 +1,55 @@
+html,
+body {
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    -webkit-user-select: none;
+    user-select: none;
+    font-family: 'Roboto', sans-serif;
+}
+
+#loadingSVG {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%) scale(3.5)
+}
+
+@keyframes rotation {
+    from {
+        -webkit-transform: rotate(359deg);
+    }
+
+    to {
+        -webkit-transform: rotate(0deg);
+    }
+}
+
+#loadingSVG * {
+    -webkit-transform-origin: 50% 50%;
+    -ms-transform-origin: 50% 50%;
+    transform-origin: 50% 50%;
+}
+
+#loadingSVG .circle {
+    -webkit-animation: rotation 8s infinite linear;
+    animation:rotation 8s infinite linear;
+}
+
+#loadingSVG .circle_s {
+    -webkit-animation: rotation 4s infinite linear;
+    animation: rotation 4s infinite linear;
+}
+
+#app {
+    height: 99vmin;
+    width: 99vmin;
+    background: #ffffad;
+    border: 0.5vmin solid black;
+    overflow:hidden;
+}
