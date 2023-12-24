@@ -17,7 +17,7 @@ export default {
   },
 
   methods: {
-    async settingsDeleteAllServerDataButtonClicked() {
+    async settingsDeleteAllServerDataButtonClicked(){
       var response = await fetch(window.location.origin + "/DeleteAllData?manualId=" + this.awesum.serverApp.manualId.toString(), {
         credentials: "include",
       });
@@ -39,20 +39,20 @@ export default {
 <template>
   <div id="settingsView" style="padding:2vmin;">
 
-
+    
 
     <h1>App Settings:</h1>
     <div class="settingsArea">
-      <div>App Id: {{ awesum.serverApp.manualId == '' ? 'Never synced to server' : awesum.serverApp.manualId }}</div>
+      <div>App Id: {{ awesum.serverApp.manualId == '' ? 'Never synced to server' :  awesum.serverApp.manualId }}</div>
 
-
+      
     </div>
 
     <h1>Databases:</h1>
-
-    <div v-for="app in awesum.serverApps" class="serverApps">
-      <router-link :to="'/' + $t(resources.Settings.key) +'/' + app.name" class="btn btn-primary">Edit</router-link>
-      <div class="areaNameDiv" style="margin-left:2vmin;">{{ app.name }}</div>
+    
+    <div  v-for="database in awesum.serverDatabases" class="serverDatabases">
+      <div class="areaNameDiv" style="margin-left:2vmin;">{{ database.name }}</div>
+      <router-link :to="'/' + database.name" class="btn btn-primary">Edit</router-link>
     </div>
 
     <h1>Spelling Settings:</h1>
@@ -84,28 +84,23 @@ export default {
     </div>
 
     <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
-      @click="settingsResetAllDataButtonClicked">
-      Reset all client data
-    </button>
+        @click="settingsResetAllDataButtonClicked">
+        Reset all client data
+      </button>
 
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
-      @click="settingsDeleteAllServerDataButtonClicked">
-      Delete all server data
-    </button>
+      <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+        @click="settingsDeleteAllServerDataButtonClicked">
+        Delete all server data
+      </button>
 
   </div>
 </template>
 <style scoped>
-.serverDatabases {
-  display: flex;
-  align-items: baseline;
-  width: 100%;
+.serverDatabases{
+  display:flex;
+  align-items:baseline;
+  width:100%;
+  background:blue
+  
 }
-
-.serverApps{
-  display: flex;
-  align-items: baseline;
-  width: 100%;
-}
-
 </style>

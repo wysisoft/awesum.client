@@ -9,6 +9,7 @@ import { createApp, reactive } from 'vue'
 import type { awesum as awesumType } from "./awesum";
 import { ItemType } from "./itemType";
 import { v4 as uuid } from 'uuid';
+import type { clientDatabase } from "./clientClasses/clientDatabase";
 
 export class AwesumDb extends Dexie {
     serverDatabases!: Table<ServerDatabase>;
@@ -17,6 +18,7 @@ export class AwesumDb extends Dexie {
     clientApp!: Table<clientApp>;
     serverDatabaseUnits!: Table<ServerDatabaseUnit>;
     serverDatabaseItems!: Table<ServerDatabaseItem>;
+    clientDatabases!: Table<clientDatabase>;
 
     public static async CreateAsync(awesum: typeof awesumType) {
         const returnValue = new AwesumDb();
@@ -33,6 +35,10 @@ export class AwesumDb extends Dexie {
                 id: 0,
                 name: 'Local',
                 uniqueId: uuid(),
+            } as ServerDatabase);
+            await trans.table('clientDatabases').add({
+                id: 0,
+                name: 'Local',
             } as ServerDatabase);
 
             var unitId = await trans.table('serverDatabaseUnits').add({
@@ -63,6 +69,7 @@ export class AwesumDb extends Dexie {
         });
         await returnValue.open();
 
+        awesum.serverApps = await returnValue.serverApps.toArray();
         awesum.serverDatabases = await returnValue.serverDatabases.toArray();
 
         var c = await returnValue.clientApp.limit(1).first();
@@ -86,6 +93,7 @@ export class AwesumDb extends Dexie {
     constructor() {
         super('awesum');
         this.version(1).stores({
+            clientDatabases: '++id',
             serverDatabases: '++id',
             serverFollowers: '++id',
             serverApps: '++id',

@@ -8,6 +8,7 @@ export default {
 
   setup() {
     const { isFullscreen, toggle } = useFullscreen()
+    
     return {
       isFullscreen,
       toggle

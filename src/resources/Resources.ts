@@ -34,7 +34,8 @@ const resourcesInternal =
   Add_Pairing: new ResourceValue('Add Pairing'),
   User_Name_Cannot_Be_Blank: new ResourceValue('User Name Cannot Be Blank'),
   You_Must_Be_Logged_In: new ResourceValue('You must be logged in to participate in pairing'),
-  No_Error_Found: new ResourceValue('No Error Found')
+  No_Error_Found: new ResourceValue('No Error Found'),
+  Name_Cannot_Be_Settings: new ResourceValue('Name Cannot Be Settings'),
 }
 
 

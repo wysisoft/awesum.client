@@ -11,10 +11,10 @@ export default {
 </script>
 
 <template>
-  <div id="areasView">
-    <div  v-for="database in awesum.serverDatabases">
-      <button type="button" class="btn btn-primary">{{ $t(resources.Lets_Go.key) }}</button>
-      <div class="areaNameDiv">{{ database.name }}</div>
+  <div id="areasView" style="padding:2vmin;">
+    <div  v-for="database in awesum.serverDatabases" style="display:flex;align-items: baseline;">
+      <router-link :to="'/' + database.name" class="btn btn-primary">{{ $t(resources.Lets_Go.key) }}</router-link>
+      <div class="areaNameDiv" style="margin-left:2vmin;">{{ database.name }}</div>
     </div>
   </div>
 </template>

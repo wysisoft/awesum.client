@@ -14,6 +14,7 @@ import AreasView from "@/views/AreasView.vue";
 import ErrorView from "@/views/ErrorView.vue";
 import SpellingView from "@/views/SpellingView.vue";
 import DatabaseView from "@/views/DatabaseView.vue";
+import AppSettingsView from "@/views/AppSettingsView.vue";
 
 import { from as linq } from "linq-to-typescript"
 
@@ -37,13 +38,8 @@ Global.router = createRouter({
       path: '/' + I18nGlobal.t(resources.Login.key),
       name: I18nGlobal.t(resources.Login.key),
       component: LoginView,
-    },
-
-    {
-      path: '/' + I18nGlobal.t(resources.Settings.key),
-      name: I18nGlobal.t(resources.Settings.key),
-      component: SettingsView,
-    },
+    },    
+    
     {
       path: '/' + I18nGlobal.t(resources.Areas.key),
       name: I18nGlobal.t(resources.Areas.key),
@@ -67,129 +63,197 @@ Global.router = createRouter({
       }
     },
     {
-      path: '/:database/:type/:unit/:index',
+      path: '/:app/:database/:type/:unit/:index',
       name: 'Item',
       component: () => {
       },
+      beforeEnter: (to, from, next) => {
+        console.log(7);
+        next();
+      }
     },
     {
-      path: '/:database/:type/:unit',
+      path: '/:app/:database/:type/:unit',
       name: 'Unit',
       component: () => {
         if (Global.awesum.currentDatabaseUnit) {
           return SpellingView;
         }
       },
+      beforeEnter: (to, from, next) => {
+        console.log(6);
+        next();
+      }
+      
     },
     {
-      path: '/:database/:type',
+      path: '/:app/:database/:type',
       name: 'Type',
       component: () => {
         if (Global.awesum.currentItemType == ItemType.spelling) {
           return SpellingView;
         }
+      },
+      beforeEnter: (to, from, next) => {
+        console.log(5);
+        next();
       }
     },
     {
-      path: '/:database',
+      path: '/:app/:database',
       name: 'Database',
-      component: DatabaseView
+      component: DatabaseView,
+      beforeEnter: (to, from, next) => {
+        console.log(4);
+        next();
+      }
+    },
+    {
+      path: '/:app',
+      name: 'App',
+      component: DatabaseView,
+      beforeEnter: (to, from, next) => {
+        console.log(3);
+        next();
+      }
+    },
+    {
+      path: '/' + I18nGlobal.t(resources.Settings.key) + '/:app',
+      name: I18nGlobal.t(resources.Settings.key),
+      component: AppSettingsView,
+      beforeEnter: (to, from, next) => {
+        console.log(1);
+        next();
+      }
+    },
+    {
+      path: '/' + I18nGlobal.t(resources.Settings.key),
+      name: I18nGlobal.t(resources.Settings.key),
+      component: SettingsView,
+      beforeEnter: (to, from, next) => {
+        console.log(2);
+        next();
+      }
     },
   ]
 })
 
-Global.router.beforeEach(async (to, from, next) => {
-  //all the reasons why we might want to redirect or 
+// Global.router.beforeEach(async (to, from, next) => {
+//   //all the reasons why we might want to redirect or 
 
-  if (
-    to.path.lc('/' + I18nGlobal.t(resources.Error.key))) {
-    next();
-    return;
-  }
+//   if (
+//     to.path.lc('/' + I18nGlobal.t(resources.Error.key))) {
+//     next();
+//     return;
+//   }
 
-  const userName = Global.awesum.serverApp.name;
-  if (!to.path.lc('/' + I18nGlobal.t(resources.Name.key)) && userName == ''
-  ) {
-    Global.router.push({
-      path: '/' + I18nGlobal.t(resources.Name.key)
-    });
-    next();
-    return;
-  }
+//   const userName = Global.awesum.serverApp.name;
+//   if (userName == '') {
+//     if (!to.path.lc('/' + I18nGlobal.t(resources.Name.key))
+//     ) {
 
-  if (!to.path.lc('/' + I18nGlobal.t(resources.Start.key)) && !Global.awesum.buttonPressed) {
-    const query = {} as any;
-    query[I18nGlobal.t(resources.sourcePath.key)] = to.path;
-    query[I18nGlobal.t(resources.sourceQuery.key)] = JSON.stringify(to.query);
-    Global.router.push({
-      path: '/' + I18nGlobal.t(resources.Start.key),
-      query
-    });
-    next();
-    return;
-  }
+//       Global.router.push({
+//         path: '/' + I18nGlobal.t(resources.Name.key)
+//       });
+//       next();
+//       return;
+//     }
+//     else
+//     {
+//       next();
+//       return;
+//     }
+//   }
 
-  if (to.params.database) {
-    var foundDatabase = linq(Global.awesum.serverDatabases).singleOrDefault(x => x.name.lc(to.params.database.toString()));
+//   // if (!to.path.lc('/' + I18nGlobal.t(resources.Start.key)) && !Global.awesum.buttonPressed) {
+//   //   const query = {} as any;
+//   //   query[I18nGlobal.t(resources.sourcePath.key)] = to.path;
+//   //   query[I18nGlobal.t(resources.sourceQuery.key)] = JSON.stringify(to.query);
+//   //   Global.router.push({
+//   //     path: '/' + I18nGlobal.t(resources.Start.key),
+//   //     query
+//   //   });
+//   //   next();
+//   //   return;
+//   // }
 
-    if (!foundDatabase) {
-      Global.awesum.errorMessage = I18nGlobal.t(resources.Database_$needle$_Not_Found.key,{database:to.params.database.toString()});
-      Global.router.push({
-        path: '/' + I18nGlobal.t(resources.Error.key)
-      });
-      next();
-      return;
-    }
-    else {
-      Global.awesum.currentDatabase = foundDatabase;
-    }
-  }
+//   if (to.params.app) {
+//     var foundApp = linq(Global.awesum.serverApps).singleOrDefault(x => x.name.lc(to.params.app.toString()));
 
-  if (to.params.type) {
-    var foundItemType = ItemType[to.params.type as keyof typeof ItemType];
+//     if (!foundApp) {
+//       Global.awesum.errorMessage = I18nGlobal.t(resources.Database_$needle$_Not_Found.key, { database: to.params.app.toString() });
+//       Global.router.push({
+//         path: '/' + I18nGlobal.t(resources.Error.key)
+//       });
+//       next();
+//       return;
+//     }
+//     else {
+//       Global.awesum.currentServerApp = foundApp;
+//     }
+//   }
 
-    if (!linq(Object.values(ItemType)).contains(foundItemType)) {
-      Global.router.push({
-        path: '/' + I18nGlobal.t(resources.Error.key)
-      });
-      next();
-      return;
-    }
-    else {
-      if (Global.awesum.currentItemType != foundItemType) {
-        Global.awesum.currentItemType = foundItemType;
+//   if (to.params.database) {
+//     var foundDatabase = linq(Global.awesum.serverDatabases).singleOrDefault(x => x.name.lc(to.params.database.toString()));
 
-        Global.awesum.currentDatabaseUnits = await Global.awesumDb.serverDatabaseUnits.where('databaseId').equals(Global.awesum.currentDatabase.id).and(x => x.type == Global.awesum.currentItemType).toArray();
+//     if (!foundDatabase) {
+//       Global.awesum.errorMessage = I18nGlobal.t(resources.Database_$needle$_Not_Found.key, { database: to.params.database.toString() });
+//       Global.router.push({
+//         path: '/' + I18nGlobal.t(resources.Error.key)
+//       });
+//       next();
+//       return;
+//     }
+//     else {
+//       Global.awesum.currentDatabase = foundDatabase;
+//     }
+//   }
 
-        Global.awesum.currentDatabaseUnit = Global.awesum.currentDatabaseUnits[0];
-      }
-    }
-  }
-  else {
-  }
+//   if (to.params.type) {
+//     var foundItemType = ItemType[to.params.type as keyof typeof ItemType];
 
-  if (to.params.unit) {
-    var foundUnit = linq(Global.awesum.currentDatabaseUnits).singleOrDefault(x => x.name.lc(to.params.unit.toString()));
+//     if (!linq(Object.values(ItemType)).contains(foundItemType)) {
+//       Global.router.push({
+//         path: '/' + I18nGlobal.t(resources.Error.key)
+//       });
+//       next();
+//       return;
+//     }
+//     else {
+//       if (Global.awesum.currentItemType != foundItemType) {
+//         Global.awesum.currentItemType = foundItemType;
 
-    if (!foundUnit) {
-      Global.router.push({
-        path: '/' + I18nGlobal.t(resources.Error.key)
-      });
-      next();
-      return;
-    }
-    else {
-      if (Global.awesum.currentDatabaseUnit != foundUnit) {
-        Global.awesum.currentDatabaseUnit = foundUnit;
-      }
-    }
-  }
-  else {
-  }
+//         Global.awesum.currentDatabaseUnits = await Global.awesumDb.serverDatabaseUnits.where('databaseId').equals(Global.awesum.currentDatabase.id).and(x => x.type == Global.awesum.currentItemType).toArray();
 
-  document.title = to.name!.toString();
-  next();
-});
+//         Global.awesum.currentDatabaseUnit = Global.awesum.currentDatabaseUnits[0];
+//       }
+//     }
+//   }
+//   else {
+//   }
+
+//   if (to.params.unit) {
+//     var foundUnit = linq(Global.awesum.currentDatabaseUnits).singleOrDefault(x => x.name.lc(to.params.unit.toString()));
+
+//     if (!foundUnit) {
+//       Global.router.push({
+//         path: '/' + I18nGlobal.t(resources.Error.key)
+//       });
+//       next();
+//       return;
+//     }
+//     else {
+//       if (Global.awesum.currentDatabaseUnit != foundUnit) {
+//         Global.awesum.currentDatabaseUnit = foundUnit;
+//       }
+//     }
+//   }
+//   else {
+//   }
+
+//   document.title = to.name!.toString();
+//   next();
+// });
 
 
 export default Global.router

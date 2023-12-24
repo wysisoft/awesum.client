@@ -28,7 +28,8 @@ export default {
     };
   },
   async beforeCreate() {
-    var response = await fetch("https://awesum.app/GetCurrentUserInfo?Name=" + this.awesum.serverApp.name, {
+    debugger;
+    var response = await fetch(window.location.origin + "/GetCurrentUserInfo?Name=" + this.awesum.serverApp.name, {
       credentials: "include",
     });
 
