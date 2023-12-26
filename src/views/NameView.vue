@@ -2,35 +2,42 @@
 import { Global } from '@/global';
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
 import { ref, toRaw } from 'vue';
+import { useVuelidate } from '@vuelidate/core'
+import { required, minLength, helpers, email } from '@vuelidate/validators'
+import { I18nGlobal } from '@/i18nGlobal';
+import { CustomValidators } from '@/customValidators';
+import { resources } from '@/resources/Resources';
+
+
 
 export default {
+  validations: {
+    name: {
+      required: helpers.withMessage(I18nGlobal.t(resources.Required.key), required),
+    }
+  },
   setup() {
-
     let name = ref('');
-    let validationMessage = ref('');
+    let v$ = useVuelidate();
     return {
-      name,
-      validationMessage
+      name, v$
     };
   },
   methods: {
-    inputChanged() {
+    async onSubmit() {
 
-    },
-    async saveUserName() {
-      if (this.name.lc(this.$t(this.resources.Settings.key))) {
-        this.validationMessage = this.$t(this.resources.Name_Cannot_Be_Settings.key);
-      }
-      else {
+      var result = await this.v$.$validate();
+
+      if (result) {
         this.awesum.serverApp.name = this.name;
         await this.awesum.clientApp.waitFor();
-      }
-      
-      this.awesum.buttonPressed = true;
 
-      this.$router.push({
-        path: '/' + this.$t(this.resources.Login.key)
-      });
+        this.awesum.buttonPressed = true;
+
+        this.$router.push({
+          path: '/' + this.$t(this.resources.Login.key)
+        });
+      }
     }
   },
 };
@@ -38,33 +45,36 @@ export default {
 </script>
 
 <template>
-  <div id="gettingStartedView">
-    <div id="gettingStartedNameContainer">
-      <div class="input-group">
-        <label for="gettingStartedNameInput" class="input-group-text">{{ $t(resources.UserNameColon.key) }}</label>
-        <input v-model="name" id="gettingStartedNameInput" type="text" aria-label="First name" class="form-control"
-          placeholder="Bob Smith">
-        <button class="btn btn-outline-secondary" type="button" :disabled="awesum.serverApp.name == ''"
-          @click="saveUserName">{{ $t(resources.Save.key) }}</button>
-        <div v-if="validationMessage">
-          {{ validationMessage }}</div>
+  <div id="gettingStartedDiv">
+    <form @submit.prevent="onSubmit()" class="needs-validation" id="form">
+      <div>
+        <label for="name" class="form-label">User Name:</label>
+        <input v-model="name" id="name" :class="v$.name.$error ? 'is-invalid' : ''" type="text"
+          class="form-control">
+        <div v-for="err in v$.name.$errors" class="invalid-feedback">
+          {{ err.$message }}
+        </div>
       </div>
-    </div>
+        <button class="btn btn-primary" id="submitButton" type="submit">Submit form</button>
+    </form>
   </div>
 </template>
 
 <style scoped>
-#gettingStartedView {
+#gettingStartedDiv {
   display: flex;
   align-items: start;
   justify-content: center;
   height: 100%;
-  padding-top: 45vmin;
+  padding-top: 35vmin;
 }
 
-#gettingStartedNameContainer {
-  display: flex;
-  align-items: flex-start;
-  font-size: 3vmin;
+#form{
+  width: 40vmin;
 }
+
+#submitButton {
+  margin-top: 1.5vmin;
+}
+
 </style>

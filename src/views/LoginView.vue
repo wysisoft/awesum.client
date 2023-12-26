@@ -28,7 +28,6 @@ export default {
     };
   },
   async beforeCreate() {
-    debugger;
     var response = await fetch(window.location.origin + "/GetCurrentUserInfo?Name=" + this.awesum.serverApp.name, {
       credentials: "include",
     });

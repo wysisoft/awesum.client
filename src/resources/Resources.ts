@@ -7,6 +7,8 @@ const resourcesInternal =
   Page_Not_Found: new ResourceValue('Page Not Found'),
   Error: new ResourceValue('Error'),
   Start: new ResourceValue('Begin'),
+  Apps: new ResourceValue('Apps'),
+  
   Database_Not_Found:new ResourceValue('Database not found'),
   Database_$needle$_Not_Found:new ResourceValue('Database {database} not found'),
   DatabaseNotFound:new ResourceValue('DatabaseNotFound'),
@@ -36,6 +38,9 @@ const resourcesInternal =
   You_Must_Be_Logged_In: new ResourceValue('You must be logged in to participate in pairing'),
   No_Error_Found: new ResourceValue('No Error Found'),
   Name_Cannot_Be_Settings: new ResourceValue('Name Cannot Be Settings'),
+  Required: new ResourceValue('Required'),
+  Invalid_Name: new ResourceValue('Invalid name'),
+  
 }
 
 

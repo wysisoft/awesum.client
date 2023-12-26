@@ -5,7 +5,7 @@ import { createI18n } from 'vue-i18n'
 import { Global } from '@/global';
 
 import { createRouter, createWebHistory, type RouteLocationNormalizedLoaded } from "vue-router";
-import Home from "@/views/HomeView.vue";
+import HomeView from "@/views/HomeView.vue";
 import StartView from "@/views/StartView.vue";
 import NameView from "@/views/NameView.vue";
 import LoginView from "@/views/LoginView.vue";
@@ -39,7 +39,6 @@ Global.router = createRouter({
       name: I18nGlobal.t(resources.Login.key),
       component: LoginView,
     },    
-    
     {
       path: '/' + I18nGlobal.t(resources.Areas.key),
       name: I18nGlobal.t(resources.Areas.key),
@@ -48,7 +47,7 @@ Global.router = createRouter({
     {
       path: '/',
       name: I18nGlobal.t(resources.Home.key),
-      component: AreasView,
+      component: HomeView,
     },
     {
       path: '/' + I18nGlobal.t(resources.Start.key),
@@ -63,197 +62,201 @@ Global.router = createRouter({
       }
     },
     {
-      path: '/:app/:database/:type/:unit/:index',
-      name: 'Item',
+      path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app/:database/:type/:unit/:index',
+      name: 'AppItem',
       component: () => {
       },
-      beforeEnter: (to, from, next) => {
-        console.log(7);
-        next();
-      }
     },
     {
-      path: '/:app/:database/:type/:unit',
-      name: 'Unit',
+      path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app/:database/:type/:unit',
+      name: 'AppUnit',
       component: () => {
         if (Global.awesum.currentDatabaseUnit) {
           return SpellingView;
         }
       },
-      beforeEnter: (to, from, next) => {
-        console.log(6);
-        next();
-      }
-      
     },
     {
-      path: '/:app/:database/:type',
-      name: 'Type',
+      path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app/:database/:type',
+      name: 'AppType',
       component: () => {
         if (Global.awesum.currentItemType == ItemType.spelling) {
           return SpellingView;
         }
-      },
-      beforeEnter: (to, from, next) => {
-        console.log(5);
-        next();
       }
     },
     {
-      path: '/:app/:database',
-      name: 'Database',
-      component: DatabaseView,
-      beforeEnter: (to, from, next) => {
-        console.log(4);
-        next();
-      }
+      path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app/:database',
+      name: 'AppDatabase',
+      component: DatabaseView
     },
     {
-      path: '/:app',
+      path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app',
+      name: 'AppApp',
+      component: DatabaseView
+    },
+    {
+      path: '/' + I18nGlobal.t(resources.Apps.key),
       name: 'App',
-      component: DatabaseView,
-      beforeEnter: (to, from, next) => {
-        console.log(3);
-        next();
+      component: DatabaseView
+    },
+    {
+      path: '/' + I18nGlobal.t(resources.Settings.key) + '/:app/:database/:type/:unit/:index',
+      name: 'SettingsItem',
+      component: () => {
+      },
+    },
+    {
+      path: '/' + I18nGlobal.t(resources.Settings.key) + '/:app/:database/:type/:unit',
+      name: 'SettingsUnit',
+      component: () => {
+        if (Global.awesum.currentDatabaseUnit) {
+          return SpellingView;
+        }
+      },
+    },
+    {
+      path: '/' + I18nGlobal.t(resources.Settings.key) + '/:app/:database/:type',
+      name: 'SettingsType',
+      component: () => {
+        if (Global.awesum.currentItemType == ItemType.spelling) {
+          return SpellingView;
+        }
       }
+    },
+    {
+      path: '/' + I18nGlobal.t(resources.Settings.key) + '/:app/:database',
+      name: 'SettingsDatabase',
+      component: DatabaseView
     },
     {
       path: '/' + I18nGlobal.t(resources.Settings.key) + '/:app',
-      name: I18nGlobal.t(resources.Settings.key),
-      component: AppSettingsView,
-      beforeEnter: (to, from, next) => {
-        console.log(1);
-        next();
-      }
+      name: 'SettingsApp',
+      component: AppSettingsView
     },
     {
       path: '/' + I18nGlobal.t(resources.Settings.key),
-      name: I18nGlobal.t(resources.Settings.key),
-      component: SettingsView,
-      beforeEnter: (to, from, next) => {
-        console.log(2);
-        next();
-      }
+      name: 'Settings',
+      component: SettingsView
     },
   ]
 })
 
-// Global.router.beforeEach(async (to, from, next) => {
-//   //all the reasons why we might want to redirect or 
+Global.router.beforeEach(async (to, from, next) => {
+  //all the reasons why we might want to redirect or 
 
-//   if (
-//     to.path.lc('/' + I18nGlobal.t(resources.Error.key))) {
-//     next();
-//     return;
-//   }
+  if (
+    to.path.lc('/' + I18nGlobal.t(resources.Error.key))) {
+    next();
+    return;
+  }
 
-//   const userName = Global.awesum.serverApp.name;
-//   if (userName == '') {
-//     if (!to.path.lc('/' + I18nGlobal.t(resources.Name.key))
-//     ) {
+  const userName = Global.awesum.serverApp.name;
+  if (userName == '') {
+    if (!to.path.lc('/' + I18nGlobal.t(resources.Name.key))
+    ) {
 
-//       Global.router.push({
-//         path: '/' + I18nGlobal.t(resources.Name.key)
-//       });
-//       next();
-//       return;
-//     }
-//     else
-//     {
-//       next();
-//       return;
-//     }
-//   }
+      Global.router.push({
+        path: '/' + I18nGlobal.t(resources.Name.key)
+      });
+      next();
+      return;
+    }
+    else
+    {
+      next();
+      return;
+    }
+  }
 
-//   // if (!to.path.lc('/' + I18nGlobal.t(resources.Start.key)) && !Global.awesum.buttonPressed) {
-//   //   const query = {} as any;
-//   //   query[I18nGlobal.t(resources.sourcePath.key)] = to.path;
-//   //   query[I18nGlobal.t(resources.sourceQuery.key)] = JSON.stringify(to.query);
-//   //   Global.router.push({
-//   //     path: '/' + I18nGlobal.t(resources.Start.key),
-//   //     query
-//   //   });
-//   //   next();
-//   //   return;
-//   // }
+  // if (!to.path.lc('/' + I18nGlobal.t(resources.Start.key)) && !Global.awesum.buttonPressed) {
+  //   const query = {} as any;
+  //   query[I18nGlobal.t(resources.sourcePath.key)] = to.path;
+  //   query[I18nGlobal.t(resources.sourceQuery.key)] = JSON.stringify(to.query);
+  //   Global.router.push({
+  //     path: '/' + I18nGlobal.t(resources.Start.key),
+  //     query
+  //   });
+  //   next();
+  //   return;
+  // }
+  if (to.params.app) {
+    var foundApp = linq(Global.awesum.serverApps).singleOrDefault(x => x.name.lc(to.params.app.toString()));
 
-//   if (to.params.app) {
-//     var foundApp = linq(Global.awesum.serverApps).singleOrDefault(x => x.name.lc(to.params.app.toString()));
+    if (!foundApp) {
+      Global.awesum.errorMessage = I18nGlobal.t(resources.Database_$needle$_Not_Found.key, { database: to.params.app.toString() });
+      Global.router.push({
+        path: '/' + I18nGlobal.t(resources.Error.key)
+      });
+      next();
+      return;
+    }
+    else {
+      Global.awesum.currentServerApp = foundApp;
+    }
+  }
 
-//     if (!foundApp) {
-//       Global.awesum.errorMessage = I18nGlobal.t(resources.Database_$needle$_Not_Found.key, { database: to.params.app.toString() });
-//       Global.router.push({
-//         path: '/' + I18nGlobal.t(resources.Error.key)
-//       });
-//       next();
-//       return;
-//     }
-//     else {
-//       Global.awesum.currentServerApp = foundApp;
-//     }
-//   }
+  if (to.params.database) {
+    var foundDatabase = linq(Global.awesum.serverDatabases).singleOrDefault(x => x.name.lc(to.params.database.toString()));
 
-//   if (to.params.database) {
-//     var foundDatabase = linq(Global.awesum.serverDatabases).singleOrDefault(x => x.name.lc(to.params.database.toString()));
+    if (!foundDatabase) {
+      Global.awesum.errorMessage = I18nGlobal.t(resources.Database_$needle$_Not_Found.key, { database: to.params.database.toString() });
+      Global.router.push({
+        path: '/' + I18nGlobal.t(resources.Error.key)
+      });
+      next();
+      return;
+    }
+    else {
+      Global.awesum.currentDatabase = foundDatabase;
+    }
+  }
 
-//     if (!foundDatabase) {
-//       Global.awesum.errorMessage = I18nGlobal.t(resources.Database_$needle$_Not_Found.key, { database: to.params.database.toString() });
-//       Global.router.push({
-//         path: '/' + I18nGlobal.t(resources.Error.key)
-//       });
-//       next();
-//       return;
-//     }
-//     else {
-//       Global.awesum.currentDatabase = foundDatabase;
-//     }
-//   }
+  if (to.params.type) {
+    var foundItemType = ItemType[to.params.type as keyof typeof ItemType];
 
-//   if (to.params.type) {
-//     var foundItemType = ItemType[to.params.type as keyof typeof ItemType];
+    if (!linq(Object.values(ItemType)).contains(foundItemType)) {
+      Global.router.push({
+        path: '/' + I18nGlobal.t(resources.Error.key)
+      });
+      next();
+      return;
+    }
+    else {
+      if (Global.awesum.currentItemType != foundItemType) {
+        Global.awesum.currentItemType = foundItemType;
 
-//     if (!linq(Object.values(ItemType)).contains(foundItemType)) {
-//       Global.router.push({
-//         path: '/' + I18nGlobal.t(resources.Error.key)
-//       });
-//       next();
-//       return;
-//     }
-//     else {
-//       if (Global.awesum.currentItemType != foundItemType) {
-//         Global.awesum.currentItemType = foundItemType;
+        Global.awesum.currentDatabaseUnits = await Global.awesumDb.serverDatabaseUnits.where('databaseId').equals(Global.awesum.currentDatabase.id).and(x => x.type == Global.awesum.currentItemType).toArray();
 
-//         Global.awesum.currentDatabaseUnits = await Global.awesumDb.serverDatabaseUnits.where('databaseId').equals(Global.awesum.currentDatabase.id).and(x => x.type == Global.awesum.currentItemType).toArray();
+        Global.awesum.currentDatabaseUnit = Global.awesum.currentDatabaseUnits[0];
+      }
+    }
+  }
+  else {
+  }
 
-//         Global.awesum.currentDatabaseUnit = Global.awesum.currentDatabaseUnits[0];
-//       }
-//     }
-//   }
-//   else {
-//   }
+  if (to.params.unit) {
+    var foundUnit = linq(Global.awesum.currentDatabaseUnits).singleOrDefault(x => x.name.lc(to.params.unit.toString()));
 
-//   if (to.params.unit) {
-//     var foundUnit = linq(Global.awesum.currentDatabaseUnits).singleOrDefault(x => x.name.lc(to.params.unit.toString()));
+    if (!foundUnit) {
+      Global.router.push({
+        path: '/' + I18nGlobal.t(resources.Error.key)
+      });
+      next();
+      return;
+    }
+    else {
+      if (Global.awesum.currentDatabaseUnit != foundUnit) {
+        Global.awesum.currentDatabaseUnit = foundUnit;
+      }
+    }
+  }
+  else {
+  }
 
-//     if (!foundUnit) {
-//       Global.router.push({
-//         path: '/' + I18nGlobal.t(resources.Error.key)
-//       });
-//       next();
-//       return;
-//     }
-//     else {
-//       if (Global.awesum.currentDatabaseUnit != foundUnit) {
-//         Global.awesum.currentDatabaseUnit = foundUnit;
-//       }
-//     }
-//   }
-//   else {
-//   }
-
-//   document.title = to.name!.toString();
-//   next();
-// });
+  document.title = to.name!.toString();
+  next();
+});
 
 
 export default Global.router

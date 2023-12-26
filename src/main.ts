@@ -17,6 +17,7 @@ app.use(I18nGlobal._t);
 app.config.globalProperties.awesum = awesum;
 app.config.globalProperties.resources = resources;
 Global.awesum = app.config.globalProperties.awesum;
+Global.resources = resources;
 Global.awesumDb = await AwesumDb.CreateAsync(app.config.globalProperties.awesum);
 
 app.use(router)
