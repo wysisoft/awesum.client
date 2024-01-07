@@ -843,7 +843,7 @@ export default {
 
 .myAudio-dimensions {
   width: 72vmin;
-  height: 40vmin;
+  height: 20vmin;
 }
 
 .video-js {
