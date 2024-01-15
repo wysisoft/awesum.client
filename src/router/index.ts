@@ -5,6 +5,7 @@ import { createI18n } from 'vue-i18n'
 import { Global } from '@/global';
 
 import { createRouter, createWebHistory, type RouteLocationNormalizedLoaded } from "vue-router";
+import AboutView from "@/views/AboutView.vue";
 import HomeView from "@/views/HomeView.vue";
 import StartView from "@/views/StartView.vue";
 import NameView from "@/views/NameView.vue";
@@ -47,6 +48,11 @@ Global.router = createRouter({
       path: '/' + I18nGlobal.t(resources.Areas.key),
       name: I18nGlobal.t(resources.Areas.key),
       component: AreasView,
+    },
+    {
+      path: '/' + I18nGlobal.t(resources.About.key),
+      name: I18nGlobal.t(resources.About.key),
+      component: AboutView,
     },
     {
       path: '/',
@@ -150,6 +156,7 @@ Global.router = createRouter({
 })
 
 Global.router.beforeEach(async (to, from, next) => {
+
   //all the reasons why we might want to redirect or 
   
   if (
@@ -260,7 +267,7 @@ Global.router.beforeEach(async (to, from, next) => {
   else {
   }
 
-  document.title = to.name!.toString();
+  document.title =  I18nGlobal.t(resources.Awesum.key) + ' - ' + to.name!.toString();
   next();
 });
 

@@ -90,7 +90,7 @@ export default {
           <span>{{ $t(resources.Edit.key) }}</span>
         </router-link>
         <router-link v-if="showSave()" :to="Global.replaceAtFront($router.currentRoute.value.fullPath,'/' + $t(resources.Settings.key),'/' + $t(resources.Apps.key))" class="btn btn-link">
-          <AdSave  />
+          <FlFilledSave  />
           <span>{{ $t(resources.Save.key) }}</span>
         </router-link>
         <div id="appViewLoginDiv">
@@ -129,24 +129,19 @@ export default {
 
 
 #appViewHeader {
-  width: 100%;
-  background: #ffffad;
   height: 5.9vmin;
   border-bottom: .1vmin solid #c2c2c2;
   display: flex;
   align-items: center;
   flex-direction: column;
   align-items: start;
-
 }
 
 #appViewHeaderButtons {
   width: 100%;
-  background: #ffffad;
-  height: 5.9vmin;
-  border-bottom: .1vmin solid #c2c2c2;
   display: flex;
   align-items: center;
+  padding-top: .35vmin;
   padding-left: .5vmin;
   padding-right: .5vmin;
 }
@@ -158,10 +153,11 @@ export default {
   padding-right: .5vmin;
   border-radius: .5vmin;
   margin-left: .5vmin;
-  height: 4vmin;
+  height: 100%;
 }
 
 #appViewHeader span {
+  font-weight: 500;
   font-size: 1.3vmin;
   display: block;
 }
@@ -183,7 +179,7 @@ export default {
 #appViewHeader svg {
   cursor: pointer;
   color: black;
-  font-size: 1.5vmin;
+  font-size: 2.3vmin;
   margin-top: .25vmin;
   margin-bottom: .25vmin;
 }

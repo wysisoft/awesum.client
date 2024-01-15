@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AdSave: typeof import('@kalimahapps/vue-icons/ad')['AdSave']
+    EditAudioComponent: typeof import('./src/components/EditAudioComponent.vue')['default']
     FaBars: typeof import('@kalimahapps/vue-icons/fa')['FaBars']
     FaCompress: typeof import('@kalimahapps/vue-icons/fa')['FaCompress']
     FaEdit: typeof import('@kalimahapps/vue-icons/fa')['FaEdit']
@@ -18,6 +19,7 @@ declare module 'vue' {
     FaPuzzlePiece: typeof import('@kalimahapps/vue-icons/fa')['FaPuzzlePiece']
     FaSave: typeof import('@kalimahapps/vue-icons/fa')['FaSave']
     FaUser: typeof import('@kalimahapps/vue-icons/fa')['FaUser']
+    FlFilledSave: typeof import('@kalimahapps/vue-icons/fl')['FlFilledSave']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

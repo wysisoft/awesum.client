@@ -95,18 +95,18 @@ export class AwesumDb extends Dexie {
 
         Global.awesum.serverApps = useDexieLiveQuery(
             () => this.serverApps.toArray(),
-            { initialValue: [] }
+            { initialValue: await this.serverApps.toArray() }
         );
 
         Global.awesum.serverDatabases = useDexieLiveQuery(
             () => this.serverDatabases.toArray(),
-            { initialValue: [] }
+            { initialValue: await this.serverDatabases.toArray() }
         );
 
         Global.awesum.currentDatabases = useDexieLiveQueryWithDeps(() => {
             return this.serverDatabases.where({ appId: Global.awesum.currentServerApp.id }).toArray();
         }, {
-            initialValue: [], immediate: true
+            initialValue: await this.serverDatabases.where({ appId: Global.awesum.currentServerApp.id }).toArray(), immediate: true
             /* Supported all watch options, default: immediate: true */
         });
 
