@@ -4,6 +4,7 @@ import { ServerDatabase } from './clientClasses/ServerDatabase';
 import type { ServerDatabase as ServerDatabaseInterface } from './serverClasses/ServerDatabase';
 
 import { ServerApp } from './clientClasses/ServerApp';
+import type { ServerDatabaseType } from './serverClasses/ServerDatabaseType';
 import { ServerDatabaseItem } from './clientClasses/ServerDatabaseItem';
 import { ServerDatabaseUnit } from './clientClasses/ServerDatabaseUnit';
 import type { ServerFollower } from './clientClasses/ServerFollower';
@@ -17,6 +18,7 @@ import { from as linq } from "linq-to-typescript"
 import { useDexieLiveQuery, useDexieLiveQueryWithDeps } from "./dexieLiveQuery";
 
 export class AwesumDb extends Dexie {
+    serverDatabaseTypes!: Table<ServerDatabaseType>;
     serverDatabases!: Table<ServerDatabaseInterface>;
     serverFollowers!: Table<ServerFollower>;
     serverApps!: Table<ServerApp>;
@@ -52,8 +54,20 @@ export class AwesumDb extends Dexie {
                 name: 'Local',
             } as ServerDatabase);
 
+            var typeId = await trans.table('serverDatabaseTypes').add({
+                id: 0,
+                databaseId: 0,
+                type: ItemType.spelling.toString()
+            } as ServerDatabaseType);
+
+            await trans.table('serverDatabaseTypes').add({
+                id: 1,
+                databaseId: 1,
+                type: ItemType.spelling.toString()
+            } as ServerDatabaseType);
+
             var unitId = await trans.table('serverDatabaseUnits').add({
-                type: ItemType.spelling,
+                databaseTypeId: typeId,
                 name: "Unit 1",
                 order: 1,
                 databaseId: 0,
@@ -96,19 +110,21 @@ export class AwesumDb extends Dexie {
         Global.awesum.serverApps = useDexieLiveQuery(
             () => this.serverApps.toArray(),
             { initialValue: await this.serverApps.toArray() }
-        );
+        ) as any as Array<ServerApp>;
 
         Global.awesum.serverDatabases = useDexieLiveQuery(
             () => this.serverDatabases.toArray(),
             { initialValue: await this.serverDatabases.toArray() }
-        );
+        ) as any as Array<ServerDatabaseInterface>;
 
         Global.awesum.currentDatabases = useDexieLiveQueryWithDeps(() => {
             return this.serverDatabases.where({ appId: Global.awesum.currentServerApp.id }).toArray();
         }, {
             initialValue: await this.serverDatabases.where({ appId: Global.awesum.currentServerApp.id }).toArray(), immediate: true
             /* Supported all watch options, default: immediate: true */
-        });
+        }) as any as Array<ServerDatabaseInterface>;
+
+        Global.awesum.currentDatabaseTypes = await this.serverDatabaseTypes.toArray()
 
     }
     constructor() {
@@ -119,6 +135,7 @@ export class AwesumDb extends Dexie {
             serverFollowers: '++id',
             serverApps: '++id',
             clientApp: '++id',
+            serverDatabaseTypes: '++id',
             serverDatabaseItems: '++id,unitId',
             serverDatabaseUnits: '++id,databaseId'
         }).upgrade(tx => {

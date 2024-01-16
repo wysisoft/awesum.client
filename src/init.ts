@@ -40,7 +40,7 @@ style.innerHTML = `
 document.head.appendChild(style);
 
 document.addEventListener("DOMContentLoaded", function () {
-    const verticalRuler = document.getElementById('verticalRuler');
+    const verticalRuler = document.getElementById('verticalRuler')!;
 
 
     // Create bars for vertical ruler
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let txt = document.createElement('div');
             bar.appendChild(txt);
             txt.classList.add('txt');
-            txt.innerText = i;
+            txt.innerText = i.toString();
         }
         verticalRuler.appendChild(bar);
     }

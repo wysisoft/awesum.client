@@ -58,7 +58,7 @@ export function useDexieLiveQueryWithDeps<
     subscription = undefined;
   }
 
-  watchEffect(start, { immediate: true, ...rest });
+  watchEffect(start);
 
   tryOnScopeDispose(() => {
     cleanup();

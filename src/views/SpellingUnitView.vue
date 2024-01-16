@@ -11,14 +11,31 @@ export default {
 </script>
 
 <template>
-  <div>
-    <div v-for="item in awesum.currentDatabaseItems" style="display:flex;align-items: baseline;">
+  <div id="spellingUnitView">
+    <h2>{{ awesum.currentDatabaseUnit.name }}</h2>
+    <div v-for="item in awesum.currentDatabaseItems" class="unit">
       <router-link
         :to="'/' + $t(resources.Apps.key) + '/' + awesum.currentServerApp.name + '/' + awesum.currentDatabase.name + '/' + $t(resources.Spelling.key) + '/' + awesum.currentDatabaseUnit.name + '/' + item.order "
         class="btn btn-primary">{{ $t(resources.Lets_Go.key) }}</router-link>
-      <div class="areaNameDiv" style="margin-left:2vmin;">{{ item.order }}</div>
+      <div class="unitName">{{ item.order }}</div>
     </div>
   </div>
 </template>
   
-  
+<style scoped>
+#spellingUnitView {
+  padding: 1vmin;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: start;
+}
+
+.unit {
+  margin-top: 2vmin;
+}
+.unitName{
+  margin-left:2vmin;
+  display: inline-block;
+}
+</style>

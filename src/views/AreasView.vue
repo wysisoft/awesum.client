@@ -5,7 +5,7 @@ import { reactive } from 'vue';
 
 
 export default {
-   async setup() {
+    setup() {
   },
 }
 </script>

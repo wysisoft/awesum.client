@@ -10,5 +10,6 @@
     {
       "path": "./nightwatch/tsconfig.json"
     }
-  ]
+  ],
+  "include": ["components.d.ts"]
 }

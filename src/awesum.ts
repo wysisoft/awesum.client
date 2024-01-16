@@ -6,8 +6,13 @@ import type { clientApp } from './clientClasses/clientApp';
 import type { ServerDatabase as ServerDatabaseInterface } from './serverClasses/ServerDatabase';
 import type { ServerDatabaseUnit } from './clientClasses/ServerDatabaseUnit';
 import type { ServerDatabaseItem } from './clientClasses/ServerDatabaseItem';
+import type { ServerDatabaseType } from './serverClasses/ServerDatabaseType';
 
 import { ItemType } from './itemType';
+import { Global } from './global';
+import { I18nGlobal } from './i18nGlobal';
+import { resources } from './resources/Resources';
+import { ItemLevel } from './itemLevel';
 
 export const awesum = reactive({
   errorMessage:'',  
@@ -21,13 +26,32 @@ export const awesum = reactive({
     currentDatabase: null as unknown as ServerDatabaseInterface,
     currentDatabases: Array<ServerDatabaseInterface>(),
     currentDatabaseUnits: Array<ServerDatabaseUnit>(),
+    currentDatabaseTypes: Array<ServerDatabaseType>(),
     currentDatabaseUnit: null as unknown as ServerDatabaseUnit,
     currentDatabaseItems: Array<ServerDatabaseItem>(),
     currentDatabaseItem: null as unknown as ServerDatabaseItem,
     serverDatabases: Array<ServerDatabaseInterface>(),
 
-    currentItemType:null as unknown as ItemType,
+    currentItemType:null as unknown as ServerDatabaseType,
     audio: new Audio('null'),
+    getPropertyValue(propertyName:string,propertyLevel:ItemLevel) {
+      if(propertyLevel == ItemLevel.databaseItem){
+        return {value:(awesum.currentDatabaseItem as any)[propertyName],source:ItemLevel.databaseItem};
+      }
+      if(propertyLevel == ItemLevel.databaseUnit){
+        return {value:(awesum.currentDatabaseUnit as any)[propertyName],source:ItemLevel.databaseUnit};
+      }
+      if(propertyLevel == ItemLevel.databaseType){
+        return {value:(awesum.currentItemType as any)[propertyName],source:ItemLevel.databaseType};
+      }
+      if(propertyLevel == ItemLevel.database){
+        return {value:(awesum.currentDatabase as any)[propertyName],source:ItemLevel.database};
+      }
+      if(propertyLevel == ItemLevel.app){
+        return {value:(awesum.currentServerApp as any)[propertyName],source:ItemLevel.app};
+      }
+      return null;
+    },
     startProgressPar() {
       this.progressBarPercentage = 1;
       this.progressBarHandle = setInterval(() => {
@@ -41,7 +65,7 @@ export const awesum = reactive({
       this.progressBarPercentage = 0;
       }, 300);
     },
-    async playAudioOrSpeech(soundString: string) {
+    async playAudioOrSpeech(soundString?: string) {
       this.pauseAudio();
   
       if (soundString) {
@@ -78,5 +102,35 @@ export const awesum = reactive({
         this.audio.pause();
       }
       window.speechSynthesis.cancel();
+    },
+    canGoForward: function () {
+      return this.currentDatabaseItem.order < this.currentDatabaseItems.length - 1;
+    },
+    goForward: function () {
+      this.currentDatabaseItem = this.currentDatabaseItems.find(i => i.order == this.currentDatabaseItem.order + 1)!;
+      Global.router.push({
+        path: '/' + I18nGlobal.t(resources.Apps.key) + '/' + this.currentServerApp.name + '/' + this.currentDatabase.name + '/' + this.currentItemType + '/' + this.currentDatabaseUnit.name + '/' + this.currentDatabaseItem.order
+      });
+  
+      this.playAudioOrSpeech();
+    },
+    canGoBack: function () {
+      return this.currentDatabaseItem.order > 0;
+    },
+    goBack: function () {
+      this.currentDatabaseItem = this.currentDatabaseItems.find(i => i.order == this.currentDatabaseItem.order - 1)!;
+      Global.router.push({
+        path: '/' + I18nGlobal.t(resources.Apps.key) + '/' + this.currentServerApp.name + '/' + this.currentDatabase.name + '/' + this.currentItemType + '/' + this.currentDatabaseUnit.name + '/' + this.currentDatabaseItem.order
+      });
+  
+      this.playAudioOrSpeech();
+    },
+    goToItem: function (index: number) {
+      this.currentDatabaseItem = this.currentDatabaseItems[index];  
+      Global.router.push({
+        path: '/' + I18nGlobal.t(resources.Apps.key) + '/' + this.currentServerApp.name + '/' + this.currentDatabase.name + '/' + this.currentItemType + '/' + this.currentDatabaseUnit.name + '/' + this.currentDatabaseItem.order
+      });
+  
+      this.playAudioOrSpeech();
     },
   });

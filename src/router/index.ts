@@ -74,8 +74,8 @@ Global.router = createRouter({
     {
       path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app/:database/:type/:unit/:index',
       name: 'AppItem',
-      component: () => {
-        if (Global.awesum.currentItemType == ItemType.spelling) {
+      component: async () => {
+        if (Global.awesum.currentItemType.type == ItemType.spelling.toString()) {
           return SpellingItemView;
         }
       },
@@ -83,8 +83,8 @@ Global.router = createRouter({
     {
       path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app/:database/:type/:unit',
       name: 'AppUnit',
-      component: () => {
-        if (Global.awesum.currentItemType == ItemType.spelling) {
+      component: async () => {
+        if (Global.awesum.currentItemType.type == ItemType.spelling.toString()) {
           return SpellingUnitView;
         }
       },
@@ -92,8 +92,8 @@ Global.router = createRouter({
     {
       path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app/:database/:type',
       name: 'AppType',
-      component: () => {
-        if (Global.awesum.currentItemType == ItemType.spelling) {
+      component: async () => {
+        if (Global.awesum.currentItemType.type == ItemType.spelling.toString()) {
           return SpellingView;
         }
       }
@@ -132,7 +132,7 @@ Global.router = createRouter({
       path: '/' + I18nGlobal.t(resources.Settings.key) + '/:app/:database/:type',
       name: 'SettingsType',
       component: () => {
-        if (Global.awesum.currentItemType == ItemType.spelling) {
+        if (Global.awesum.currentItemType.type == ItemType.spelling.toString()) {
           return SpellingView;
         }
       }
@@ -226,9 +226,9 @@ Global.router.beforeEach(async (to, from, next) => {
   }
 
   if (to.params.type) {
-    var foundItemType = ItemType[to.params.type.toString().toLocaleLowerCase() as keyof typeof ItemType];
+    var foundItemType = linq(Global.awesum.currentDatabaseTypes).singleOrDefault(x => x.type.lc(ItemType[to.params.type.toString().toLocaleLowerCase() as keyof typeof ItemType].toString()));
 
-    if (!linq(Object.values(ItemType)).contains(foundItemType)) {
+    if (!foundItemType) {
       Global.router.push({
         path: '/' + I18nGlobal.t(resources.Error.key)
       });
@@ -238,8 +238,7 @@ Global.router.beforeEach(async (to, from, next) => {
     else {
       if (Global.awesum.currentItemType != foundItemType) {
         Global.awesum.currentItemType = foundItemType;
-
-        Global.awesum.currentDatabaseUnits = await Global.awesumDb.serverDatabaseUnits.where('databaseId').equals(Global.awesum.currentDatabase.id).and(x => x.type == Global.awesum.currentItemType).toArray();
+        Global.awesum.currentDatabaseUnits = await Global.awesumDb.serverDatabaseUnits.where('typeId').equals(Global.awesum.currentItemType.id).toArray();
       }
     }
   }
@@ -261,6 +260,25 @@ Global.router.beforeEach(async (to, from, next) => {
         Global.awesum.currentDatabaseUnit = foundUnit;
         Global.awesum.currentDatabaseItems = await Global.awesumDb.serverDatabaseItems.where('unitId').equals(Global.awesum.currentDatabaseUnit.id).toArray();
 
+      }
+    }
+  }
+  else {
+  }
+
+  if (to.params.index) {
+    var foundItem = linq(Global.awesum.currentDatabaseItems).singleOrDefault(x => x.order.toString().lc(to.params.index.toString()));
+
+    if (!foundItem) {
+      Global.router.push({
+        path: '/' + I18nGlobal.t(resources.Error.key)
+      });
+      next();
+      return;
+    }
+    else {
+      if (Global.awesum.currentDatabaseItem != foundItem) {
+        Global.awesum.currentDatabaseItem = foundItem;
       }
     }
   }

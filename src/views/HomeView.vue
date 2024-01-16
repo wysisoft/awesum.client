@@ -1,5 +1,4 @@
 <script lang="ts">
-import resources from '@/resources'; // Add the missing import statement
 
 export default {
 
@@ -9,12 +8,12 @@ export default {
 <template>
   <div id="homeView">
     <div id=content>
-      {{ $t(resources.Awesum.key) }}
+      <h2>{{ $t(resources.Awesum.key) }}</h2>
       <div v-for="app in awesum.serverApps" class="appDiv">
         <router-link :to="'/' + $t(resources.Apps.key) + '/' + app.name" class="btn btn-primary appButton">
           <span>{{ $t(resources.Lets_Go.key) }}</span>
         </router-link>
-        <span>{{ $t(app.name) }}</span>
+        <span>{{ app.name }}</span>
       </div>
     </div>
     <div class="footer">

@@ -8,4 +8,5 @@ export interface ServerDatabaseUnit {
     appId: number;
     uniqueId: string;
     deleted: boolean;
+    databaseTypeId: number;
 }

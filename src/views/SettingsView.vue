@@ -41,21 +41,21 @@ export default {
 
 
 
-    <h1>App Settings:</h1>
+    <h2>App Settings:</h2>
     <div class="settingsArea">
       <div>App Id: {{ awesum.serverApp.manualId == '' ? 'Never synced to server' : awesum.serverApp.manualId }}</div>
 
 
     </div>
 
-    <h1>Databases:</h1>
+    <h2>Databases:</h2>
 
     <div v-for="app in awesum.serverApps" class="serverApps">
       <router-link :to="'/' + $t(resources.Settings.key) +'/' + app.name" class="btn btn-primary">Edit</router-link>
       <div class="areaNameDiv" style="margin-left:2vmin;">{{ app.name }}</div>
     </div>
 
-    <h1>Spelling Settings:</h1>
+    <h2>Spelling Settings:</h2>
     <RouterLink :to="{ path: $t(resources.Type_Settings.key), query: { type: $t(resources.Spelling.key) } }">
       <button class="btn btn-primary" id="spellingDetails">{{ $t(resources.Go_To_Spelling_Settings.key) }}</button>
     </RouterLink>

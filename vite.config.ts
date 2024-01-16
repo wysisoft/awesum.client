@@ -6,8 +6,6 @@ import nightwatchPlugin from 'vite-plugin-nightwatch'
 import Components from 'unplugin-vue-components/vite'
 import VueIconsResolver from '@kalimahapps/vue-icons/resolver';
 
-export const hash = Math.floor(Math.random() * 90000) + 10000;
-
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -32,13 +30,6 @@ server:{
   port:8080
 },
 build: {
-  target: 'esnext',
-  rollupOptions: {
-    output: {
-      entryFileNames: `[name]` + hash + `.js`,
-      chunkFileNames: `[name]` + hash + `.js`,
-      assetFileNames: `[name]` + hash + `.[ext]`
-    }
-  }
+  target: 'esnext'
 }
 })

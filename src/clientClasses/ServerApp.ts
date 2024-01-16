@@ -40,6 +40,4 @@ public get homePageIcon(): string  { return this._homePageIcon; }public set home
 public get uniqueId(): string  { return this._uniqueId; }public set uniqueId(v: string ) {this._uniqueId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'uniqueId',v,this.table,this.promises))}
     private _deleted: boolean = false;
 public get deleted(): boolean  { return this._deleted; }public set deleted(v: boolean ) {this._deleted=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'deleted',v,this.table,this.promises))}
-    private _successSound: string = '';
-public get successSound(): string  { return this._successSound; }public set successSound(v: string ) {this._successSound=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'successSound',v,this.table,this.promises))}
 }

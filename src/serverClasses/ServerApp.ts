@@ -8,5 +8,4 @@ export interface ServerApp {
     homePageIcon: string;
     uniqueId: string;
     deleted: boolean;
-    successSound: string;
 }

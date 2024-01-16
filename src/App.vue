@@ -10,7 +10,7 @@ export default {
 
   setup() {
     const { isFullscreen, toggle } = useFullscreen()
-    
+
     return {
       isFullscreen,
       toggle,
@@ -18,16 +18,16 @@ export default {
     };
   },
   methods: {
-    showEdit(){
+    showEdit() {
       return this.$router.currentRoute.value.fullPath.startsWith('/' + I18nGlobal.t(Global.resources.Apps.key));
     },
-    showSave(){
+    showSave() {
       return this.$router.currentRoute.value.fullPath.startsWith('/' + I18nGlobal.t(Global.resources.Settings.key));
     },
     toggleFullScreen() {
       this.toggle();
     },
-    changeUnit(unit:ServerDatabaseUnit) {
+    changeUnit(unit: ServerDatabaseUnit) {
       this.awesum.currentDatabaseUnit = unit;
       this.$router.push({ path: this.$t(this.resources.Spelling.key), query: { unit: unit.name } });
     }
@@ -39,6 +39,19 @@ export default {
 <template>
   <div id="appDiv">
 
+    <div id="balloonCanvas"
+      style="display: none; position:absolute;width:100vmin;height:100vmin;margin:auto;z-index:9999;pointer-events:none;">
+    </div>
+    <canvas id="emojiCanvas"
+      style="display: none;position:absolute;width:100vmin;height:100vmin;margin:auto;z-index:9999;pointer-events:none;"></canvas>
+    <canvas id="confettiCanvas"
+      style="display: none;position:absolute;width:100vmin;height:100vmin;margin:auto;z-index:9999;pointer-events:none;"></canvas>
+    <canvas id="fireworksCanvas"
+      style="display: none;position:absolute;width:100vmin;height:100vmin;margin:auto;z-index:999;pointer-events:none;"></canvas>
+    <div style="display: none;width:100%;height:100%;position:absolute;margin:auto;z-index:9999;" id="player">
+    </div>
+
+
     <!-- Modal -->
     <div class="modal fade" id="addPairingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
@@ -49,8 +62,9 @@ export default {
           </div>
           <div class="modal-body">
             <div v-for="unit in awesum.currentDatabaseUnits">
-              <button data-bs-dismiss="modal" type="button" class="btn btn-primary" @click="changeUnit(unit as ServerDatabaseUnit)">{{ $t(resources.Lets_Go.key) }}</button>
-              <div >{{ unit.name }}</div>
+              <button data-bs-dismiss="modal" type="button" class="btn btn-primary"
+                @click="changeUnit(unit as ServerDatabaseUnit)">{{ $t(resources.Lets_Go.key) }}</button>
+              <div>{{ unit.name }}</div>
             </div>
           </div>
         </div>
@@ -71,10 +85,10 @@ export default {
           <FaBars />
           <span>{{ $t(resources.Units.key) }}</span>
         </button> -->
-        <router-link :to="{ path: $t(resources.Areas.key) }" class="btn btn-link">
+        <!-- <router-link :to="{ path: $t(resources.Areas.key) }" class="btn btn-link">
           <FaPuzzlePiece />
           <span>{{ $t(resources.Areas.key) }}</span>
-        </router-link>
+        </router-link> -->
 
         <button to="" class="btn btn-link" @click="toggleFullScreen">
           <faCompress v-if="isFullscreen" />
@@ -85,12 +99,16 @@ export default {
           <faGears />
           <span>{{ $t(resources.Settings.key) }}</span>
         </router-link>
-        <router-link v-if="showEdit()" :to="Global.replaceAtFront($router.currentRoute.value.fullPath,'/' + $t(resources.Apps.key),'/' + $t(resources.Settings.key))" class="btn btn-link">
+        <router-link v-if="showEdit()"
+          :to="Global.replaceAtFront($router.currentRoute.value.fullPath, '/' + $t(resources.Apps.key), '/' + $t(resources.Settings.key))"
+          class="btn btn-link">
           <faPenToSquare />
           <span>{{ $t(resources.Edit.key) }}</span>
         </router-link>
-        <router-link v-if="showSave()" :to="Global.replaceAtFront($router.currentRoute.value.fullPath,'/' + $t(resources.Settings.key),'/' + $t(resources.Apps.key))" class="btn btn-link">
-          <FlFilledSave  />
+        <router-link v-if="showSave()"
+          :to="Global.replaceAtFront($router.currentRoute.value.fullPath, '/' + $t(resources.Settings.key), '/' + $t(resources.Apps.key))"
+          class="btn btn-link">
+          <FlFilledSave />
           <span>{{ $t(resources.Save.key) }}</span>
         </router-link>
         <div id="appViewLoginDiv">
@@ -113,9 +131,7 @@ export default {
     </div>
 
     <div id="appViewContent">
-      <Suspense>
-        <RouterView :key="$route.path" />
-      </Suspense>
+      <RouterView :key="$route.path" />
     </div>
   </div>
 </template>
@@ -227,5 +243,4 @@ export default {
 #appDiv .progress {
   border-radius: 0;
   position: relative;
-}
-</style>
+}</style>

@@ -5,7 +5,7 @@ import { reactive } from 'vue';
 
 
 export default {
-   async setup() {
+    setup() {
   },
   methods: {
   }
@@ -14,6 +14,18 @@ export default {
 
 <template>
   <div id="databaseView">
-    <RouterLink :to="'/' + $t(resources.Apps.key) + '/' + awesum.currentServerApp.name + '/' + awesum.currentDatabase.name +'/' + $t(resources.Spelling.key)" class="btn btn-primary">{{ $t(resources.Spelling.key) }}</RouterLink>
+    <h2>{{ awesum.currentDatabase.name }}</h2>
+    <RouterLink :to="'/' + $t(resources.Apps.key) + '/' + awesum.currentServerApp.name + '/' + awesum.currentDatabase.name +'/' + $t(resources.Spelling.key)" class="btn btn-primary">
+      {{ $t(resources.Spelling.key) }}
+    </RouterLink>
   </div>
 </template>
+<style scoped>
+#databaseView{
+  padding:1vmin;
+  display:flex;
+  flex-direction:column;
+  height: 100%;
+  align-items: start;
+}
+</style>

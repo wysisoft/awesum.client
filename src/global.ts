@@ -36,7 +36,7 @@ export class Global {
         Global.awesum.currentServerApp = app;
     }
 
-    static replaceAtFront(originalString, searchString, replaceString) {
+    static replaceAtFront(originalString:string, searchString:string, replaceString:string) {
         // Create a regular expression that matches the searchString only at the beginning of the originalString
         const regex = new RegExp("^" + searchString);
     
