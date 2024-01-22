@@ -24,18 +24,18 @@ export class ServerDatabase implements ServerDatabaseInterface {
    }
     
 
-    private _appId: number = 0;
-public get appId(): number  { return this._appId; }public set appId(v: number ) {this._appId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'appId',v,this.table,this.promises))}
     private _name: string = '';
 public get name(): string  { return this._name; }public set name(v: string ) {this._name=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'name',v,this.table,this.promises))}
-    private _default: string = '';
-public get default(): string  { return this._default; }public set default(v: string ) {this._default=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'default',v,this.table,this.promises))}
     private _lastModified: string = '';
 public get lastModified(): string  { return this._lastModified; }public set lastModified(v: string ) {this._lastModified=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'lastModified',v,this.table,this.promises))}
-    private _manualId: string = '';
-public get manualId(): string  { return this._manualId; }public set manualId(v: string ) {this._manualId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'manualId',v,this.table,this.promises))}
-    private _uniqueId: string = '';
-public get uniqueId(): string  { return this._uniqueId; }public set uniqueId(v: string ) {this._uniqueId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'uniqueId',v,this.table,this.promises))}
     private _deleted: boolean = false;
 public get deleted(): boolean  { return this._deleted; }public set deleted(v: boolean ) {this._deleted=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'deleted',v,this.table,this.promises))}
+    private _version: number = 0;
+public get version(): number  { return this._version; }public set version(v: number ) {this._version=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'version',v,this.table,this.promises))}
+    private _order: number = 0;
+public get order(): number  { return this._order; }public set order(v: number ) {this._order=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'order',v,this.table,this.promises))}
+    private _loginid: string = '';
+public get loginid(): string  { return this._loginid; }public set loginid(v: string ) {this._loginid=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'loginid',v,this.table,this.promises))}
+    private _uniqueId: string = '';
+public get uniqueId(): string  { return this._uniqueId; }public set uniqueId(v: string ) {this._uniqueId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'uniqueId',v,this.table,this.promises))}
 }

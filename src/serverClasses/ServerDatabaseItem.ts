@@ -11,8 +11,8 @@ export interface ServerDatabaseItem {
     grouping: number;
     lastModified: string;
     text: string;
-    databaseId: number;
-    appId: number;
-    uniqueId: string;
     deleted: boolean;
+    version: number;
+    loginid: string;
+    uniqueId: string;
 }

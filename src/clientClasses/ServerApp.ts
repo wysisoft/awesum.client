@@ -36,8 +36,8 @@ public get name(): string  { return this._name; }public set name(v: string ) {th
 public get lastModified(): string  { return this._lastModified; }public set lastModified(v: string ) {this._lastModified=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'lastModified',v,this.table,this.promises))}
     private _homePageIcon: string = '';
 public get homePageIcon(): string  { return this._homePageIcon; }public set homePageIcon(v: string ) {this._homePageIcon=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'homePageIcon',v,this.table,this.promises))}
-    private _uniqueId: string = '';
-public get uniqueId(): string  { return this._uniqueId; }public set uniqueId(v: string ) {this._uniqueId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'uniqueId',v,this.table,this.promises))}
     private _deleted: boolean = false;
 public get deleted(): boolean  { return this._deleted; }public set deleted(v: boolean ) {this._deleted=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'deleted',v,this.table,this.promises))}
+    private _version: number = 0;
+public get version(): number  { return this._version; }public set version(v: number ) {this._version=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'version',v,this.table,this.promises))}
 }

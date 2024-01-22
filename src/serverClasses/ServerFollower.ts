@@ -11,4 +11,7 @@ export interface ServerFollower {
     leaderRemoved: boolean;
     uniqueId: string;
     deleted: boolean;
+    followerLoginId: string;
+    version: number;
+    databaseId: number;
 }

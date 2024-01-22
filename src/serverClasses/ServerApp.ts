@@ -6,6 +6,6 @@ export interface ServerApp {
     name: string;
     lastModified: string;
     homePageIcon: string;
-    uniqueId: string;
     deleted: boolean;
+    version: number;
 }
