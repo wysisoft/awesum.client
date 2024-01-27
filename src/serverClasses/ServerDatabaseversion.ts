@@ -1,7 +1,7 @@
 export interface ServerDatabaseversion {
-    id: number;
-    databaseid: number;
-    databasejson: string;
-    updatedate: string;
-    appid: number;
+    id: number | null;
+    databaseid: number | null;
+    databasejson: string | null;
+    updatedate: string | null;
+    appid: number | null;
 }

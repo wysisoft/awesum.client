@@ -13,6 +13,7 @@ import { Global } from './global';
 import { I18nGlobal } from './i18nGlobal';
 import { resources } from './resources/Resources';
 import { ItemLevel } from './itemLevel';
+import { ServerPushAppRequest } from './clientClasses/ServerPushAppRequest';
 
 export const awesum = reactive({
   errorMessage:'',  
@@ -133,4 +134,19 @@ export const awesum = reactive({
   
       this.playAudioOrSpeech();
     },
+    async refresh(){
+      var apps = await Global.awesumDb.serverApps.toArray();
+      for (const App of apps) {
+        var response = await fetch(window.location.origin + "/PushDatabaseItem", {
+          method: "POST",
+          body: JSON.stringify(new ServerPushAppRequest({
+            A
+          })),
+          credentials: "include",
+        });
+    
+        if (response.status == 200) {
+        }
+      }
+    }
   });

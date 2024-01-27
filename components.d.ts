@@ -8,6 +8,7 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     BsCalendar4Range: typeof import('@kalimahapps/vue-icons/bs')['BsCalendar4Range']
+    ChRefresh: typeof import('@kalimahapps/vue-icons/ch')['ChRefresh']
     EditAudioComponent: typeof import('./src/components/EditAudioComponent.vue')['default']
     FaBackward: typeof import('@kalimahapps/vue-icons/fa')['FaBackward']
     FaCompress: typeof import('@kalimahapps/vue-icons/fa')['FaCompress']

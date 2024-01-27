@@ -1,9 +1,9 @@
 import type { ServerApp } from "./ServerApp";
 
 export interface ServerUser {
-    id: number;
-    email: string;
-    loginid: string;
-    name: string;
+    id: number | null;
+    email: string | null;
+    loginid: string | null;
+    name: string | null;
     
 }

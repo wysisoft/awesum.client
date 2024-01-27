@@ -26,11 +26,11 @@ export class ServerUser implements ServerUserInterface {
    }
     
 
-    private _email: string = '';
-public get email(): string  { return this._email; }public set email(v: string ) {this._email=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'email',v,this.table,this.promises))}
-    private _loginid: string = '';
-public get loginid(): string  { return this._loginid; }public set loginid(v: string ) {this._loginid=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'loginid',v,this.table,this.promises))}
-    private _name: string = '';
-public get name(): string  { return this._name; }public set name(v: string ) {this._name=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'name',v,this.table,this.promises))}
+    private _email: string | null = null;
+public get email(): string | null | null { return this._email; }public set email(v: string | null | null) {this._email=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'email',v,this.table,this.promises))}
+    private _loginid: string | null = null;
+public get loginid(): string | null | null { return this._loginid; }public set loginid(v: string | null | null) {this._loginid=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'loginid',v,this.table,this.promises))}
+    private _name: string | null = null;
+public get name(): string | null | null { return this._name; }public set name(v: string | null | null) {this._name=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'name',v,this.table,this.promises))}
     
 }

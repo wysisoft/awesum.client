@@ -31,6 +31,7 @@ const resourcesInternal =
   homepageImage: new ResourceValue('homepageImage'),
   userName: new ResourceValue('userName'),
   Save: new ResourceValue('Save'),
+  Refresh: new ResourceValue('Refresh'),
   Name: new ResourceValue('Name'),
   Units: new ResourceValue('Units'),
   Lets_Go: new ResourceValue('Lets Go'),

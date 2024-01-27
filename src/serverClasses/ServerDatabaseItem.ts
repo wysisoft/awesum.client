@@ -1,18 +1,20 @@
 export interface ServerDatabaseItem {
-    id: number;
-    letters: string;
-    order: number;
-    image: string;
-    sound: string;
-    type: number;
-    unitId: number;
-    rewardType: number;
-    reward: string;
-    grouping: number;
-    lastModified: string;
-    text: string;
-    deleted: boolean;
-    version: number;
-    loginid: string;
-    uniqueId: string;
+    id: number | null;
+    letters: string | null;
+    order: number | null;
+    image: string | null;
+    sound: string | null;
+    type: number | null;
+    unitId: number | null;
+    rewardType: number | null;
+    reward: string | null;
+    grouping: number | null;
+    lastModified: string | null;
+    text: string | null;
+    deleted: boolean | null;
+    version: number | null;
+    loginid: string | null;
+    uniqueId: string | null;
+    databaseId: number | null;
+    appId: number | null;
 }

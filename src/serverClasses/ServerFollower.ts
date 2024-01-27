@@ -1,17 +1,19 @@
 export interface ServerFollower {
-    id: number;
-    leaderAppId: number;
-    followerAppId: number;
-    followerName: string;
-    followerEmail: string;
-    leaderName: string;
-    leaderEmail: string;
-    lastModified: string;
-    leaderAccepted: boolean;
-    leaderRemoved: boolean;
-    uniqueId: string;
-    deleted: boolean;
-    followerLoginId: string;
-    version: number;
-    databaseId: number;
+    id: number | null;
+    leaderAppId: number | null;
+    followerAppId: number | null;
+    followerName: string | null;
+    followerEmail: string | null;
+    leaderName: string | null;
+    leaderEmail: string | null;
+    lastModified: string | null;
+    leaderAccepted: boolean | null;
+    leaderRemoved: boolean | null;
+    uniqueId: string | null;
+    deleted: boolean | null;
+    followerLoginId: string | null;
+    version: number | null;
+    databaseId: number | null;
+    initiatedBy: number | null;
+    followerDatabaseGroup: string | null;
 }
