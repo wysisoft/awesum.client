@@ -23,6 +23,5 @@ export class ServerPushDatabaseResponse implements ServerPushDatabaseResponseInt
         this.promises = Array<Promise<void>>();
    }
     
-    private _requiresForce: boolean | null = null;
-public get requiresForce(): boolean | null | null { return this._requiresForce; }public set requiresForce(v: boolean | null | null) {this._requiresForce=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'requiresForce',v,this.table,this.promises))}
+    private _requiresForce: boolean = false;
 }

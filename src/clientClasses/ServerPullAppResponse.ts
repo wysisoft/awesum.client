@@ -26,8 +26,6 @@ export class ServerPullAppResponse implements ServerPullAppResponseInterface {
         this.promises = Array<Promise<void>>();
    }
     
-    private _app: ServerApp | null = null;
-public get app(): ServerApp | null | null { return this._app; }public set app(v: ServerApp | null | null) {this._app=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'app',v,this.table,this.promises))}
-    private _databases: Database[] = null;
-public get databases(): Database[] | null { return this._databases; }public set databases(v: Database[] | null) {this._databases=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'databases',v,this.table,this.promises))}
+    private _app: ServerApp;
+    private _databases: Database[];
 }

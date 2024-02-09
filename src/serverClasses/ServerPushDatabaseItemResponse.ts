@@ -1,3 +1,3 @@
 export interface ServerPushDatabaseItemResponse {
-    requiresForce: boolean | null;
+    requiresForce: boolean;
 }

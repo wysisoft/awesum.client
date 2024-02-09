@@ -3,6 +3,12 @@ import { clientApp } from "./clientClasses/clientApp";
 import { ServerDatabase } from './clientClasses/ServerDatabase';
 import type { ServerDatabase as ServerDatabaseInterface } from './serverClasses/ServerDatabase';
 
+import type { ServerApp as ServerAppInterface } from './serverClasses/ServerApp';
+import type { ServerDatabaseUnit as ServerDatabaseUnitInterface } from './serverClasses/ServerDatabaseUnit';
+
+import type { ServerDatabaseItem as ServerDatabaseItemInterface } from './serverClasses/ServerDatabaseItem';
+
+
 import { ServerApp } from './clientClasses/ServerApp';
 import type { ServerDatabaseType } from './serverClasses/ServerDatabaseType';
 import { ServerDatabaseItem } from './clientClasses/ServerDatabaseItem';
@@ -21,25 +27,27 @@ export class AwesumDb extends Dexie {
     serverDatabaseTypes!: Table<ServerDatabaseType>;
     serverDatabases!: Table<ServerDatabaseInterface>;
     serverFollowers!: Table<ServerFollower>;
-    serverApps!: Table<ServerApp>;
+    serverApps!: Table<ServerAppInterface>;
     clientApp!: Table<clientApp>;
-    serverDatabaseUnits!: Table<ServerDatabaseUnit>;
-    serverDatabaseItems!: Table<ServerDatabaseItem>;
+    serverDatabaseUnits!: Table<ServerDatabaseUnitInterface>;
+    serverDatabaseItems!: Table<ServerDatabaseItemInterface>;
     clientDatabases!: Table<clientDatabase>;
 
     public static async CreateAsync(awesum: typeof awesumType) {
         const returnValue = new AwesumDb();
         await returnValue.on('populate', async function (trans) {
+            var clientAppId =uuid();
             await trans.table('clientApp').add({
-                id: 0
+                id: 0,
+                uniqueId: clientAppId,
             } as clientApp);
             await trans.table('serverApps').add({
                 id: 0,
                 name: 'app0',
-                uniqueId: uuid(),
+                uniqueId: clientAppId,
             } as ServerApp);
             await trans.table('serverApps').add({
-                id: 1,
+                id: 2,
                 name: 'app1',
                 uniqueId: uuid(),
             } as ServerApp);
@@ -133,8 +141,8 @@ export class AwesumDb extends Dexie {
             clientDatabases: '++id',
             serverDatabases: '++id,appId',
             serverFollowers: '++id',
-            serverApps: '++id',
-            clientApp: '++id',
+            serverApps: '++id,uniqueId',
+            clientApp: '++id,uniqueId',
             serverDatabaseTypes: '++id',
             serverDatabaseItems: '++id,unitId',
             serverDatabaseUnits: '++id,databaseId'

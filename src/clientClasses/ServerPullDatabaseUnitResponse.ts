@@ -26,8 +26,6 @@ export class ServerPullDatabaseUnitResponse implements ServerPullDatabaseUnitRes
         this.promises = Array<Promise<void>>();
    }
     
-    private _databaseUnit: ServerDatabaseUnit | null = null;
-public get databaseUnit(): ServerDatabaseUnit | null | null { return this._databaseUnit; }public set databaseUnit(v: ServerDatabaseUnit | null | null) {this._databaseUnit=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'databaseUnit',v,this.table,this.promises))}
-    private _items: ServerDatabaseItem[] | null = null;
-public get items(): ServerDatabaseItem[] | null | null { return this._items; }public set items(v: ServerDatabaseItem[] | null | null) {this._items=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'items',v,this.table,this.promises))}
+    private _databaseUnit: ServerDatabaseUnit;
+    private _items: ServerDatabaseItem[];
 }

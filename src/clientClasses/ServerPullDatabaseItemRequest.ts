@@ -25,12 +25,10 @@ export class ServerPullDatabaseItemRequest implements ServerPullDatabaseItemRequ
         this.promises = Array<Promise<void>>();
    }
     
-    private _isLeader: boolean | null = null;
-public get isLeader(): boolean | null | null { return this._isLeader; }public set isLeader(v: boolean | null | null) {this._isLeader=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'isLeader',v,this.table,this.promises))}
-    private _appId: number | null = null;
-public get appId(): number | null | null { return this._appId; }public set appId(v: number | null | null) {this._appId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'appId',v,this.table,this.promises))}
-    private _databaseId: number | null = null;
-public get databaseId(): number | null | null { return this._databaseId; }public set databaseId(v: number | null | null) {this._databaseId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'databaseId',v,this.table,this.promises))}
-    private _databaseItem: ServerDatabaseItem | null = null;
-public get databaseItem(): ServerDatabaseItem | null | null { return this._databaseItem; }public set databaseItem(v: ServerDatabaseItem | null | null) {this._databaseItem=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'databaseItem',v,this.table,this.promises))}
+    private _isLeader: boolean = false;
+    private _appId: number = 0;
+public get appId():number { return this._appId; }public set appId(v:number) {this._appId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'appId',v,this.table,this.promises))};
+    private _databaseId: number = 0;
+public get databaseId():number { return this._databaseId; }public set databaseId(v:number) {this._databaseId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'databaseId',v,this.table,this.promises))};
+    private _databaseItem: ServerDatabaseItem;
 }

@@ -25,6 +25,5 @@ export class ServerAddFollowRequestResponse implements ServerAddFollowRequestRes
         this.promises = Array<Promise<void>>();
    }
     
-    private _followers: Array<ServerFollower> | null = null;
-public get followers(): Array<ServerFollower> | null | null { return this._followers; }public set followers(v: Array<ServerFollower> | null | null) {this._followers=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'followers',v,this.table,this.promises))}
+    private _followers: Array<ServerFollower>;
 }

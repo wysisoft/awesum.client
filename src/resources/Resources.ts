@@ -33,6 +33,7 @@ const resourcesInternal =
   Save: new ResourceValue('Save'),
   Refresh: new ResourceValue('Refresh'),
   Name: new ResourceValue('Name'),
+  InvalidResponse: new ResourceValue('InvalidResponse'),
   Units: new ResourceValue('Units'),
   Lets_Go: new ResourceValue('Lets Go'),
   AboutAwesum: new ResourceValue('About Awesum'),

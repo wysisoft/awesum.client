@@ -25,10 +25,6 @@ export class ServerPushDatabaseItemRequest implements ServerPushDatabaseItemRequ
         this.promises = Array<Promise<void>>();
    }
     
-    private _isLeader: boolean | null = null;
-public get isLeader(): boolean | null | null { return this._isLeader; }public set isLeader(v: boolean | null | null) {this._isLeader=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'isLeader',v,this.table,this.promises))}
-    private _databaseItem: ServerDatabaseItem | null = null;
-public get databaseItem(): ServerDatabaseItem | null | null { return this._databaseItem; }public set databaseItem(v: ServerDatabaseItem | null | null) {this._databaseItem=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'databaseItem',v,this.table,this.promises))}
-    private _force: boolean | null = null;
-public get force(): boolean | null | null { return this._force; }public set force(v: boolean | null | null) {this._force=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'force',v,this.table,this.promises))}
+    private _databaseItem: ServerDatabaseItem;
+    private _force: boolean = false;
 }

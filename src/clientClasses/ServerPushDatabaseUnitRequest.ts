@@ -25,10 +25,6 @@ export class ServerPushDatabaseUnitRequest implements ServerPushDatabaseUnitRequ
         this.promises = Array<Promise<void>>();
    }
     
-    private _isLeader: boolean | null = null;
-public get isLeader(): boolean | null | null { return this._isLeader; }public set isLeader(v: boolean | null | null) {this._isLeader=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'isLeader',v,this.table,this.promises))}
-    private _databaseUnit: ServerDatabaseUnit | null = null;
-public get databaseUnit(): ServerDatabaseUnit | null | null { return this._databaseUnit; }public set databaseUnit(v: ServerDatabaseUnit | null | null) {this._databaseUnit=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'databaseUnit',v,this.table,this.promises))}
-    private _force: boolean | null = null;
-public get force(): boolean | null | null { return this._force; }public set force(v: boolean | null | null) {this._force=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'force',v,this.table,this.promises))}
+    private _databaseUnit: ServerDatabaseUnit;
+    private _force: boolean = false;
 }

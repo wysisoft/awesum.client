@@ -111,12 +111,12 @@ export default {
           <FlFilledSave />
           <span>{{ $t(resources.Save.key) }}</span>
         </router-link>
-        <Button
+        <button v-if="awesum.clientApp.email"
           @click="awesum.refresh()"
           class="btn btn-link">
           <ChRefresh />
           <span>{{ $t(resources.Refresh.key) }}</span>
-        </Button>
+        </button>
         
         <div id="appViewLoginDiv">
           <router-link to="/Login" class="btn btn-link">

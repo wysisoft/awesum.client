@@ -26,8 +26,6 @@ export class ServerPullDatabaseResponse implements ServerPullDatabaseResponseInt
         this.promises = Array<Promise<void>>();
    }
     
-    private _database: Database = null;
-public get database(): Database | null { return this._database; }public set database(v: Database | null) {this._database=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'database',v,this.table,this.promises))}
-    private _types: ServerDatabaseType[] | null = null;
-public get types(): ServerDatabaseType[] | null | null { return this._types; }public set types(v: ServerDatabaseType[] | null | null) {this._types=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'types',v,this.table,this.promises))}
+    private _database: ServerDatabase;
+    private _types: ServerDatabaseType[];
 }

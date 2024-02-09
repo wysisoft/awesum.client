@@ -25,6 +25,5 @@ export class ServerPullDatabaseItemResponse implements ServerPullDatabaseItemRes
         this.promises = Array<Promise<void>>();
    }
     
-    private _databaseItem: ServerDatabaseItem | null = null;
-public get databaseItem(): ServerDatabaseItem | null | null { return this._databaseItem; }public set databaseItem(v: ServerDatabaseItem | null | null) {this._databaseItem=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'databaseItem',v,this.table,this.promises))}
+    private _databaseItem: ServerDatabaseItem;
 }

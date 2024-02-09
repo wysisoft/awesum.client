@@ -25,8 +25,6 @@ export class ServerPullAppRequest implements ServerPullAppRequestInterface {
         this.promises = Array<Promise<void>>();
    }
     
-    private _isLeader: boolean | null = null;
-public get isLeader(): boolean | null | null { return this._isLeader; }public set isLeader(v: boolean | null | null) {this._isLeader=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'isLeader',v,this.table,this.promises))}
-    private _app: ServerApp | null = null;
-public get app(): ServerApp | null | null { return this._app; }public set app(v: ServerApp | null | null) {this._app=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'app',v,this.table,this.promises))}
+    private _isLeader: boolean = false;
+    private _app: ServerApp;
 }

@@ -1,7 +1,7 @@
 import type { ServerDatabase } from "./ServerDatabase";
 
 export interface ServerPullDatabaseRequest {
-    isLeader: boolean | null;
-    appId: number | null;
-    database: Database;
+    isLeader: boolean;
+    appId: number;
+    database: ServerDatabase;
 }
