@@ -1,5 +1,4 @@
 export interface ServerApp {
-    id: number;
     manualId: string;
     email: string;
     loginid: string;
@@ -10,4 +9,6 @@ export interface ServerApp {
     version: number;
     allowedToInitiateFollows: boolean;
     uniqueId: string;
+    authenticationType: string;
+    id: number;
 }

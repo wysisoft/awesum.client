@@ -21,6 +21,7 @@ declare module 'vue' {
     FaVolumeHigh: typeof import('@kalimahapps/vue-icons/fa')['FaVolumeHigh']
     FaWandMagicSparkles: typeof import('@kalimahapps/vue-icons/fa')['FaWandMagicSparkles']
     FlFilledSave: typeof import('@kalimahapps/vue-icons/fl')['FlFilledSave']
+    Modal: typeof import('./src/components/Modal.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

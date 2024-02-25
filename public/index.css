@@ -8,9 +8,9 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    -webkit-user-select: none;
-    user-select: none;
-    font-family: 'Roboto', sans-serif;
+    /* -webkit-user-select: none; */
+    /* user-select: none; */
+    /* font-family: 'Roboto', sans-serif; */
 }
 
 #loadingSVG {
@@ -50,6 +50,6 @@ body {
     height: 100vmin;
     width: 100vmin;
     background: #ffffad;
-    border: 0.5vmin solid black;
-    overflow:hidden;
+    border: 0.5vmin solid black;/*bounces around if I don't have this*/
+    box-sizing: border-box;
 }

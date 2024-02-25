@@ -32,7 +32,7 @@ export default {
 
       if (result) {
         this.awesum.serverApp.name = this.name;
-        await this.awesum.clientApp.waitFor();
+        await Global.waitForDexie();
 
         this.awesum.buttonPressed = true;
 

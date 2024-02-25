@@ -1,6 +1,7 @@
 import Dexie, { liveQuery, type Table } from "dexie";
 import { clientApp } from "./clientClasses/clientApp";
 import { ServerDatabase } from './clientClasses/ServerDatabase';
+
 import type { ServerDatabase as ServerDatabaseInterface } from './serverClasses/ServerDatabase';
 
 import type { ServerApp as ServerAppInterface } from './serverClasses/ServerApp';
@@ -10,10 +11,14 @@ import type { ServerDatabaseItem as ServerDatabaseItemInterface } from './server
 
 
 import { ServerApp } from './clientClasses/ServerApp';
-import type { ServerDatabaseType } from './serverClasses/ServerDatabaseType';
+import type { ServerDatabaseType as ServerDatabaseTypeInterface } from './serverClasses/ServerDatabaseType';
+import { ServerDatabaseType } from './clientClasses/ServerDatabaseType';
+
 import { ServerDatabaseItem } from './clientClasses/ServerDatabaseItem';
 import { ServerDatabaseUnit } from './clientClasses/ServerDatabaseUnit';
 import type { ServerFollower } from './clientClasses/ServerFollower';
+import type { ServerFollower as ServerFollowerInterface } from './serverClasses/ServerFollower';
+
 import { computed, createApp, reactive, watch, watchEffect } from 'vue'
 import type { awesum as awesumType } from "./awesum";
 import { ItemType } from "./itemType";
@@ -24,83 +29,154 @@ import { from as linq } from "linq-to-typescript"
 import { useDexieLiveQuery, useDexieLiveQueryWithDeps } from "./dexieLiveQuery";
 
 export class AwesumDb extends Dexie {
-    serverDatabaseTypes!: Table<ServerDatabaseType>;
-    serverDatabases!: Table<ServerDatabaseInterface>;
-    serverFollowers!: Table<ServerFollower>;
-    serverApps!: Table<ServerAppInterface>;
-    clientApp!: Table<clientApp>;
-    serverDatabaseUnits!: Table<ServerDatabaseUnitInterface>;
-    serverDatabaseItems!: Table<ServerDatabaseItemInterface>;
-    clientDatabases!: Table<clientDatabase>;
+    serverDatabaseTypes!: Table<ServerDatabaseTypeInterface, number>;
+    serverDatabases!: Table<ServerDatabaseInterface, number>;
+    serverFollowers!: Table<ServerFollowerInterface, number>;
+    serverApps!: Table<ServerAppInterface, number>;
+    clientApp!: Table<clientApp, number>;
+    serverDatabaseUnits!: Table<ServerDatabaseUnitInterface, number>;
+    serverDatabaseItems!: Table<ServerDatabaseItemInterface, number>;
+    clientDatabases!: Table<clientDatabase, number>;
 
     public static async CreateAsync(awesum: typeof awesumType) {
         const returnValue = new AwesumDb();
         await returnValue.on('populate', async function (trans) {
-            var clientAppId =uuid();
+            var uniqueId = uuid();
             await trans.table('clientApp').add({
-                id: 0,
-                uniqueId: clientAppId,
+                id: 1,
+                uniqueId,
             } as clientApp);
-            await trans.table('serverApps').add({
-                id: 0,
+            var serverApp = await trans.table('serverApps').add({
+                id: 1,
                 name: 'app0',
-                uniqueId: clientAppId,
-            } as ServerApp);
+                uniqueId,
+                lastModified: new Date().toISOString(),
+                manualId: '',
+                email: '',
+                loginid: '',
+                homePageIcon: '',
+                deleted: false,
+                version: 0,
+                allowedToInitiateFollows: false,
+                authenticationType: 'google'
+            } as ServerAppInterface);
             await trans.table('serverApps').add({
                 id: 2,
                 name: 'app1',
                 uniqueId: uuid(),
-            } as ServerApp);
-            await trans.table('serverDatabases').add({
-                id: 0,
+                lastModified: new Date().toISOString(),
+                manualId: '',
+                email: '',
+                loginid: '',
+                homePageIcon: '',
+                deleted: false,
+                version: 0,
+                allowedToInitiateFollows: false,
+                authenticationType: 'google'
+            } as ServerAppInterface);
+            var serverDatabase = await trans.table('serverDatabases').add({
+                id: 1,
                 name: 'Local',
                 uniqueId: uuid(),
-                appId: 0,
-            } as ServerDatabase);
-            await trans.table('clientDatabases').add({
-                id: 0,
-                name: 'Local',
-            } as ServerDatabase);
-
-            var typeId = await trans.table('serverDatabaseTypes').add({
-                id: 0,
-                databaseId: 0,
-                type: ItemType.spelling.toString()
-            } as ServerDatabaseType);
-
-            await trans.table('serverDatabaseTypes').add({
+                appId: 1,
+                lastModified: new Date().toISOString(),
+                appUniqueId: serverApp.uniqueId,
+                deleted: false,
+                version: 0,
+                order: 0,
+                loginid: '',
+                groupName: ''
+            } as ServerDatabaseInterface);
+            var serverDatabaseType = await trans.table('serverDatabaseTypes').add({
                 id: 1,
                 databaseId: 1,
-                type: ItemType.spelling.toString()
-            } as ServerDatabaseType);
+                type: ItemType.spelling.toString(),
+                uniqueId: uuid(),
+                lastModified: new Date().toISOString(),
+                databaseUniqueId: serverDatabase.uniqueId,
+                version: 0,
+                order: 0,
+                loginid: '',
+                databaseGroup: '',
+                appId: 0,
+                appUniqueId: serverApp.uniqueId
+            } as ServerDatabaseTypeInterface);
 
-            var unitId = await trans.table('serverDatabaseUnits').add({
-                databaseTypeId: typeId,
+            await trans.table('serverDatabaseTypes').add({
+                id: 2,
+                databaseId: 2,
+                type: ItemType.spelling.toString(),
+                uniqueId: uuid(),
+                lastModified: new Date().toISOString(),
+                databaseUniqueId: serverDatabase.uniqueId,
+                version: 0,
+                order: 0,
+                loginid: '',
+                databaseGroup: '',
+                appId: 0,
+                appUniqueId: serverApp.uniqueId
+            } as ServerDatabaseTypeInterface);
+
+            var serverDatabaseUnit = await trans.table('serverDatabaseUnits').add({
+                id: 1,
+                databaseTypeId: 1,
                 name: "Unit 1",
                 order: 1,
-                databaseId: 0,
+                databaseId: 1,
                 uniqueId: uuid(),
-            } as ServerDatabaseUnit);
+                lastModified: new Date().toISOString(),
+                databaseTypeUniqueId: serverDatabaseType.uniqueId,
+                deleted: false,
+                version: 0,
+                loginid: '',
+                appId: 0,
+                appUniqueId: '',
+            } as ServerDatabaseUnitInterface);
             await trans.table('serverDatabaseItems').bulkAdd([{
-                unitId: parseInt(unitId.toString()),
+                id: 1,
+                unitId: 1,
                 letters: 'brick',
                 sound: 'TTS',
                 text: 'brick',
                 order: 0,
                 type: ItemType.spelling,
-                databaseId: 0,
+                databaseId: 1,
                 uniqueId: uuid(),
-            } as ServerDatabaseItem,
+                lastModified: new Date().toISOString(),
+                unitUniqueId: serverDatabaseUnit.uniqueId,
+                image: '',
+                rewardType: 0,
+                reward: '',
+                grouping: 0,
+                deleted: false,
+                version: 0,
+                loginid: '',
+                appId: 0,
+                appUniqueId: ''
+            },
             {
-                unitId: parseInt(unitId.toString()),
+                id: 2,
+                unitId: 1,
                 letters: 'brick',
                 sound: 'TTS',
                 text: 'brick',
                 order: 1,
                 type: ItemType.spelling,
-                databaseId: 0,
+                databaseId: 1,
                 uniqueId: uuid(),
-            } as ServerDatabaseItem]);
+                lastModified: new Date().toISOString(),
+                unitUniqueId: serverDatabaseUnit.uniqueId,
+                image: '',
+                rewardType: 0,
+                reward: '',
+                grouping: 0,
+                deleted: false,
+                version: 0,
+                loginid: '',
+                appId: 0,
+                appUniqueId: ''
+
+            }] as ServerDatabaseItemInterface[]);
         });
         await returnValue.open();
 
@@ -143,11 +219,15 @@ export class AwesumDb extends Dexie {
             serverFollowers: '++id',
             serverApps: '++id,uniqueId',
             clientApp: '++id,uniqueId',
-            serverDatabaseTypes: '++id',
+            serverDatabaseTypes: '++id,databaseId',
             serverDatabaseItems: '++id,unitId',
-            serverDatabaseUnits: '++id,databaseId'
+            serverDatabaseUnits: '++id,databaseTypeId'
         }).upgrade(tx => {
             debugger;
         });
+
+        this.serverApps.hook('reading', obj => { return new ServerApp(obj, this.serverApps) });
+        this.serverDatabases.hook('reading', obj => { return new ServerDatabase(obj, this.serverDatabases) });
+        this.serverDatabaseTypes.hook('reading', obj => { return new ServerDatabaseType(obj, this.serverDatabaseTypes) });
     }
 }

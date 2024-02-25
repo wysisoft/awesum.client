@@ -1,5 +1,4 @@
 export interface ServerDatabaseItem {
-    id: number;
     letters: string;
     order: number;
     image: string;
@@ -14,8 +13,10 @@ export interface ServerDatabaseItem {
     deleted: boolean;
     version: number;
     loginid: string;
-    uniqueId: string;
     databaseId: number;
     appId: number;
     appUniqueId: string;
+    unitUniqueId: string;
+    uniqueId: string;
+    id: number;
 }

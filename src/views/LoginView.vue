@@ -32,13 +32,24 @@ export default {
       credentials: "include",
     });
 
+    var response = await fetch(window.location.origin + "/GetCurrentUserInfo", {
+      method: "POST",
+      headers:new Headers({'content-type':'application/json'}),
+      body: JSON.stringify(Global.toPOJO(Global.awesum.serverApp)),
+      credentials: "include",
+    }) as Response;
+
     if (response.status == 200) {
       var responseObj = await response.json() as ServerGetCurrentUserInfoResponse;
 
       if (responseObj.email) {
         this.awesum.serverApp.manualId = responseObj.manualId;
         this.awesum.serverApp.email = responseObj.email;
+        this.awesum.serverApp.id = responseObj.id;
+        this.awesum.clientApp.authenticationType = responseObj.authenticationType;
         this.awesum.clientApp.email = responseObj.email;
+
+        await Global.waitForDexie();
       }
     }
 
@@ -77,7 +88,7 @@ export default {
     async logOut() {
       this.awesum.clientApp.authenticationType = '';
       this.awesum.clientApp.email = '';
-      await this.awesum.clientApp.waitFor();
+      await Global.waitForDexie();
 
       var response = await fetch("https://awesum.app/Logout", {
         credentials: "include",
@@ -137,15 +148,31 @@ export default {
 
       <div>Followers can scan this barcode to begin following</div>
 
-      <div style="margin:1vmin;border:.1vmin solid blue;align-self:center;">
-        <QRCodeVue3 :width="200" :height="200" :value="awesum.serverApp.manualId"
-          :key="awesum.serverApp.manualId as string | undefined" :qr-options="{
+      <div style="margin:1vmin;align-self:center;">
+        <QRCodeVue3 
+        :myclass="'QRCodeVue3'"
+        :ButtonName="'asd'" 
+        :imgclass="''" 
+        :margin="0" 
+        :background-options="{ color: '#ffffff' }" 
+        :download-button="''" 
+        :file-ext="''" 
+        :image="''" 
+        :download-options="{ name: 'vqr', extension: 'png' }"
+        :width="200" 
+        :height="200" 
+        :value="awesum.serverApp.manualId"
+        :key="awesum.serverApp.manualId" 
+        :qr-options="{
             errorCorrectionLevel: 'H'
-          }" :image-options="{ hideBackgroundDots: true, imageSize: 0.4, margin: 10 }"
-          :corners-square-options="{ type: 'dot', color: '#34495E' }" :corners-dot-options="{
+          }" 
+          :image-options="{ hideBackgroundDots: true, imageSize: 0.4, margin: 10 }"
+          :corners-square-options="{ type: 'dot', color: '#34495E' }" 
+          :corners-dot-options="{
             type: undefined,
             color: '#41B883'
-          }" :dots-options="{
+          }" 
+          :dots-options="{
   type: 'dots',
   color: '#41B883',
   gradient: {
@@ -156,7 +183,8 @@ export default {
       { offset: 1, color: '#34495E' }
     ]
   }
-}" :download="false" />
+}" 
+:download="false" />
       </div>
       <div>Followers can also enter this manual code</div>
       <div>{{ awesum.serverApp.manualId }}</div>
@@ -173,5 +201,8 @@ export default {
 <style scoped>
 #loginView {
   padding:1vmin;
+}
+:deep(.QRCodeVue3) img {
+  border:.1vmin solid black;
 }
 </style>

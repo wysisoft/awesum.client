@@ -1,5 +1,4 @@
 export interface ServerDatabaseUnit {
-    id: number;
     name: string;
     order: number;
     lastModified: string;
@@ -7,8 +6,10 @@ export interface ServerDatabaseUnit {
     databaseTypeId: number;
     version: number;
     loginid: string;
-    uniqueId: string;
     databaseId: number;
     appId: number;
     appUniqueId: string;
+    databaseTypeUniqueId: string;
+    uniqueId: string;
+    id: number;
 }

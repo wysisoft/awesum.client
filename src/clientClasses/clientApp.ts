@@ -17,16 +17,12 @@ export class clientApp {
      }
      id = 1;
      table!: Table;
-     promises = Array<Promise<void>>();
-     async waitFor() {
-          await Promise.all(this.promises);
-          this.promises = Array<Promise<void>>();
-     }
+
      private _authenticationType: string = '';
-public get authenticationType():string { return this._authenticationType; }public set authenticationType(v:string) {this._authenticationType=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'authenticationType',v,this.table,this.promises))};
+public get authenticationType():string { return this._authenticationType; }public set authenticationType(v:string) {if(this._authenticationType != v){this._authenticationType=v;Global.setTablePropertyValueById(this.id, 'authenticationType',v,this.table)}}
      private _uniqueId: string = '';
-public get uniqueId():string { return this._uniqueId; }public set uniqueId(v:string) {this._uniqueId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'uniqueId',v,this.table,this.promises))};
+public get uniqueId():string { return this._uniqueId; }public set uniqueId(v:string) {if(this._uniqueId != v){this._uniqueId=v;Global.setTablePropertyValueById(this.id, 'uniqueId',v,this.table)}}
      private _email: string = '';
-public get email():string { return this._email; }public set email(v:string) {this._email=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'email',v,this.table,this.promises))};
+public get email():string { return this._email; }public set email(v:string) {if(this._email != v){this._email=v;Global.setTablePropertyValueById(this.id, 'email',v,this.table)}}
 
 }

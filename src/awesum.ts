@@ -156,8 +156,9 @@ export const awesum = reactive({
 
     var response = await fetch(window.location.origin + "/PushDatabaseItem", {
       method: "POST",
+      headers:new Headers({'content-type':'application/json'}),
       body: JSON.stringify({
-        databaseItem,
+        databaseItem: Global.toPOJO(databaseItem),
         force: false
       } as ServerPushDatabaseItemRequest),
       credentials: "include",
@@ -183,8 +184,9 @@ export const awesum = reactive({
   async pushDatabaseUnit(databaseUnit: ServerDatabaseUnitInterface) {
     var response = await fetch(window.location.origin + "/PushDatabaseUnit", {
       method: "POST",
+      headers:new Headers({'content-type':'application/json'}),
       body: JSON.stringify({
-        databaseUnit,
+        databaseUnit:Global.toPOJO(databaseUnit),
         force: false
       } as ServerPushDatabaseUnitRequest),
       credentials: "include",
@@ -214,8 +216,9 @@ export const awesum = reactive({
 
     var response = await fetch(window.location.origin + "/PushDatabaseType", {
       method: "POST",
+      headers:new Headers({'content-type':'application/json'}),
       body: JSON.stringify({
-        databaseType: databaseType,
+        databaseType: Global.toPOJO(databaseType),
         isLeader: databaseType.appUniqueId == Global.awesum.clientApp.uniqueId,
         force: false
       } as ServerPushDatabaseTypeRequest),
@@ -246,8 +249,9 @@ export const awesum = reactive({
 
     var response = await fetch(window.location.origin + "/PushDatabase", {
       method: "POST",
+      headers:new Headers({'content-type':'application/json'}),
       body: JSON.stringify({
-        database: database,
+        database: Global.toPOJO(database),
         isLeader: database.appUniqueId == Global.awesum.clientApp.uniqueId,
         force: false
       } as ServerPushDatabaseRequest),
@@ -281,7 +285,7 @@ export const awesum = reactive({
       method: "POST",
       headers:new Headers({'content-type':'application/json'}),
       body: JSON.stringify({
-        app: app,
+        app: Global.toPOJO(app),
         force: false
       } as ServerPushAppRequest),
       credentials: "include",
@@ -294,7 +298,10 @@ export const awesum = reactive({
         Global.router.push({
           path: '/' + I18nGlobal.t(resources.Error.key)
         });
+        return;
       }
+      
+      app.id = appResponse.appId;
 
       if (appResponse.requiresForce) {
         alert('Requires force');
@@ -308,6 +315,7 @@ export const awesum = reactive({
     }
   },
   async refresh() {
+    debugger;
     var apps = await Global.awesumDb.serverApps.where('uniqueId').equals(Global.awesum.clientApp.uniqueId).toArray();
     for (const app of apps) {
       await this.pushApp(app);

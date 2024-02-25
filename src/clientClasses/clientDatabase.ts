@@ -22,7 +22,7 @@ export class clientDatabase {
           this.promises = Array<Promise<void>>();
      }
      private _manualId: string = '';
-public get manualId():string { return this._manualId; }public set manualId(v:string) {this._manualId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'manualId',v,this.table,this.promises))};
+public get manualId():string { return this._manualId; }public set manualId(v:string) {if(this._manualId != v){this._manualId=v;Global.setTablePropertyValueById(this.id, 'manualId',v,this.table)}}
      private _alias: string = '';
-public get alias():string { return this._alias; }public set alias(v:string) {this._alias=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'alias',v,this.table,this.promises))};
+public get alias():string { return this._alias; }public set alias(v:string) {if(this._alias != v){this._alias=v;Global.setTablePropertyValueById(this.id, 'alias',v,this.table)}}
 }

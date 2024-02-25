@@ -17,31 +17,28 @@ export class ServerDatabaseType implements ServerDatabaseTypeInterface {
    }
    id = 0;
    table!: Table;
-   promises = Array<Promise<void>>();
-   async waitFor() {
-        await Promise.all(this.promises);
-        this.promises = Array<Promise<void>>();
-   }
     
-
     private _type: string = '';
-public get type():string { return this._type; }public set type(v:string) {this._type=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'type',v,this.table,this.promises))};
+public get type():string { return this._type; }public set type(v:string) {if(this._type != v){this._type=v;Global.setTablePropertyValueById(this.id, 'type',v,this.table)}}
     private _databaseId: number = 0;
-public get databaseId():number { return this._databaseId; }public set databaseId(v:number) {this._databaseId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'databaseId',v,this.table,this.promises))};
+public get databaseId():number { return this._databaseId; }public set databaseId(v:number) {if(this._databaseId != v){this._databaseId=v;Global.setTablePropertyValueById(this.id, 'databaseId',v,this.table)}}
     private _lastModified: string = '';
-public get lastModified():string { return this._lastModified; }public set lastModified(v:string) {this._lastModified=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'lastModified',v,this.table,this.promises))};
+public get lastModified():string { return this._lastModified; }public set lastModified(v:string) {if(this._lastModified != v){this._lastModified=v;Global.setTablePropertyValueById(this.id, 'lastModified',v,this.table)}}
     private _version: number = 0;
-public get version():number { return this._version; }public set version(v:number) {this._version=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'version',v,this.table,this.promises))};
+public get version():number { return this._version; }public set version(v:number) {if(this._version != v){this._version=v;Global.setTablePropertyValueById(this.id, 'version',v,this.table)}}
     private _order: number = 0;
-public get order():number { return this._order; }public set order(v:number) {this._order=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'order',v,this.table,this.promises))};
+public get order():number { return this._order; }public set order(v:number) {if(this._order != v){this._order=v;Global.setTablePropertyValueById(this.id, 'order',v,this.table)}}
     private _loginid: string = '';
-public get loginid():string { return this._loginid; }public set loginid(v:string) {this._loginid=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'loginid',v,this.table,this.promises))};
-    private _uniqueId: string = '';
-public get uniqueId():string { return this._uniqueId; }public set uniqueId(v:string) {this._uniqueId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'uniqueId',v,this.table,this.promises))};
+public get loginid():string { return this._loginid; }public set loginid(v:string) {if(this._loginid != v){this._loginid=v;Global.setTablePropertyValueById(this.id, 'loginid',v,this.table)}}
     private _databaseGroup: string = '';
-public get databaseGroup():string { return this._databaseGroup; }public set databaseGroup(v:string) {this._databaseGroup=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'databaseGroup',v,this.table,this.promises))};
+public get databaseGroup():string { return this._databaseGroup; }public set databaseGroup(v:string) {if(this._databaseGroup != v){this._databaseGroup=v;Global.setTablePropertyValueById(this.id, 'databaseGroup',v,this.table)}}
     private _appId: number = 0;
-public get appId():number { return this._appId; }public set appId(v:number) {this._appId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'appId',v,this.table,this.promises))};
+public get appId():number { return this._appId; }public set appId(v:number) {if(this._appId != v){this._appId=v;Global.setTablePropertyValueById(this.id, 'appId',v,this.table)}}
     private _appUniqueId: string = '';
-public get appUniqueId():string { return this._appUniqueId; }public set appUniqueId(v:string) {this._appUniqueId=v;this.promises.push(Global.setTablePropertyValueById(this.id, 'appUniqueId',v,this.table,this.promises))};
+public get appUniqueId():string { return this._appUniqueId; }public set appUniqueId(v:string) {if(this._appUniqueId != v){this._appUniqueId=v;Global.setTablePropertyValueById(this.id, 'appUniqueId',v,this.table)}}
+    private _databaseUniqueId: string = '';
+public get databaseUniqueId():string { return this._databaseUniqueId; }public set databaseUniqueId(v:string) {if(this._databaseUniqueId != v){this._databaseUniqueId=v;Global.setTablePropertyValueById(this.id, 'databaseUniqueId',v,this.table)}}
+    private _uniqueId: string = '';
+public get uniqueId():string { return this._uniqueId; }public set uniqueId(v:string) {if(this._uniqueId != v){this._uniqueId=v;Global.setTablePropertyValueById(this.id, 'uniqueId',v,this.table)}}
+
 }

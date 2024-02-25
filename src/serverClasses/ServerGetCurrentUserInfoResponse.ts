@@ -5,7 +5,7 @@ export interface ServerGetCurrentUserInfoResponse {
     manualId: string;
     authenticationType: string;
     email: string;
-    id: string;
+    id: number;
     appId: string;
     followers: Array<ServerFollower>;
 }
