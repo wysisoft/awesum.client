@@ -13,7 +13,7 @@ export default {
 <template>
   <div id="spellingUnitView">
     <h2>{{ awesum.currentDatabaseUnit.name }}</h2>
-    <div v-for="item in awesum.currentDatabaseItems" class="unit">
+    <div v-for="item in awesum.currentDatabaseItems" class="listItem">
       <router-link
         :to="'/' + $t(resources.Apps.key) + '/' + awesum.currentServerApp.name + '/' + awesum.currentDatabase.name + '/' + $t(resources.Spelling.key) + '/' + awesum.currentDatabaseUnit.name + '/' + item.order "
         class="btn btn-primary">{{ $t(resources.Lets_Go.key) }}</router-link>
@@ -31,9 +31,6 @@ export default {
   align-items: start;
 }
 
-.unit {
-  margin-top: 2vmin;
-}
 .unitName{
   margin-left:2vmin;
   display: inline-block;

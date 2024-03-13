@@ -53,3 +53,9 @@ body {
     border: 0.5vmin solid black;/*bounces around if I don't have this*/
     box-sizing: border-box;
 }
+
+.listItem{
+    margin-bottom: 1.25vmin;
+    display:flex;
+    align-items: baseline;
+}

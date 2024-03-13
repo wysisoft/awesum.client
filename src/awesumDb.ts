@@ -60,7 +60,7 @@ export class AwesumDb extends Dexie {
                 allowedToInitiateFollows: false,
                 authenticationType: 'google'
             } as ServerAppInterface);
-            await trans.table('serverApps').add({
+            var serverApp2 = await trans.table('serverApps').add({
                 id: 2,
                 name: 'app1',
                 uniqueId: uuid(),
@@ -87,10 +87,23 @@ export class AwesumDb extends Dexie {
                 loginid: '',
                 groupName: ''
             } as ServerDatabaseInterface);
+            var serverDatabase2 = await trans.table('serverDatabases').add({
+                id: 2,
+                name: 'Local1',
+                uniqueId: uuid(),
+                appId: 1,
+                lastModified: new Date().toISOString(),
+                appUniqueId: serverApp.uniqueId,
+                deleted: false,
+                version: 0,
+                order: 0,
+                loginid: '',
+                groupName: ''
+            } as ServerDatabaseInterface);
             var serverDatabaseType = await trans.table('serverDatabaseTypes').add({
                 id: 1,
                 databaseId: 1,
-                type: ItemType.spelling.toString(),
+                type: ItemType.spelling,
                 uniqueId: uuid(),
                 lastModified: new Date().toISOString(),
                 databaseUniqueId: serverDatabase.uniqueId,
@@ -104,8 +117,8 @@ export class AwesumDb extends Dexie {
 
             await trans.table('serverDatabaseTypes').add({
                 id: 2,
-                databaseId: 2,
-                type: ItemType.spelling.toString(),
+                databaseId: 1,
+                type: ItemType.reading,
                 uniqueId: uuid(),
                 lastModified: new Date().toISOString(),
                 databaseUniqueId: serverDatabase.uniqueId,
@@ -135,7 +148,7 @@ export class AwesumDb extends Dexie {
             await trans.table('serverDatabaseItems').bulkAdd([{
                 id: 1,
                 unitId: 1,
-                letters: 'brick',
+                letters: 'a,b,c,d,e\nr,w,c,k,v\ni,a,e,o,u\nc,w,t,y,g\nc,k,l,m,n',
                 sound: 'TTS',
                 text: 'brick',
                 order: 0,
@@ -157,7 +170,7 @@ export class AwesumDb extends Dexie {
             {
                 id: 2,
                 unitId: 1,
-                letters: 'brick',
+                letters: 'a,b,c,d,e\nr,w,c,k,v\ni,a,e,o,u\nc,w,t,y,g\nc,k,l,m,n',
                 sound: 'TTS',
                 text: 'brick',
                 order: 1,

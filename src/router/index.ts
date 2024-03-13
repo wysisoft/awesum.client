@@ -75,7 +75,7 @@ Global.router = createRouter({
       path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app/:database/:type/:unit/:index',
       name: 'AppItem',
       component: async () => {
-        if (Global.awesum.currentItemType.type == ItemType.spelling.toString()) {
+        if (Global.awesum.currentItemType.type == ItemType.spelling) {
           return SpellingItemView;
         }
       },
@@ -84,7 +84,7 @@ Global.router = createRouter({
       path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app/:database/:type/:unit',
       name: 'AppUnit',
       component: async () => {
-        if (Global.awesum.currentItemType.type == ItemType.spelling.toString()) {
+        if (Global.awesum.currentItemType.type == ItemType.spelling) {
           return SpellingUnitView;
         }
       },
@@ -93,7 +93,7 @@ Global.router = createRouter({
       path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app/:database/:type',
       name: 'AppType',
       component: async () => {
-        if (Global.awesum.currentItemType.type == ItemType.spelling.toString()) {
+        if (Global.awesum.currentItemType.type == ItemType.spelling) {
           return SpellingView;
         }
       }
@@ -132,7 +132,7 @@ Global.router = createRouter({
       path: '/' + I18nGlobal.t(resources.Settings.key) + '/:app/:database/:type',
       name: 'SettingsType',
       component: () => {
-        if (Global.awesum.currentItemType.type == ItemType.spelling.toString()) {
+        if (Global.awesum.currentItemType.type == ItemType.spelling) {
           return SpellingView;
         }
       }
@@ -226,6 +226,10 @@ Global.router.beforeEach(async (to, from, next) => {
   }
 
   if (to.params.type) {
+
+    
+
+
     var foundItemType = linq(Global.awesum.currentDatabaseTypes).singleOrDefault(x => x.type.lc(ItemType[to.params.type.toString().toLocaleLowerCase() as keyof typeof ItemType].toString()));
 
     if (!foundItemType) {
@@ -238,7 +242,7 @@ Global.router.beforeEach(async (to, from, next) => {
     else {
       if (Global.awesum.currentItemType != foundItemType) {
         Global.awesum.currentItemType = foundItemType;
-        Global.awesum.currentDatabaseUnits = await Global.awesumDb.serverDatabaseUnits.where('typeId').equals(Global.awesum.currentItemType.id).toArray();
+        Global.awesum.currentDatabaseUnits = await Global.awesumDb.serverDatabaseUnits.where('databaseTypeId').equals(Global.awesum.currentItemType.id).toArray();
       }
     }
   }

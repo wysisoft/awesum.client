@@ -11,6 +11,7 @@ import * as ConfettiGenerator from "confetti-js"
 
 export default {
   setup() {
+    debugger;
     const pos = { top: 0, left: 0, x: 0, y: 0 };
     let isDragging = ref(false);
     const footer = ref(null as any as HTMLElement);
@@ -29,7 +30,7 @@ export default {
       backButton
     };
   },
-  onMounted() {
+  mounted() {
     debugger;
     this.footer = document.getElementById('footer') as HTMLElement;
     this.spellingDiv = document.getElementById('spellingDiv') as HTMLElement;
@@ -82,13 +83,13 @@ export default {
 
           const showConfetti = () => {
             jsConfetti.addConfetti({
-              emojis: awesum.getPropertyValue('emojis',ItemLevel.databaseItem)?.value,
-              emojiSize: awesum.getPropertyValue('emojiSize',ItemLevel.databaseItem)?.value,
-              confettiNumber: awesum.getPropertyValue('confettiNumber',ItemLevel.databaseItem)?.value
+              emojis: awesum.getPropertyValue('emojis', ItemLevel.databaseItem)?.value,
+              emojiSize: awesum.getPropertyValue('emojiSize', ItemLevel.databaseItem)?.value,
+              confettiNumber: awesum.getPropertyValue('confettiNumber', ItemLevel.databaseItem)?.value
             });
           }
 
-          var successSound = await awesum.getPropertyValue('successSound',ItemLevel.databaseItem)?.value;
+          var successSound = await awesum.getPropertyValue('successSound', ItemLevel.databaseItem)?.value;
 
           (spellingDiv as any).balloons = new Balloons(document.getElementById('balloonCanvas') as HTMLElement);
           (spellingDiv as any).balloons.createBalloons(30);
@@ -222,7 +223,12 @@ export default {
       topMarginDivParentDiv.appendChild(placeholderDiv);
       var innerHtml = '';
 
-      var letters = awesum.currentDatabaseItem.letters.split('');
+      var letters = [];
+      var lettersTemp = awesum.currentDatabaseItem.letters.split('\n');
+
+      for (const iterator of lettersTemp) {
+        letters.push(iterator.split(','));
+      }
 
       if (letters.length == 0) {
         var word = awesum.currentDatabaseItem.text;

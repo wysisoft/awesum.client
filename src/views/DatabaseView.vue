@@ -1,11 +1,15 @@
 <script lang="ts">
+import { ServerDatabaseType } from '@/clientClasses/ServerDatabaseType';
 import { Global } from '@/global';
 import type { ServerDatabase as ServerDatabaseInterface } from "@/serverClasses/ServerDatabase";
 import { reactive } from 'vue';
-
+import  { ItemType } from '@/itemType';
 
 export default {
     setup() {
+      return {
+        ItemType
+      }
   },
   methods: {
   }
@@ -15,9 +19,10 @@ export default {
 <template>
   <div id="databaseView">
     <h2>{{ awesum.currentDatabase.name }}</h2>
-    <RouterLink :to="'/' + $t(resources.Apps.key) + '/' + awesum.currentServerApp.name + '/' + awesum.currentDatabase.name +'/' + $t(resources.Spelling.key)" class="btn btn-primary">
-      {{ $t(resources.Spelling.key) }}
-    </RouterLink>
+    <div  v-for="typ in awesum.currentDatabaseTypes" class="listItem">
+      <router-link :to="'/' + $t(resources.Apps.key) + '/' + awesum.serverApp.name + '/' + awesum.currentDatabase.name+ '/' + ItemType[typ.type]" class="btn btn-primary">{{ $t(resources.Lets_Go.key) }}</router-link>
+      <div class="areaNameDiv" style="margin-left:2vmin;">{{ typ.type }}</div>
+    </div>
   </div>
 </template>
 <style scoped>

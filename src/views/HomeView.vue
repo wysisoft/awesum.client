@@ -9,7 +9,7 @@ export default {
   <div id="homeView">
     <div id=content>
       <h2>{{ $t(resources.Awesum.key) }}</h2>
-      <div v-for="app in awesum.serverApps" class="appDiv">
+      <div v-for="app in awesum.serverApps" class="listItem">
         <router-link :to="'/' + $t(resources.Apps.key) + '/' + app.name" class="btn btn-primary appButton">
           <span>{{ $t(resources.Lets_Go.key) }}</span>
         </router-link>
@@ -29,9 +29,6 @@ export default {
   display:flex;
   flex-direction:column;
   height: 100%;
-}
-.appDiv {
-  margin-top: 2vmin;
 }
 
 .footer {

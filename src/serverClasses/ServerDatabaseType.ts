@@ -1,5 +1,5 @@
 export interface ServerDatabaseType {
-    type: string;
+    type: number;
     databaseId: number;
     lastModified: string;
     version: number;

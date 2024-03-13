@@ -18,8 +18,8 @@ export class ServerDatabaseType implements ServerDatabaseTypeInterface {
    id = 0;
    table!: Table;
     
-    private _type: string = '';
-public get type():string { return this._type; }public set type(v:string) {if(this._type != v){this._type=v;Global.setTablePropertyValueById(this.id, 'type',v,this.table)}}
+    private _type: number = 0;
+public get type():number { return this._type; }public set type(v:number) {if(this._type != v){this._type=v;Global.setTablePropertyValueById(this.id, 'type',v,this.table)}}
     private _databaseId: number = 0;
 public get databaseId():number { return this._databaseId; }public set databaseId(v:number) {if(this._databaseId != v){this._databaseId=v;Global.setTablePropertyValueById(this.id, 'databaseId',v,this.table)}}
     private _lastModified: string = '';
