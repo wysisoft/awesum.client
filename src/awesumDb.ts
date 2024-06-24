@@ -1,5 +1,5 @@
 import Dexie, { liveQuery, type Table } from "dexie";
-import { clientApp } from "./clientClasses/clientApp";
+import { ClientApp } from "./clientClasses/ClientApp";
 import { ServerDatabase } from './clientClasses/ServerDatabase';
 
 import type { ServerDatabase as ServerDatabaseInterface } from './serverClasses/ServerDatabase';
@@ -33,7 +33,7 @@ export class AwesumDb extends Dexie {
     serverDatabases!: Table<ServerDatabaseInterface, number>;
     serverFollowers!: Table<ServerFollowerInterface, number>;
     serverApps!: Table<ServerAppInterface, number>;
-    clientApp!: Table<clientApp, number>;
+    clientApp!: Table<ClientApp, number>;
     serverDatabaseUnits!: Table<ServerDatabaseUnitInterface, number>;
     serverDatabaseItems!: Table<ServerDatabaseItemInterface, number>;
     clientDatabases!: Table<clientDatabase, number>;
@@ -45,7 +45,7 @@ export class AwesumDb extends Dexie {
             await trans.table('clientApp').add({
                 id: 1,
                 uniqueId,
-            } as clientApp);
+            } as ClientApp);
             var serverApp = await trans.table('serverApps').add({
                 id: 1,
                 name: 'app0',
@@ -198,7 +198,7 @@ export class AwesumDb extends Dexie {
     async initialize() {
 
         var c = await this.clientApp.limit(1).first();
-        Global.awesum.clientApp = new clientApp(c, this.clientApp);
+        Global.awesum.clientApp = new ClientApp(c, this.clientApp);
         if (Global.awesum.clientApp) {
             var s = linq(await this.serverApps.where('id').equals(Global.awesum.clientApp!.id).toArray()).single();
             Global.setApp(s);
@@ -215,7 +215,7 @@ export class AwesumDb extends Dexie {
         ) as any as Array<ServerDatabaseInterface>;
 
         Global.awesum.currentDatabases = useDexieLiveQueryWithDeps(() => {
-            return this.serverDatabases.where({ appId: Global.awesum.currentServerApp.id }).toArray();
+            return this.serverDatabases.where({ appId: Global.awesum.currentServerApp.id }).reverse().sortBy('order');
         }, {
             initialValue: await this.serverDatabases.where({ appId: Global.awesum.currentServerApp.id }).toArray(), immediate: true
             /* Supported all watch options, default: immediate: true */

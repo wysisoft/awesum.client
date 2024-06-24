@@ -56,4 +56,8 @@ export class Global {
         // Replace searchString with replaceString only if it is found at the beginning of originalString
         return originalString.replace(regex, replaceString);
     }
+
+     static capitalizeFirstLetter(string: string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
 }

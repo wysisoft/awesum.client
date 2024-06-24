@@ -12,7 +12,10 @@ export default {
 
 <template>
   <div id="areasView">
-    <h2>{{ awesum.currentServerApp.name }}</h2>
+    <h1>{{ awesum.currentServerApp.name }}</h1>
+
+    <h2>{{$t(resources.Databases.key)}}</h2>
+
     <div  v-for="database in awesum.currentDatabases" class="listItem">
       <router-link :to="'/' + $t(resources.Apps.key) + '/' + awesum.serverApp.name + '/' + database.name" class="btn btn-primary">{{ $t(resources.Lets_Go.key) }}</router-link>
       <div class="areaNameDiv" style="margin-left:2vmin;">{{ database.name }}</div>

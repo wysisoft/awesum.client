@@ -37,6 +37,8 @@ export default {
 </script>
 
 <template>
+   
+  
   <div id="appDiv">
 
     <div id="balloonCanvas"
@@ -138,7 +140,9 @@ export default {
     </div>
 
     <div id="appViewContent">
-      <RouterView :key="$route.path" />
+
+      <RouterView :key="$route.path"/>
+
     </div>
   </div>
 </template>

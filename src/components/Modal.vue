@@ -18,6 +18,19 @@ export default {
         }
     },
     mounted() {
+        
+        var modalDiv = document.getElementById('awesumModalDiv');
+        if (!modalDiv) {
+            modalDiv = document.createElement('div');
+            modalDiv.style.height = '0px';
+            modalDiv.style.width = '0px';
+            modalDiv.style.position = 'absolute';
+            modalDiv.id = 'awesumModalDiv';
+            document.body.prepend(modalDiv);
+        }
+
+        modalDiv.appendChild(this.$el);
+
         this.modal = new Modal(this.$el);
         this.$el.addEventListener('shown.bs.modal', () => {
             document.getElementById(this.focusedElementId).focus()
@@ -26,6 +39,7 @@ export default {
         this.$el.addEventListener('hidden.bs.modal', () => {
             this.$emit('hidden');
         })
+
     },
     setup(props) {
         const modal = ref({} as Modal);
@@ -46,15 +60,17 @@ export default {
 </script>
 
 <template>
-    <div class="modal fade" tabindex="-1" aria-hidden="true">
+    <div class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">{{ title }}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button id="awesumModalCloseButton" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <slot></slot>
             </div>
         </div>
     </div>
 </template>
+<style scoped>
+</style>

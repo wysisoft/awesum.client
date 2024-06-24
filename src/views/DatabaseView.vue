@@ -8,7 +8,8 @@ import  { ItemType } from '@/itemType';
 export default {
     setup() {
       return {
-        ItemType
+        ItemType,
+        Global
       }
   },
   methods: {
@@ -21,7 +22,7 @@ export default {
     <h2>{{ awesum.currentDatabase.name }}</h2>
     <div  v-for="typ in awesum.currentDatabaseTypes" class="listItem">
       <router-link :to="'/' + $t(resources.Apps.key) + '/' + awesum.serverApp.name + '/' + awesum.currentDatabase.name+ '/' + ItemType[typ.type]" class="btn btn-primary">{{ $t(resources.Lets_Go.key) }}</router-link>
-      <div class="areaNameDiv" style="margin-left:2vmin;">{{ typ.type }}</div>
+      <div class="areaNameDiv" style="margin-left:2vmin;">{{ Global.capitalizeFirstLetter( ItemType[typ.type]) }}</div>
     </div>
   </div>
 </template>

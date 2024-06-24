@@ -11,7 +11,6 @@ import * as ConfettiGenerator from "confetti-js"
 
 export default {
   setup() {
-    debugger;
     const pos = { top: 0, left: 0, x: 0, y: 0 };
     let isDragging = ref(false);
     const footer = ref(null as any as HTMLElement);
@@ -19,6 +18,7 @@ export default {
     const imageAndSound = ref(null as any as HTMLElement);
     const forwardButton = ref(null as any as HTMLElement);
     const backButton = ref(null as any as HTMLElement);
+    const scopedDataAttribute = ref('');
 
     return {
       pos,
@@ -27,11 +27,18 @@ export default {
       spellingDiv,
       imageAndSound,
       forwardButton,
-      backButton
+      backButton,
+      scopedDataAttribute
     };
   },
   mounted() {
-    debugger;
+    var viewAttributes = document.getElementsByClassName('view')[0].attributes;
+    for (let i = 0; i < viewAttributes.length; i++) {
+      if (viewAttributes[i].name.startsWith('data-')) {
+        this.scopedDataAttribute = viewAttributes[i].name;
+        break;
+      }
+    }
     this.footer = document.getElementById('footer') as HTMLElement;
     this.spellingDiv = document.getElementById('spellingDiv') as HTMLElement;
     this.imageAndSound = document.getElementById('imageAndSound') as HTMLElement;
@@ -158,7 +165,6 @@ export default {
       }
     },
     reset() {
-      debugger;
       var viewDiv = document.querySelector('.view') as HTMLElement;
       viewDiv.style.display = 'flex';
       const sizeChanged = function () {
@@ -214,12 +220,13 @@ export default {
       spellingDiv?.appendChild(topMarginDivParentDiv);
 
       var topMarginDiv = document.createElement('div');
-      topMarginDiv.innerHTML = '<div class="sliderPlaceholder" data-v-55943314>&nbsp;</div>'
+      topMarginDiv.innerHTML = '<div class="sliderPlaceholder" ' + this.scopedDataAttribute + '>&nbsp;</div>'
       topMarginDivParentDiv.appendChild(topMarginDiv);
       var placeholderDiv = document.createElement('div');
-      placeholderDiv.setAttribute('data-v-55943314', '');
+      placeholderDiv.setAttribute(this.scopedDataAttribute, '');
       placeholderDiv.style.cssText = 'border:.5vmin solid black;width:auto;display:inline-block;background:white;';
       placeholderDiv.classList.add('sliderPlaceholder');
+
       topMarginDivParentDiv.appendChild(placeholderDiv);
       var innerHtml = '';
 
@@ -249,7 +256,7 @@ export default {
       }
 
       for (const arr of letters) {
-        innerHtml += '<div class="sliderPlaceholder" data-v-55943314 >&nbsp;</div>';
+        innerHtml += '<button class="sliderPlaceholder" ' + this.scopedDataAttribute + '>&nbsp;</button>';
       }
       placeholderDiv.innerHTML = innerHtml;
 
@@ -257,18 +264,253 @@ export default {
       var builtWord = [];
       for (const arr of letters) {
         let sliderOuterDiv = document.createElement("div");
+
+
+
         sliderOuterDiv.style.cssText = 'overflow:hidden;height:42vmin;'
         sliderOuterDiv.classList.add('spellingDivChild');
         spellingDiv.appendChild(sliderOuterDiv);
 
         let sliderDiv = document.createElement("div");
+
+        sliderDiv.addEventListener("wheel", e => {
+
+          this.toggleGrabbing(true);
+
+          e.preventDefault();
+
+          let el = (e.target as HTMLElement).parentElement as any;
+          if (el.animation) {
+            el.animationWasCanceled = true;
+            console.log('canceling previous animation')
+          }
+
+          var transparentChildren = el.getElementsByClassName('transparentLetter');
+          for (let i = transparentChildren.length - 1; i >= 0; --i) {
+            const child = transparentChildren[i];
+            child.classList.remove('transparentLetter');
+            child.classList.add('opaqueLetter');
+          }
+
+          el.initialClickTop = e.clientY;
+          el.initialElementTop = parseFloat(el.style.top);
+
+          el.minTop = -(
+            el.clientHeight -
+            el.elementsToShowWhenFullyScrolled * el.lastElementChild.clientHeight
+          );
+
+          let mouseMove = (e: any) => {
+            if (e.touches && e.touches.length > 0) {
+              e = e.touches[0]
+            }
+
+            var newTop = el.initialElementTop + (e.clientY - el.initialClickTop);
+            if (newTop > 0) {
+              newTop = newTop / 20;
+              if (newTop > 20) {
+                newTop = 20;
+              }
+            }
+
+            if (newTop < el.minTop) {
+              newTop = el.minTop + (e.clientY - el.initialClickTop) / 20;
+              if (newTop < el.minTop - 20) {
+                newTop = el.minTop - 20;
+              }
+            }
+
+            el.style.top = newTop + "px";
+
+            console.log('mousemove');
+          };
+
+          let mouseUp = async (e: any) => {
+
+            this.toggleGrabbing(false);
+
+            if (parseFloat(el.style.top) > 0) {
+              console.log('if (parseFloat(el.style.top) > 0) {')
+              el.selectedElement = el.firstElementChild;
+
+              let offsetCount = el.selectedElementOffset;
+              while (
+                offsetCount > 0 &&
+                el.selectedElement !=
+                (el.selectedElementOffset > 0
+                  ? el.lastElementChild
+                  : el.firstElementChild)
+              ) {
+                el.selectedElement =
+                  el.selectedElementOffset > 0
+                    ? el.selectedElement.nextElementSibling
+                    : el.selectedElement.previousElementSibling;
+                --offsetCount;
+              }
+
+              el.animation = el.animate(
+                [{ transform: "translateY(-" + parseFloat(el.style.top) + "px)" }],
+                {
+                  duration: 100,
+                  iterations: 1,
+                }
+              );
+              el.animation.onfinish = function () {
+                if (!el.animationWasCanceled) {
+                  el.style.top = "0vmin";
+                }
+                el.animationWasCanceled = false;
+                el.animation = null;
+              };
+            } else if (parseFloat(el.style.top) < el.minTop) {
+
+console.log('} else if (parseFloat(el.style.top) < el.minTop) {')
+
+              el.selectedElement = el.lastElementChild;
+
+              let offsetCount = el.selectedElementOffset;
+              while (
+                offsetCount > 0 &&
+                el.selectedElement !=
+                (el.selectedElementOffset > 0
+                  ? el.lastElementChild
+                  : el.firstElementChild)
+              ) {
+                el.selectedElement =
+                  el.selectedElementOffset > 0
+                    ? el.selectedElement.nextElementSibling
+                    : el.selectedElement.previousElementSibling;
+                --offsetCount;
+              }
+
+              el.animation = el.animate(
+                [
+                  {
+                    transform:
+                      "translateY(" + (el.minTop - parseFloat(el.style.top)) + "px)",
+                  },
+                ],
+                {
+                  duration: 100,
+                  iterations: 1,
+                }
+              );
+              el.animation.onfinish = function () {
+                if (!el.animationWasCanceled) {
+                  el.style.top = el.minTop + "px";
+                }
+                el.animationWasCanceled = false;
+                el.animation = null;
+              };
+            } else {
+              console.log('else {')
+              var minDistance = 9999999;
+              var elAtMinDistance: any = null;
+              for (const child of el.children) {
+                let distance = Math.abs(
+                  child.getBoundingClientRect().top -
+                  el.parentElement.getBoundingClientRect().top
+                );
+                if (distance < minDistance) {
+                  minDistance = distance;
+                  elAtMinDistance = child;
+                  console.log(elAtMinDistance.innerHTML)
+                }
+                
+              }
+              el.selectedElement = elAtMinDistance;
+              let offsetCount = el.selectedElementOffset;
+              while (
+                offsetCount > 0 &&
+                el.selectedElement !=
+                (el.selectedElementOffset > 0
+                  ? el.lastElementChild
+                  : el.firstElementChild)
+              ) {
+                el.selectedElement =
+                  el.selectedElementOffset > 0
+                    ? el.selectedElement.nextElementSibling
+                    : el.selectedElement.previousElementSibling;
+                --offsetCount;
+              }
+
+              var translateAmount = Math.round(
+                elAtMinDistance.getBoundingClientRect().top -
+                  el.parentElement.getBoundingClientRect().top >
+                  0
+                  ? -(
+                    elAtMinDistance.getBoundingClientRect().top -
+                    el.parentElement.getBoundingClientRect().top
+                  )
+                  : elAtMinDistance.getBoundingClientRect().top -
+                  el.parentElement.getBoundingClientRect().top
+              );
+
+              var shouldGoDown =
+                elAtMinDistance.getBoundingClientRect().top -
+                el.parentElement.getBoundingClientRect().top >
+                0;
+
+              el.animation = el.animate(
+                [
+                  {
+                    transform:
+                      "translateY(" +
+                      (shouldGoDown ? translateAmount : -translateAmount) +
+                      "px)",
+                  },
+                ],
+                {
+                  duration: 100,
+                  iterations: 1,
+                }
+              );
+              el.animation.onfinish = function () {
+                if (!el.animationWasCanceled) {
+                  el.style.top =
+                    parseFloat(el.style.top) +
+                    (shouldGoDown ? translateAmount : -translateAmount) +
+                    "px";
+                  if (elAtMinDistance == el.firstElementChild) {
+                    el.style.top = "0vmin";
+                  }
+                  if (elAtMinDistance == el.lastElementChild) {
+                    el.style.top = el.minTop + "px";
+                  }
+                }
+                el.animationWasCanceled = false;
+                el.animation = null;
+              };
+            }
+
+            var sliders = document.getElementsByClassName('slider')
+
+            var letters = el.getElementsByClassName('opaqueLetter');
+            for (let index = letters.length - 1; index >= 0; --index) {
+              const letter = letters[index];
+              letter.classList.remove('opaqueLetter');
+              letter.classList.add('transparentLetter');
+
+            }
+
+            this.lettersChanged();
+
+            console.log('mouseup');
+          };
+
+          mouseMove({ ...e, clientY: e.clientY + Math.sign(e.deltaY) * 50 });
+          mouseUp(e);
+
+
+        });
+
         sliderDiv.addEventListener('mousedown', this.mouseDown);
         sliderDiv.addEventListener('touchstart', this.mouseDown, { passive: false });
         (sliderDiv as any).elementsToShowWhenFullyScrolled = 2;
         (sliderDiv as any).selectedElementOffset = 1;
 
         sliderDiv.classList.add('slider');
-        sliderDiv.setAttribute('data-v-55943314', '');
+        sliderDiv.setAttribute(this.scopedDataAttribute, '');
         sliderDiv.style.top = '0vmin';
 
         sliderOuterDiv.appendChild(sliderDiv);
@@ -283,6 +525,7 @@ export default {
         var first = true;
         for (const ltr of arr) {
           sliderLetter = document.createElement("div");
+          sliderLetter.setAttribute(this.scopedDataAttribute, '');
           sliderDiv.appendChild(sliderLetter);
           sliderLetter.innerHTML = ltr.replace(' ', '&nbsp;').toLocaleLowerCase();
           if (first) {
@@ -681,30 +924,36 @@ export default {
 <template>
   <div class="view">
 
-    <div @click="awesum.playAudioOrSpeech()" id="imageAndSound">
+    <button @click="awesum.playAudioOrSpeech()" id="imageAndSound" ref="imageAndSound">
       <img :src="awesum.currentDatabaseItem.image" class="img" v-if="awesum.currentDatabaseItem.image" />
       <FaVolumeHigh v-if="awesum.currentDatabaseItem.sound" />
-    </div>
+    </button>
 
 
     <div id="spellingDiv"></div>
-    <BsCalendar4Range />
-    <FaWandMagicSparkles @click="applyHint()" class="hintButton" />
 
-    <FaBackward @click="awesum.goBack" v-if="awesum.canGoBack()" id="backButton" class="backButton" />
-    <FaForward @click="awesum.goForward" v-if="awesum.canGoForward()" id="forwardButton" class="forwardButton" />
+    <button if="hintButton" ref="hintButton" v-if="true" class="hintButton" >
+    <FaWandMagicSparkles @click="applyHint()" />
+  </button>
+
+  <button @click="awesum.goBack" v-if="awesum.canGoBack()" id="backButton" class="backButton" >
+    <FaBackward />
+  </button>
+  <button id="forwardButton" class="forwardButton" @click="awesum.goForward" v-if="awesum.canGoForward()" >
+    <FaForward  />
+  </button>
 
     <div id="footer" class="footer" style="height: 6vmin; overflow: auto; " v-on:mousedown="mouseDownHandler">
-      <div v-for="item in awesum.currentDatabaseItems" @click="footerClicked(item)" @click.capture="footerClicked2()"
+      <button v-for="item in awesum.currentDatabaseItems" @click="footerClicked(item)" @click.capture="footerClicked2()"
         :class="item == awesum.currentDatabaseItem
-          ? 'footerButton currentFooterButton'
-          : 'footerButton'
-          ">
+      ? 'footerButton currentFooterButton'
+      : 'footerButton'
+      ">
         {{
-          item.text.toLocaleLowerCase()
-            /*awesum.currentDatabaseItems.indexOf(item)*/
-        }}
-      </div>
+      item.text.toLocaleLowerCase()
+      /*awesum.currentDatabaseItems.indexOf(item)*/
+    }}
+      </button>
     </div>
 
 
@@ -717,7 +966,6 @@ export default {
   right: 2vmin;
   top: 30vmin;
   height: 8vmin;
-  padding: 1vmin;
   border: .5vmin solid black;
   cursor: pointer;
 }
@@ -774,9 +1022,10 @@ export default {
   flex-direction: column;
   position: relative;
   align-items: center;
-  height: 94vmin;
+  height: 92vmin;
   width: 100%;
   display: none;
+  user-select: none;
 }
 
 .footer::-webkit-scrollbar {
@@ -840,5 +1089,22 @@ export default {
   text-shadow: 1px 1px 1px #878700;
   cursor: grab;
   margin-top: 4vmin;
+}
+
+.transparentLetter {
+  opacity: .05;
+}
+
+.opaqueLetter {
+  opacity: 1;
+}
+
+.hintButton {
+  position: absolute;
+  right: 2vmin;
+  top: 0vmin;
+  height: 7vmin;
+  border: .5vmin solid black;
+  cursor: pointer;
 }
 </style>

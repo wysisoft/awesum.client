@@ -1,9 +1,8 @@
-//usePlatform.js
 import { reactive } from 'vue';
 import type { ServerApp as ServerAppInterface } from './serverClasses/ServerApp';
 import type { ServerApp } from './clientClasses/ServerApp';
 import type { ServerDatabase } from './clientClasses/ServerDatabase';
-import type { clientApp } from './clientClasses/clientApp';
+import type { ClientApp } from './clientClasses/ClientApp';
 import type { ServerDatabase as ServerDatabaseInterface } from './serverClasses/ServerDatabase';
 import type { ServerDatabaseUnit } from './clientClasses/ServerDatabaseUnit';
 import type { ServerDatabaseUnit as ServerDatabaseUnitInterface } from './serverClasses/ServerDatabaseUnit';
@@ -40,15 +39,15 @@ export const awesum = reactive({
   progressBarHandle: 0 as any,
   serverApp: null as unknown as ServerApp,
   serverApps: Array<ServerApp>(),
-  clientApp: null as unknown as clientApp,
+  clientApp: null as unknown as ClientApp,
   currentServerApp: null as unknown as ServerAppInterface,
   currentDatabase: null as unknown as ServerDatabaseInterface,
   currentDatabases: Array<ServerDatabaseInterface>(),
-  currentDatabaseUnits: Array<ServerDatabaseUnit>(),
+  currentDatabaseUnits: Array<ServerDatabaseUnitInterface>(),
   currentDatabaseTypes: Array<ServerDatabaseType>(),
-  currentDatabaseUnit: null as unknown as ServerDatabaseUnit,
-  currentDatabaseItems: Array<ServerDatabaseItem>(),
-  currentDatabaseItem: null as unknown as ServerDatabaseItem,
+  currentDatabaseUnit: null as unknown as ServerDatabaseUnitInterface,
+  currentDatabaseItems: Array<ServerDatabaseItemInterface>(),
+  currentDatabaseItem: null as unknown as ServerDatabaseItemInterface,
   serverDatabases: Array<ServerDatabaseInterface>(),
 
   currentItemType: null as unknown as ServerDatabaseType,

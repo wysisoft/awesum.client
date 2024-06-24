@@ -19,12 +19,21 @@ import SpellingItemView from "@/views/SpellingItemView.vue";
 
 import DatabaseView from "@/views/DatabaseView.vue";
 import AppSettingsView from "@/views/AppSettingsView.vue";
+import DatabaseSettingsView from "@/views/DatabaseSettingsView.vue";
 
 import { from as linq } from "linq-to-typescript"
 
 import { I18nGlobal } from "@/i18nGlobal";
 import { ItemType } from "@/itemType";
 import AppView from "@/views/AppView.vue";
+import { ItemLevel } from '@/itemLevel';
+
+declare module 'vue-router' {
+  interface RouteMeta {
+    // must be declared by every route
+    itemLevel: ItemLevel
+  }
+}
 
 Global.router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -79,6 +88,9 @@ Global.router = createRouter({
           return SpellingItemView;
         }
       },
+      meta: {
+        ItemLevel: ItemLevel.databaseItem
+      }
     },
     {
       path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app/:database/:type/:unit',
@@ -88,6 +100,9 @@ Global.router = createRouter({
           return SpellingUnitView;
         }
       },
+      meta: {
+        ItemLevel: ItemLevel.databaseUnit
+      }
     },
     {
       path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app/:database/:type',
@@ -96,17 +111,26 @@ Global.router = createRouter({
         if (Global.awesum.currentItemType.type == ItemType.spelling) {
           return SpellingView;
         }
+      },
+      meta: {
+        ItemLevel: ItemLevel.databaseType
       }
     },
     {
       path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app/:database',
       name: 'AppDatabase',
-      component: DatabaseView
+      component: DatabaseView,
+      meta: {
+        ItemLevel: ItemLevel.database
+      }
     },
     {
       path: '/' + I18nGlobal.t(resources.Apps.key) + '/:app',
       name: 'AppApp',
-      component: AppView
+      component: AppView,
+      meta: {
+        ItemLevel: ItemLevel.app
+      }
     },
     {
       path: '/' + I18nGlobal.t(resources.Apps.key),
@@ -118,6 +142,9 @@ Global.router = createRouter({
       name: 'SettingsItem',
       component: () => {
       },
+      meta: {
+        ItemLevel: ItemLevel.databaseItem
+      }
     },
     {
       path: '/' + I18nGlobal.t(resources.Settings.key) + '/:app/:database/:type/:unit',
@@ -127,6 +154,9 @@ Global.router = createRouter({
           return SpellingView;
         }
       },
+      meta: {
+        ItemLevel: ItemLevel.databaseUnit
+      }
     },
     {
       path: '/' + I18nGlobal.t(resources.Settings.key) + '/:app/:database/:type',
@@ -135,17 +165,26 @@ Global.router = createRouter({
         if (Global.awesum.currentItemType.type == ItemType.spelling) {
           return SpellingView;
         }
+      },
+      meta: {
+        ItemLevel: ItemLevel.databaseType
       }
     },
     {
       path: '/' + I18nGlobal.t(resources.Settings.key) + '/:app/:database',
       name: 'SettingsDatabase',
-      component: DatabaseView
+      component: DatabaseSettingsView,
+      meta: {
+        ItemLevel: ItemLevel.database
+      }
     },
     {
       path: '/' + I18nGlobal.t(resources.Settings.key) + '/:app',
       name: 'SettingsApp',
-      component: AppSettingsView
+      component: AppSettingsView,
+      meta: {
+        ItemLevel: ItemLevel.app
+      }
     },
     {
       path: '/' + I18nGlobal.t(resources.Settings.key),
@@ -227,10 +266,7 @@ Global.router.beforeEach(async (to, from, next) => {
 
   if (to.params.type) {
 
-    
-
-
-    var foundItemType = linq(Global.awesum.currentDatabaseTypes).singleOrDefault(x => x.type.lc(ItemType[to.params.type.toString().toLocaleLowerCase() as keyof typeof ItemType].toString()));
+    var foundItemType = linq(Global.awesum.currentDatabaseTypes).singleOrDefault(x => x.type == ItemType[to.params.type.toString().toLocaleLowerCase() as keyof typeof ItemType]);
 
     if (!foundItemType) {
       Global.router.push({

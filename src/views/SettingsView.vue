@@ -9,18 +9,24 @@ export default {
     Modal
   },
   setup() {
+    const submitButton = null! as HTMLButtonElement;
+    const cancelButton = null! as HTMLButtonElement;
+
     let resetEverythingValue = ref(0);
     let showModal = ref(false);
 
     return {
       resetEverythingValue,
-      showModal
+      showModal,
+      submitButton,
+      cancelButton,
     };
   },
   async beforeCreate() {
   },
   mounted() {
-
+    this.submitButton = (this.$refs.submitButton as HTMLButtonElement)!;
+    this.cancelButton = (this.$refs.cancelButton as HTMLButtonElement)!;
   },
 
   methods: {
@@ -50,26 +56,27 @@ export default {
 
 
 
-    <h2>App Settings:</h2>
+    <h2>Awesum Settings:</h2>
     <div class="settingsArea">
-      <div>App Id: {{ awesum.serverApp.manualId == '' ? 'Never synced to server' : awesum.serverApp.manualId }}</div>
+      <div>Awesum Id: {{ awesum.serverApp.manualId == '' ? 'Log in and sync to receive ID' : awesum.serverApp.manualId }}</div>
 
 
     </div>
 
-    <h2>Databases:</h2>
+    <h2>{{ $t(resources.Apps.key) }}</h2>
 
     <div v-for="app in awesum.serverApps" class="serverApps">
       <router-link :to="'/' + $t(resources.Settings.key) + '/' + app.name" class="btn btn-primary">Edit</router-link>
       <div class="areaNameDiv" style="margin-left:2vmin;">{{ app.name }}</div>
     </div>
 
-    <h2>Spelling Settings:</h2>
+    <!-- <h2>Spelling Settings:</h2>
     <RouterLink :to="{ path: $t(resources.Type_Settings.key), query: { type: $t(resources.Spelling.key) } }">
       <button class="btn btn-primary" id="spellingDetails">{{ $t(resources.Go_To_Spelling_Settings.key) }}</button>
-    </RouterLink>
+    </RouterLink> -->
 
-    <Modal @hidden="showModal = false" :shown="showModal" :title="'Reset All Client Data'" :focusedElementId="'resetEverythingValueInput'">
+    <Modal @hidden="showModal = false" :shown="showModal" :title="'Reset All Client Data'"
+      :focusedElementId="'resetEverythingValueInput'">
       <div class="modal-body">
 
         <span>Are you sure you want to totally delete everything? If so, enter the result of 4 * 10 - 3 + 1</span>
@@ -80,7 +87,7 @@ export default {
       <div class="modal-footer" style="justify-content:space-between">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" ref="cancelButton">Cancel</button>
         <button type="button" class="btn btn-primary" v-if="resetEverythingValue == 38" ref="submitButton"
-          @vue:mounted="$refs.submitButton.focus()" @vue:unmounted="$refs.cancelButton.focus()"
+          @vue:mounted="submitButton!.focus()" @vue:unmounted="cancelButton.focus()"
           @click="resetEverything">Submit</button>
       </div>
     </Modal>

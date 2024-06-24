@@ -8,7 +8,9 @@ export default {
 <template>
   <div id="homeView">
     <div id=content>
-      <h2>{{ $t(resources.Awesum.key) }}</h2>
+      <h1>{{ $t(resources.Awesum.key) }}</h1>
+
+      <h2>{{ $t(resources.Apps.key) }}</h2>
       <div v-for="app in awesum.serverApps" class="listItem">
         <router-link :to="'/' + $t(resources.Apps.key) + '/' + app.name" class="btn btn-primary appButton">
           <span>{{ $t(resources.Lets_Go.key) }}</span>
@@ -29,6 +31,10 @@ export default {
   display:flex;
   flex-direction:column;
   height: 100%;
+  background-image: url("@/assets/images/home.jpg");
+  background-color: rgba(255,255,255,0.7);
+  background-blend-mode: lighten;
+  background-size: contain;
 }
 
 .footer {

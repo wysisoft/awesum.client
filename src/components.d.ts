@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     AdSave: typeof import('@kalimahapps/vue-icons/ad')['AdSave']
     EditAudioComponent: typeof import('./src/components/EditAudioComponent.vue')['default']
+    EditTextComponent: typeof import('./src/components/EditTextComponent.vue')['default']
     FaBackward: typeof import('@kalimahapps/vue-icons/fa')['FaBackward']
     FaBars: typeof import('@kalimahapps/vue-icons/fa')['FaBars']
     FaCompress: typeof import('@kalimahapps/vue-icons/fa')['FaCompress']

@@ -1,7 +1,7 @@
 
 import { createApp, reactive } from 'vue'
 
-import "./bootstrap.scss"
+import "./scss/bootstrap.scss"
 import "bootstrap"
 
 import App from './App.vue'
