@@ -1,4 +1,3 @@
-
 import { createApp, reactive } from 'vue'
 
 import "./scss/bootstrap.scss"
@@ -12,6 +11,12 @@ import { resources } from './resources/Resources'
 import { I18nGlobal } from './i18nGlobal'
 import { awesum } from './awesum'
 
+//record time right now
+const start = new Date().getTime();
+
+
+
+
 
 const app = createApp(App)
 app.use(I18nGlobal._t);
@@ -23,4 +28,15 @@ Global.awesumDb = await AwesumDb.CreateAsync(app.config.globalProperties.awesum)
 await Global.awesumDb.initialize();
 app.use(router)
 
-app.mount('#app')
+//if start is less than 1 second from now, wait a second, else continue on
+const end = new Date().getTime();
+if (end - start < 2000) {
+    await setTimeout(() => {
+        app.mount('#app')
+    }, 2000);
+}
+else {
+    app.mount('#app')
+}
+
+

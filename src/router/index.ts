@@ -15,6 +15,14 @@ import AreasView from "@/views/AreasView.vue";
 import ErrorView from "@/views/ErrorView.vue";
 import SpellingView from "@/views/SpellingView.vue";
 import SpellingUnitView from "@/views/SpellingUnitView.vue";
+import SpellingSettingsView from "@/views/SpellingSettingsView.vue";
+
+import SpellingItemSettingsView from "@/views/SpellingSettingsView.vue";
+
+
+
+
+import SpellingUnitSettingsView from "@/views/SpellingUnitSettingsView.vue";
 import SpellingItemView from "@/views/SpellingItemView.vue";
 
 import DatabaseView from "@/views/DatabaseView.vue";
@@ -27,6 +35,7 @@ import { I18nGlobal } from "@/i18nGlobal";
 import { ItemType } from "@/itemType";
 import AppView from "@/views/AppView.vue";
 import { ItemLevel } from '@/itemLevel';
+import { ServerDatabaseUnit } from '@/clientClasses/ServerDatabaseUnit';
 
 declare module 'vue-router' {
   interface RouteMeta {
@@ -89,7 +98,7 @@ Global.router = createRouter({
         }
       },
       meta: {
-        ItemLevel: ItemLevel.databaseItem
+        itemLevel: ItemLevel.databaseItem
       }
     },
     {
@@ -101,7 +110,7 @@ Global.router = createRouter({
         }
       },
       meta: {
-        ItemLevel: ItemLevel.databaseUnit
+        itemLevel: ItemLevel.databaseUnit
       }
     },
     {
@@ -113,7 +122,7 @@ Global.router = createRouter({
         }
       },
       meta: {
-        ItemLevel: ItemLevel.databaseType
+        itemLevel: ItemLevel.databaseType
       }
     },
     {
@@ -121,7 +130,7 @@ Global.router = createRouter({
       name: 'AppDatabase',
       component: DatabaseView,
       meta: {
-        ItemLevel: ItemLevel.database
+        itemLevel: ItemLevel.database
       }
     },
     {
@@ -129,7 +138,7 @@ Global.router = createRouter({
       name: 'AppApp',
       component: AppView,
       meta: {
-        ItemLevel: ItemLevel.app
+        itemLevel: ItemLevel.app
       }
     },
     {
@@ -141,9 +150,12 @@ Global.router = createRouter({
       path: '/' + I18nGlobal.t(resources.Settings.key) + '/:app/:database/:type/:unit/:index',
       name: 'SettingsItem',
       component: () => {
+        if (Global.awesum.currentItemType.type == ItemType.spelling) {
+          return SpellingItemSettingsView;
+        }
       },
       meta: {
-        ItemLevel: ItemLevel.databaseItem
+        itemLevel: ItemLevel.databaseItem
       }
     },
     {
@@ -151,11 +163,11 @@ Global.router = createRouter({
       name: 'SettingsUnit',
       component: () => {
         if (Global.awesum.currentDatabaseUnit) {
-          return SpellingView;
+          return SpellingUnitSettingsView;
         }
       },
       meta: {
-        ItemLevel: ItemLevel.databaseUnit
+        itemLevel: ItemLevel.databaseUnit
       }
     },
     {
@@ -163,11 +175,11 @@ Global.router = createRouter({
       name: 'SettingsType',
       component: () => {
         if (Global.awesum.currentItemType.type == ItemType.spelling) {
-          return SpellingView;
+          return SpellingSettingsView;
         }
       },
       meta: {
-        ItemLevel: ItemLevel.databaseType
+        itemLevel: ItemLevel.databaseType
       }
     },
     {
@@ -175,7 +187,7 @@ Global.router = createRouter({
       name: 'SettingsDatabase',
       component: DatabaseSettingsView,
       meta: {
-        ItemLevel: ItemLevel.database
+        itemLevel: ItemLevel.database
       }
     },
     {
@@ -183,7 +195,7 @@ Global.router = createRouter({
       name: 'SettingsApp',
       component: AppSettingsView,
       meta: {
-        ItemLevel: ItemLevel.app
+        itemLevel: ItemLevel.app
       }
     },
     {
@@ -197,7 +209,6 @@ Global.router = createRouter({
 Global.router.beforeEach(async (to, from, next) => {
 
   //all the reasons why we might want to redirect or 
-  
   if (
     to.path.lc('/' + I18nGlobal.t(resources.Error.key))) {
     next();
@@ -208,7 +219,6 @@ Global.router.beforeEach(async (to, from, next) => {
   if (userName == '') {
     if (!to.path.lc('/' + I18nGlobal.t(resources.Name.key))
     ) {
-
       Global.router.push({
         path: '/' + I18nGlobal.t(resources.Name.key)
       });
@@ -289,6 +299,7 @@ Global.router.beforeEach(async (to, from, next) => {
     var foundUnit = linq(Global.awesum.currentDatabaseUnits).singleOrDefault(x => x.name.lc(to.params.unit.toString()));
 
     if (!foundUnit) {
+      debugger;
       Global.router.push({
         path: '/' + I18nGlobal.t(resources.Error.key)
       });
@@ -297,6 +308,7 @@ Global.router.beforeEach(async (to, from, next) => {
     }
     else {
       if (Global.awesum.currentDatabaseUnit != foundUnit) {
+        debugger;
         Global.awesum.currentDatabaseUnit = foundUnit;
         Global.awesum.currentDatabaseItems = await Global.awesumDb.serverDatabaseItems.where('unitId').equals(Global.awesum.currentDatabaseUnit.id).toArray();
 
@@ -325,7 +337,26 @@ Global.router.beforeEach(async (to, from, next) => {
   else {
   }
 
-  document.title =  I18nGlobal.t(resources.Awesum.key) + ' - ' + to.name!.toString();
+  if(to.name! == 'AppApp'){
+    document.title =  I18nGlobal.t(resources.Awesum.key) + ' - ' + Global.awesum.currentServerApp.name;
+  }
+  else if(to.name! == 'AppDatabase'){
+    document.title =  I18nGlobal.t(resources.Awesum.key) + ' - ' + Global.awesum.currentDatabase.name;
+  }
+  else if(to.name! == 'AppType'){
+    document.title =  I18nGlobal.t(resources.Awesum.key) + ' - ' + Global.capitalizeFirstLetter(ItemType[Global.awesum.currentItemType.type]);
+  }
+  else if(to.name! == 'AppUnit'){
+    document.title =  I18nGlobal.t(resources.Awesum.key) + ' - ' + Global.awesum.currentDatabaseUnit.name;
+  }
+  else if(to.name! == 'AppItem'){
+    document.title =  I18nGlobal.t(resources.Awesum.key) + ' - ' + Global.awesum.currentDatabaseItem.text;
+  }
+  else
+  {
+    document.title =  I18nGlobal.t(resources.Awesum.key) + ' - ' + to.name!.toString();
+
+  }
   next();
 });
 

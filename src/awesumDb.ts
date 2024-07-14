@@ -23,7 +23,6 @@ import { computed, createApp, reactive, watch, watchEffect } from 'vue'
 import type { awesum as awesumType } from "./awesum";
 import { ItemType } from "./itemType";
 import { v4 as uuid } from 'uuid';
-import type { clientDatabase } from "./clientClasses/clientDatabase";
 import { Global } from "./global";
 import { from as linq } from "linq-to-typescript"
 import { useDexieLiveQuery, useDexieLiveQueryWithDeps } from "./dexieLiveQuery";
@@ -36,7 +35,6 @@ export class AwesumDb extends Dexie {
     clientApp!: Table<ClientApp, number>;
     serverDatabaseUnits!: Table<ServerDatabaseUnitInterface, number>;
     serverDatabaseItems!: Table<ServerDatabaseItemInterface, number>;
-    clientDatabases!: Table<clientDatabase, number>;
 
     public static async CreateAsync(awesum: typeof awesumType) {
         const returnValue = new AwesumDb();
@@ -205,29 +203,31 @@ export class AwesumDb extends Dexie {
         }
 
         Global.awesum.serverApps = useDexieLiveQuery(
-            () => this.serverApps.toArray(),
-            { initialValue: await this.serverApps.toArray() }
+            () => this.serverApps.reverse().sortBy('order'),
+            { initialValue: await this.serverApps.reverse().sortBy('order') }
         ) as any as Array<ServerApp>;
 
         Global.awesum.serverDatabases = useDexieLiveQuery(
-            () => this.serverDatabases.toArray(),
-            { initialValue: await this.serverDatabases.toArray() }
+            () => this.serverDatabases.reverse().sortBy('order'),
+            { initialValue: await this.serverDatabases.reverse().sortBy('order') }
         ) as any as Array<ServerDatabaseInterface>;
 
         Global.awesum.currentDatabases = useDexieLiveQueryWithDeps(() => {
             return this.serverDatabases.where({ appId: Global.awesum.currentServerApp.id }).reverse().sortBy('order');
         }, {
-            initialValue: await this.serverDatabases.where({ appId: Global.awesum.currentServerApp.id }).toArray(), immediate: true
-            /* Supported all watch options, default: immediate: true */
+            initialValue: await this.serverDatabases.where({ appId: Global.awesum.currentServerApp.id }).reverse().sortBy('order'), immediate: true
         }) as any as Array<ServerDatabaseInterface>;
 
-        Global.awesum.currentDatabaseTypes = await this.serverDatabaseTypes.toArray()
+        Global.awesum.currentDatabaseTypes = useDexieLiveQueryWithDeps(() => {
+            return Global.awesum.currentDatabase ? this.serverDatabaseTypes.where({ databaseId:Global.awesum.currentDatabase.id }).reverse().sortBy('order') : this.serverDatabaseTypes.reverse().sortBy('order');
+        }, {
+            initialValue: await this.serverDatabaseTypes.reverse().sortBy('order'), immediate: true
+        }) as any as Array<ServerDatabaseTypeInterface>;
 
     }
     constructor() {
         super('awesum');
         this.version(1).stores({
-            clientDatabases: '++id',
             serverDatabases: '++id,appId',
             serverFollowers: '++id',
             serverApps: '++id,uniqueId',

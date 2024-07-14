@@ -129,6 +129,7 @@ h6 {
 p {
   margin-top: 0;
   margin-bottom: $paragraph-margin-bottom;
+  margin-left:2vmin;
 }
 
 
@@ -407,10 +408,12 @@ button,
 select,
 optgroup,
 textarea {
-  margin: 0; // 1
   font-family: inherit;
   @include font-size(inherit);
-  line-height: inherit;
+  line-height: 1vmin;
+  padding:1vmin;
+outline: 1vmin;
+border:.25vmin solid black;
 }
 
 // Remove the inheritance of text transform in Firefox

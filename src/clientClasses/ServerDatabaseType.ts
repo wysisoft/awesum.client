@@ -41,4 +41,6 @@ public get databaseUniqueId():string { return this._databaseUniqueId; }public se
     private _uniqueId: string = '';
 public get uniqueId():string { return this._uniqueId; }public set uniqueId(v:string) {if(this._uniqueId != v){this._uniqueId=v;Global.setTablePropertyValueById(this.id, 'uniqueId',v,this.table)}}
 
+    private _deleted: boolean = false;
+public get deleted():boolean { return this._deleted; }public set deleted(v:boolean) {if(this._deleted != v){this._deleted=v;Global.setTablePropertyValueById(this.id, 'deleted',v,this.table)}}
 }

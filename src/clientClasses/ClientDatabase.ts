@@ -19,7 +19,7 @@ export class ClientDatabase {
 
 
      private _manualId: string = '';
-     public get manualId(): string { return this._manualId; } public set manualId(v: string) { if (this._manualId != v) { this._manualId = v; Global.setTablePropertyValueById(this.id, 'manualId', v, this.table) } }
+public get manualId():string { return this._manualId; }public set manualId(v:string) {if(this._manualId != v){this._manualId=v;Global.setTablePropertyValueById(this.id, 'manualId',v,this.table)}}
      private _alias: string = '';
-     public get alias(): string { return this._alias; } public set alias(v: string) { if (this._alias != v) { this._alias = v; Global.setTablePropertyValueById(this.id, 'alias', v, this.table) } }
+public get alias():string { return this._alias; }public set alias(v:string) {if(this._alias != v){this._alias=v;Global.setTablePropertyValueById(this.id, 'alias',v,this.table)}}
 }

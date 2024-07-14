@@ -6,16 +6,16 @@ string filePath = Args[0];
 string fileContent = File.ReadAllText(filePath);
 
 // Regular expressions for matching px and rem units
-string pxRegex = @"(\d*\.?\d+)px";
-string remRegex = @"(\d*\.?\d+)rem";
-string emRegex = @"(\d*\.?\d+)em";
+string pxRegex = @"(\d*\.?\d+) ?px";
+string remRegex = @"(\d*\.?\d+) ?rem";
+string emRegex = @"(\d*\.?\d+) ?em";
 
 
 // Conversion factors assuming iPad resolution (768x1024)
 // These factors may need adjustment based on the specific iPad model and orientation
 double pxToVminFactor = 100.0 / 1024; // 1px to vmin
 double remToVminFactor = 2.5; // Assuming 1rem = 16px
-
+double emToVminFactor = 2.5;
 
 // Replace px with vmin
 fileContent = Regex.Replace(fileContent, pxRegex, m =>

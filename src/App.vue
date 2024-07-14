@@ -21,13 +21,14 @@ export default {
     showEdit() {
       return this.$router.currentRoute.value.fullPath.startsWith('/' + I18nGlobal.t(Global.resources.Apps.key));
     },
-    showSave() {
+    showPlay() {
       return this.$router.currentRoute.value.fullPath.startsWith('/' + I18nGlobal.t(Global.resources.Settings.key));
     },
     toggleFullScreen() {
       this.toggle();
     },
     changeUnit(unit: ServerDatabaseUnit) {
+      debugger;
       this.awesum.currentDatabaseUnit = unit;
       this.$router.push({ path: this.$t(this.resources.Spelling.key), query: { unit: unit.name } });
     }
@@ -52,28 +53,6 @@ export default {
       style="display: none;position:absolute;width:100vmin;height:100vmin;margin:auto;z-index:999;pointer-events:none;"></canvas>
     <div style="display: none;width:100%;height:100%;position:absolute;margin:auto;z-index:9999;" id="player">
     </div>
-
-
-    <!-- Modal -->
-    <div class="modal fade" id="addPairingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Spelling Units</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-            <div v-for="unit in awesum.currentDatabaseUnits">
-              <button data-bs-dismiss="modal" type="button" class="btn btn-primary"
-                @click="changeUnit(unit as ServerDatabaseUnit)">{{ $t(resources.Lets_Go.key) }}</button>
-              <div>{{ unit.name }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
 
 
     <div v-if="awesum.buttonPressed && $router.currentRoute.value.name != 'Start' &&
@@ -107,11 +86,11 @@ export default {
           <faPenToSquare />
           <span>{{ $t(resources.Edit.key) }}</span>
         </router-link>
-        <router-link v-if="showSave()"
+        <router-link v-if="showPlay()"
           :to="Global.replaceAtFront($router.currentRoute.value.fullPath, '/' + $t(resources.Settings.key), '/' + $t(resources.Apps.key))"
           class="btn btn-link">
-          <FlFilledSave />
-          <span>{{ $t(resources.Save.key) }}</span>
+          <CgPlayButtonR/>
+          <span>{{ $t(resources.Play.key) }}</span>
         </router-link>
         <button v-if="awesum.clientApp.email"
           @click="awesum.refresh()"
@@ -121,7 +100,7 @@ export default {
         </button>
         
         <div id="appViewLoginDiv">
-          <router-link to="/Login" class="btn btn-link">
+          <router-link to="/Login" class="btn btn-link" style="padding-right:0vmin;">
             <faUser />
             <div id="loginTextDiv">
               <span v-if="awesum.clientApp.email">{{ awesum.clientApp.email }}</span>
@@ -180,6 +159,7 @@ export default {
   padding-right: .5vmin;
   border-radius: .5vmin;
   margin-left: .5vmin;
+  margin: 0vmin;
   height: 100%;
 }
 
@@ -216,6 +196,7 @@ export default {
   display: flex;
   justify-content: flex-end;
 }
+
 
 #appViewContent {
   flex-grow: 1;

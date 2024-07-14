@@ -4,6 +4,7 @@ import { Global } from "@/global";
 
 export class ServerDatabaseUnit implements ServerDatabaseUnitInterface {
     constructor(other?:Partial<ServerDatabaseUnit>|null, table?: Table) {
+        debugger;
         if (other) {
             (this as any)["id"] = (other as any)["id"];
              for (var i in other) {
@@ -19,7 +20,7 @@ export class ServerDatabaseUnit implements ServerDatabaseUnitInterface {
    table!: Table;
     
     private _name: string = '';
-public get name():string { return this._name; }public set name(v:string) {if(this._name != v){this._name=v;Global.setTablePropertyValueById(this.id, 'name',v,this.table)}}
+public get name():string { return this._name; }public set name(v:string) {debugger;if(this._name != v){this._name=v;Global.setTablePropertyValueById(this.id, 'name',v,this.table)}}
     private _order: number = 0;
 public get order():number { return this._order; }public set order(v:number) {if(this._order != v){this._order=v;Global.setTablePropertyValueById(this.id, 'order',v,this.table)}}
     private _lastModified: string = '';

@@ -51,7 +51,7 @@ export default {
     <h1>Databases:</h1>
     
     <div  v-for="database in awesum.serverDatabases" class="serverDatabases">
-      <div class="areaNameDiv" style="margin-left:2vmin;">{{ database.name }}</div>
+      <div class="areaNameDiv">{{ database.name }}</div>
       <router-link :to="'/' + database.name" class="btn btn-primary">Edit</router-link>
     </div>
 

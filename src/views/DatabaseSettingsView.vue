@@ -13,19 +13,22 @@ import { v4 as uuid } from 'uuid';
 import type { Table } from 'dexie';
 import { from as linq } from "linq-to-typescript"
 import { ItemType } from '@/itemType';
+import type { ServerDatabaseType } from '@/serverClasses/ServerDatabaseType';
+
 
 
 export default {
   components: {
-    Modal
+    Modal,
+    EditTextComponent
   },
   setup() {
     let showModal = ref(false);
-    let currentDatabase = ref({} as ServerDatabaseInterface);
+    let currentType = ref({} as ServerDatabaseType);
 
     return {
       showModal,
-      currentDatabase,
+      currentType,
       Global,
       ItemType
     }
@@ -36,65 +39,85 @@ export default {
   mounted() {
   },
   methods: {
-    showDeleteModal(database:ServerDatabaseInterface){
-      this.currentDatabase = database;
+    showDeleteModal(typ:ServerDatabaseType){
+      this.currentType = typ;
       this.showModal = true;
     },
-    async deleteDatabase(){
+    async deleteType(){
       this.showModal = false;
-      await Global.awesumDb.serverDatabases.delete(this.currentDatabase.id);
-      this.awesum.currentDatabases = this.awesum.currentDatabases.filter((database:ServerDatabaseInterface) => database.appId == this.awesum.serverApp.id);
+      await Global.awesumDb.serverDatabaseTypes.delete(this.currentType.id);
     },
-    async addDatabase(){
-      var maxId = linq(Global.awesum.currentDatabases).max((database:ServerDatabaseInterface) => database.id);
-      var maxOrder = linq(Global.awesum.currentDatabases).max((database:ServerDatabaseInterface) => database.order);
-      await Global.awesumDb.serverDatabases.add({
-        id: maxId + 1,
-                name: 'Local' + (maxId + 1).toString(),
-                uniqueId: uuid(),
-                appId: Global.awesum.currentServerApp.id,
-                lastModified: new Date().toISOString(),
-                appUniqueId: this.awesum.currentServerApp.uniqueId,
-                deleted: false,
-                version: 0,
-                order: maxOrder+1,
-                loginid: '',
-                groupName: ''
+    async addSpellingType(){
+      var maxId = Global.awesum.currentDatabaseTypes.length == 0 ? 0 : linq(Global.awesum.currentDatabaseTypes).max((databaseType: ServerDatabaseType) => databaseType.id);
+      var maxOrder = Global.awesum.currentDatabaseTypes.length == 0 ? 0 : linq(Global.awesum.currentDatabaseTypes).max((databaseType: ServerDatabaseType) => databaseType.order);
+
+      await Global.awesumDb.serverDatabaseTypes.add({
+        id: maxId+1,
+        type: ItemType.spelling,
+        databaseId: this.awesum.currentDatabase.id,
+        lastModified: new Date().toISOString(),
+        deleted: false,
+        version: 0,
+        order: maxOrder+1,
+        loginid: '',
+        groupName: ''
       });
-      this.awesum.currentDatabases.sort((a:ServerDatabaseInterface,b:ServerDatabaseInterface) => b.order - a.order);
-    }
+    },
+    async addReadingType(){
+      var maxId = Global.awesum.currentDatabaseTypes.length == 0 ? 0 : linq(Global.awesum.currentDatabaseTypes).max((databaseType: ServerDatabaseType) => databaseType.id);
+      var maxOrder = Global.awesum.currentDatabaseTypes.length == 0 ? 0 : linq(Global.awesum.currentDatabaseTypes).max((databaseType: ServerDatabaseType) => databaseType.order);
+
+      await Global.awesumDb.serverDatabaseTypes.add({
+        id: maxId+1,
+        type: ItemType.reading,
+        databaseId: this.awesum.currentDatabase.id,
+        lastModified: new Date().toISOString(),
+        deleted: false,
+        version: 0,
+        order: maxOrder+1,
+        loginid: '',
+        groupName: ''
+      });
+    },
   },
 };
 
 </script>
 
 <template>
-  <div id="appSettingsView" style="padding:2vmin;">
+  <div class="pageView" style="background-image: none;background-color: inherit;">
+    <div class="content">
+      <h1> {{ awesum.currentDatabase.name + " " + $t(resources.Settings.key) }}</h1>
+
+    <EditTextComponent :requiresEditAndSave="true"  :redirectUrlAfterSave="'/' + $t(resources.Settings.key) + '/' + awesum.currentServerApp.name + '/' " :parentObject="awesum.currentDatabase" :displayName="'Database Name'" :propertyName="'name'" />
+
     
 
     <h2>{{ awesum.currentDatabase.name }}</h2>
-
-    <button class="btn btn-primary" v-on:click="addType()" >{{ $t(resources.Add_Type.key) }}</button>
-
+    <button v-if="Global.awesum.currentDatabaseTypes.length == 0 || Global.awesum.currentDatabaseTypes.filter((o:ServerDatabaseType)=>{return o.type == 1}).length == 0" class="btn btn-primary" v-on:click="addSpellingType()">{{ $t(resources.AddSpelling.key) }}</button>
+    <button v-if="Global.awesum.currentDatabaseTypes.length == 0 || Global.awesum.currentDatabaseTypes.filter((o:ServerDatabaseType)=>{return o.type == 3}).length == 0" class="btn btn-primary" v-on:click="addReadingType()">{{ $t(resources.AddReading.key) }}</button>
 
     <div  v-for="typ in awesum.currentDatabaseTypes" class="listItem">
       <router-link :to="Global.replaceAtFront('/' + $t(resources.Apps.key) + '/' + awesum.serverApp.name + '/' + awesum.currentDatabase.name+ '/' + ItemType[typ.type], '/' + $t(resources.Apps.key), '/' + $t(resources.Settings.key))" class="btn btn-primary">{{ $t(resources.Edit.key) }}</router-link>
-      <div class="areaNameDiv" style="margin-left:2vmin;">{{ Global.capitalizeFirstLetter( ItemType[typ.type]) }}</div>
+      <button class="btn btn-primary" v-on:click="showDeleteModal(typ)">{{ $t(resources.Delete.key) }}</button>
+
+      <div class="areaNameDiv">{{ Global.capitalizeFirstLetter( ItemType[typ.type]) }}</div>
     </div>
     
     <Modal @hidden="showModal = false" :shown="showModal" :title="'Delete Database'"
       :focusedElementId="'cancelButton'">
       <div class="modal-body">
 
-        <span>Are you sure you want to delete database {{ currentDatabase.name }}</span>
+        <span>Are you sure you want to delete type {{ ItemType[currentType.type] }}</span>
       </div>
       <div class="modal-footer" style="justify-content:space-between">
         <button id="cancelButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal" ref="cancelButton">Cancel</button>
         <button type="button" class="btn btn-primary" ref="submitButton"
-          @click="deleteDatabase">Submit</button>
+          @click="deleteType">Submit</button>
       </div>
     </Modal>
 
+  </div>
   </div>
 </template>
 <style scoped>

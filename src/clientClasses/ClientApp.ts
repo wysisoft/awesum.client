@@ -19,10 +19,10 @@ export class ClientApp {
      table!: Table;
 
      private _authenticationType: string = '';
-     public get authenticationType(): string { return this._authenticationType; } public set authenticationType(v: string) { if (this._authenticationType != v) { this._authenticationType = v; Global.setTablePropertyValueById(this.id, 'authenticationType', v, this.table) } }
+public get authenticationType():string { return this._authenticationType; }public set authenticationType(v:string) {if(this._authenticationType != v){this._authenticationType=v;Global.setTablePropertyValueById(this.id, 'authenticationType',v,this.table)}}
      private _uniqueId: string = '';
-     public get uniqueId(): string { return this._uniqueId; } public set uniqueId(v: string) { if (this._uniqueId != v) { this._uniqueId = v; Global.setTablePropertyValueById(this.id, 'uniqueId', v, this.table) } }
+public get uniqueId():string { return this._uniqueId; }public set uniqueId(v:string) {if(this._uniqueId != v){this._uniqueId=v;Global.setTablePropertyValueById(this.id, 'uniqueId',v,this.table)}}
      private _email: string = '';
-     public get email(): string { return this._email; } public set email(v: string) { if (this._email != v) { this._email = v; Global.setTablePropertyValueById(this.id, 'email', v, this.table) } }
+public get email():string { return this._email; }public set email(v:string) {if(this._email != v){this._email=v;Global.setTablePropertyValueById(this.id, 'email',v,this.table)}}
 
 }

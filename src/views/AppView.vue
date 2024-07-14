@@ -5,28 +5,23 @@ import { reactive } from 'vue';
 
 
 export default {
-    setup() {
+  setup() {
   },
 }
 </script>
 
 <template>
-  <div id="areasView">
-    <h1>{{ awesum.currentServerApp.name }}</h1>
+  <div class="pageView">
+    <div class="content">
+      <h1>{{ awesum.currentServerApp.name }}</h1>
 
-    <h2>{{$t(resources.Databases.key)}}</h2>
+      <h2>{{ $t(resources.Databases.key) }}</h2>
 
-    <div  v-for="database in awesum.currentDatabases" class="listItem">
-      <router-link :to="'/' + $t(resources.Apps.key) + '/' + awesum.serverApp.name + '/' + database.name" class="btn btn-primary">{{ $t(resources.Lets_Go.key) }}</router-link>
-      <div class="areaNameDiv" style="margin-left:2vmin;">{{ database.name }}</div>
+      <div v-for="database in awesum.currentDatabases" class="listItem">
+        <router-link :to="'/' + $t(resources.Apps.key) + '/' + awesum.serverApp.name + '/' + database.name"
+          class="btn btn-primary">{{ $t(resources.Lets_Go.key) }}</router-link>
+        <div class="areaNameDiv">{{ database.name }}</div>
+      </div>
     </div>
   </div>
 </template>
-<style scoped>
-#areasView{
-  padding:1vmin;
-  display:flex;
-  flex-direction:column;
-  height: 100%;
-}
-</style>

@@ -11,4 +11,5 @@ export interface ServerDatabaseType {
     databaseUniqueId: string;
     uniqueId: string;
     id: number;
+    deleted: boolean;
 }

@@ -62,6 +62,9 @@ export default {
     async addPairing() {
 
     },
+    onCameraReady(){
+
+    },
     onDetect(detectedCodes: any) {
     },
     loginViewAddPairingButtonClicked() {
@@ -110,12 +113,60 @@ export default {
   <div id="loginView">
     <div v-if="awesum.clientApp.email" id="loginViewLoggedInContent">
       <h1>Log Out:</h1>
-      <button @click="logOut()" id="loginViewLogoutButton">Log Out</button>
+      <p>
+        <button @click="logOut()" id="loginViewLogoutButton">Log Out</button>
+      </p>
       <h1>Pairings:</h1>
-      <button data-bs-toggle="modal" data-bs-target="#addPairingModal" class="btn btn-primary"
+      <p>
+        <button data-bs-toggle="modal" data-bs-target="#addPairingModal" class="btn btn-primary"
         id="loginViewAddPairingButton" type="button" @click="loginViewAddPairingButtonClicked">{{
           $t(resources.Add_Pairing.key) }}</button>
 
+<div>Followers can scan this barcode to begin following you</div>
+
+<div style="margin:1vmin;align-self:center;">
+  <QRCodeVue3 
+  :myclass="'QRCodeVue3'"
+  :ButtonName="'asd'" 
+  :imgclass="''" 
+  :margin="0" 
+  :background-options="{ color: '#ffffff' }" 
+  :download-button="''" 
+  :file-ext="''" 
+  :image="''" 
+  :download-options="{ name: 'vqr', extension: 'png' }"
+  :width="200" 
+  :height="200" 
+  :value="awesum.serverApp.manualId"
+  :key="awesum.serverApp.manualId" 
+  :qr-options="{
+      errorCorrectionLevel: 'H'
+    }" 
+    :image-options="{ hideBackgroundDots: true, imageSize: 0.4, margin: 10 }"
+    :corners-square-options="{ type: 'dot', color: '#34495E' }" 
+    :corners-dot-options="{
+      type: undefined,
+      color: '#41B883'
+    }" 
+    :dots-options="{
+type: 'dots',
+color: '#41B883',
+gradient: {
+type: 'linear',
+rotation: 0,
+colorStops: [
+{ offset: 0, color: '#41B883' },
+{ offset: 1, color: '#34495E' }
+]
+}
+}" 
+:download="false" />
+</div>
+<div>Followers can also enter this manual code to begin following you</div>
+<div>{{ awesum.serverApp.manualId }}</div>
+      </p>
+
+      
 
       <!-- Modal -->
       <div class="modal fade" id="addPairingModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -126,7 +177,16 @@ export default {
               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-              <qrcode-stream @detect="onDetect"></qrcode-stream>
+
+              <FeCameraOff style="
+    font-size: 11vmin;
+    margin: auto;
+    position: absolute;
+    width: 40vmin;
+    margin-top: 4vmin;
+"/>
+
+              <qrcode-stream @camera-on="onCameraReady" @detect="onDetect"></qrcode-stream>
 
               <div class="input-group">
                 <label for="gettingStartedNameInput" class="input-group-text">Leader Code</label>
@@ -146,48 +206,7 @@ export default {
 
 
 
-      <div>Followers can scan this barcode to begin following</div>
-
-      <div style="margin:1vmin;align-self:center;">
-        <QRCodeVue3 
-        :myclass="'QRCodeVue3'"
-        :ButtonName="'asd'" 
-        :imgclass="''" 
-        :margin="0" 
-        :background-options="{ color: '#ffffff' }" 
-        :download-button="''" 
-        :file-ext="''" 
-        :image="''" 
-        :download-options="{ name: 'vqr', extension: 'png' }"
-        :width="200" 
-        :height="200" 
-        :value="awesum.serverApp.manualId"
-        :key="awesum.serverApp.manualId" 
-        :qr-options="{
-            errorCorrectionLevel: 'H'
-          }" 
-          :image-options="{ hideBackgroundDots: true, imageSize: 0.4, margin: 10 }"
-          :corners-square-options="{ type: 'dot', color: '#34495E' }" 
-          :corners-dot-options="{
-            type: undefined,
-            color: '#41B883'
-          }" 
-          :dots-options="{
-  type: 'dots',
-  color: '#41B883',
-  gradient: {
-    type: 'linear',
-    rotation: 0,
-    colorStops: [
-      { offset: 0, color: '#41B883' },
-      { offset: 1, color: '#34495E' }
-    ]
-  }
-}" 
-:download="false" />
-      </div>
-      <div>Followers can also enter this manual code</div>
-      <div>{{ awesum.serverApp.manualId }}</div>
+      
     </div>
     <div v-else>
       <span>Choose a login provider below:</span>
@@ -204,5 +223,6 @@ export default {
 }
 :deep(.QRCodeVue3) img {
   border:.1vmin solid black;
+  width:30vmin;
 }
 </style>
