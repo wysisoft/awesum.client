@@ -21,6 +21,12 @@ export default {
       var response = await fetch(window.location.origin + "/DeleteAllData?manualId=" + this.awesum.serverApp.manualId.toString(), {
         credentials: "include",
       });
+
+      if (response.status == 200) {
+        Global.router.push({
+          path: '/'
+        });
+      }
     },
     settingsResetAllDataButtonClicked() {
       this.resetEverythingValue = 0;

@@ -8,6 +8,7 @@ const resourcesInternal =
   Error: new ResourceValue('Error'),
   Start: new ResourceValue('Begin'),
   Apps: new ResourceValue('Apps'),
+  PairedApps: new ResourceValue('Paired Apps'),
   About: new ResourceValue('About'),
   Delete: new ResourceValue('Delete'),
   AddReading:new ResourceValue('Add Reading'),

@@ -41,4 +41,6 @@ public get uniqueId():string { return this._uniqueId; }public set uniqueId(v:str
     private _authenticationType: string = '';
 public get authenticationType():string { return this._authenticationType; }public set authenticationType(v:string) {if(this._authenticationType != v){this._authenticationType=v;Global.setTablePropertyValueById(this.id, 'authenticationType',v,this.table)}}
 
+    private _order: number = 0;
+public get order():number { return this._order; }public set order(v:number) {if(this._order != v){this._order=v;Global.setTablePropertyValueById(this.id, 'order',v,this.table)}}
 }

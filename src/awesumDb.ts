@@ -50,13 +50,14 @@ export class AwesumDb extends Dexie {
                 uniqueId,
                 lastModified: new Date().toISOString(),
                 manualId: '',
-                email: '',
+                email: 'wildert@gmail.com',
                 loginid: '',
                 homePageIcon: '',
                 deleted: false,
                 version: 0,
                 allowedToInitiateFollows: false,
-                authenticationType: 'google'
+                authenticationType: 'google',
+                order:0
             } as ServerAppInterface);
             var serverApp2 = await trans.table('serverApps').add({
                 id: 2,
@@ -64,13 +65,14 @@ export class AwesumDb extends Dexie {
                 uniqueId: uuid(),
                 lastModified: new Date().toISOString(),
                 manualId: '',
-                email: '',
+                email: 'someoneelse@gmail.com',
                 loginid: '',
                 homePageIcon: '',
                 deleted: false,
                 version: 0,
                 allowedToInitiateFollows: false,
-                authenticationType: 'google'
+                authenticationType: 'google',
+                order:1
             } as ServerAppInterface);
             var serverDatabase = await trans.table('serverDatabases').add({
                 id: 1,

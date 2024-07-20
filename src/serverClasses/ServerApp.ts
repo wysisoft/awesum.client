@@ -11,4 +11,5 @@ export interface ServerApp {
     uniqueId: string;
     authenticationType: string;
     id: number;
+    order: number;
 }
