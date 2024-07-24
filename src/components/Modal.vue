@@ -17,8 +17,10 @@ export default {
             default: ''
         }
     },
+
+
     mounted() {
-        
+
         var modalDiv = document.getElementById('awesumModalDiv');
         if (!modalDiv) {
             modalDiv = document.createElement('div');
@@ -32,11 +34,18 @@ export default {
         modalDiv.appendChild(this.$el);
 
         this.modal = new Modal(this.$el);
+        let returnToElement = document.activeElement as HTMLElement;
+        this.$el.addEventListener('show.bs.modal', () => {
+            returnToElement = document.activeElement as HTMLElement;
+            document.getElementById(this.focusedElementId).focus()
+            this.$emit('shown');
+        })
         this.$el.addEventListener('shown.bs.modal', () => {
             document.getElementById(this.focusedElementId).focus()
             this.$emit('shown');
         })
         this.$el.addEventListener('hidden.bs.modal', () => {
+            returnToElement.focus();
             this.$emit('hidden');
         })
 
@@ -65,12 +74,12 @@ export default {
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">{{ title }}</h5>
-                    <button id="awesumModalCloseButton" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button id="awesumModalCloseButton" type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
                 </div>
                 <slot></slot>
             </div>
         </div>
     </div>
 </template>
-<style scoped>
-</style>
+<style scoped></style>
