@@ -23,7 +23,7 @@ import SpellingItemSettingsView from "@/views/SpellingSettingsView.vue";
 
 
 import SpellingUnitSettingsView from "@/views/SpellingUnitSettingsView.vue";
-import SpellingItemView from "@/views/SpellingItemView.vue";
+import SpellingItemView from "@/views/SpellingItemView2.vue";
 
 import DatabaseView from "@/views/DatabaseView.vue";
 import AppSettingsView from "@/views/AppSettingsView.vue";
@@ -299,7 +299,6 @@ Global.router.beforeEach(async (to, from, next) => {
     var foundUnit = linq(Global.awesum.currentDatabaseUnits).singleOrDefault(x => x.name.lc(to.params.unit.toString()));
 
     if (!foundUnit) {
-      debugger;
       Global.router.push({
         path: '/' + I18nGlobal.t(resources.Error.key)
       });
@@ -308,7 +307,6 @@ Global.router.beforeEach(async (to, from, next) => {
     }
     else {
       if (Global.awesum.currentDatabaseUnit != foundUnit) {
-        debugger;
         Global.awesum.currentDatabaseUnit = foundUnit;
         Global.awesum.currentDatabaseItems = await Global.awesumDb.serverDatabaseItems.where('unitId').equals(Global.awesum.currentDatabaseUnit.id).toArray();
 
@@ -350,7 +348,7 @@ Global.router.beforeEach(async (to, from, next) => {
     document.title =  I18nGlobal.t(resources.Awesum.key) + ' - ' + Global.awesum.currentDatabaseUnit.name;
   }
   else if(to.name! == 'AppItem'){
-    document.title =  I18nGlobal.t(resources.Awesum.key) + ' - ' + Global.awesum.currentDatabaseItem.text;
+    document.title =  I18nGlobal.t(resources.Awesum.key) + ' - ' + Global.awesum.currentDatabaseItem.order;
   }
   else
   {

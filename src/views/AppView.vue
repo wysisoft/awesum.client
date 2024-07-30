@@ -12,8 +12,9 @@ export default {
 
 <template>
   <div class="pageView">
+    <h1>{{ awesum.currentServerApp.name }}</h1>
+
     <div class="content">
-      <h1>{{ awesum.currentServerApp.name }}</h1>
 
       <h2>{{ $t(resources.Databases.key) }}</h2>
 

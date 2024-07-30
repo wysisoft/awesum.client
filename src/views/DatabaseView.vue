@@ -19,8 +19,8 @@ export default {
 
 <template>
   <div class="pageView">
+    <h1>{{ awesum.currentDatabase.name }}</h1>
     <div class=content>
-      <h1>{{ awesum.currentDatabase.name }}</h1>
       <h2>{{ $t(resources.Types.key) }}</h2>
 
       <div v-for="typ in awesum.currentDatabaseTypes" class="listItem">

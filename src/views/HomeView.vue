@@ -7,8 +7,8 @@ export default {
 
 <template>
   <div class="pageView">
+    <h1>{{ $t(resources.Awesum.key) }}</h1>
     <div class=content>
-      <h1>{{ $t(resources.Awesum.key) }}</h1>
 
       <h2>{{ $t(resources.Apps.key) }}</h2>
       <div id="serverAppsContainer">
@@ -32,6 +32,6 @@ export default {
 
 #serverAppsContainer{
   overflow: auto;
-  height:70vmin;
+  height:68vmin;
 }
 </style>

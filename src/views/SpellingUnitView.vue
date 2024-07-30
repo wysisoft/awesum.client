@@ -13,8 +13,9 @@ export default {
 <template>
 
   <div class="pageView">
+    <h1>{{ awesum.currentDatabaseUnit.name }}</h1>
+
     <div class="content">
-      <h1>{{ awesum.currentDatabaseUnit.name }}</h1>
 
       <h2>{{ $t(resources.Items.key) }}</h2>
       <div v-for="item in awesum.currentDatabaseItems" class="listItem">

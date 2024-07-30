@@ -116,8 +116,5 @@ export default {
 #loginView {
   padding:1vmin;
 }
-:deep(.QRCodeVue3) img {
-  border:.1vmin solid black;
-  width:30vmin;
-}
+
 </style>

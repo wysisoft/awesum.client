@@ -68,11 +68,16 @@ export default {
 
 <template>
   <div class="pageView" style="background-image: none;background-color: inherit;">
+    <h1> {{ awesum.serverApp.name + " " + $t(resources.Settings.key) }}</h1>
+
     <div class="content">
-      <h1> {{ awesum.serverApp.name + " " + $t(resources.Settings.key) }}</h1>
 
-    <EditTextComponent :requiresEditAndSave="true" :redirectUrlAfterSave="'/' + $t(resources.Settings.key)" :parentObject="awesum.serverApp" :displayName="'App Name'" :propertyName="'name'" />
+    <EditTextComponent 
+    :required="true"  :maxLength="100" :forbiddenChars="'/'" 
+    :requiresEditAndSave="true" :redirectUrlAfterSave="'/' + $t(resources.Settings.key)" :parentObject="awesum.serverApp" :displayName="'App Name'" :propertyName="'name'" />
 
+
+    
     <div v-if="awesum.serverApp.uniqueId == awesum.clientApp.uniqueId">
 
       <button class="btn btn-primary" v-on:click="addDatabase()">{{ $t(resources.Add_Database.key) }}</button>

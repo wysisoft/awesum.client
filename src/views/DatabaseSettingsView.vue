@@ -86,10 +86,11 @@ export default {
 
 <template>
   <div class="pageView" style="background-image: none;background-color: inherit;">
-    <div class="content">
-      <h1> {{ awesum.currentDatabase.name + " " + $t(resources.Settings.key) }}</h1>
+    <h1> {{ awesum.currentDatabase.name + " " + $t(resources.Settings.key) }}</h1>
 
-    <EditTextComponent :requiresEditAndSave="true"  :redirectUrlAfterSave="'/' + $t(resources.Settings.key) + '/' + awesum.currentServerApp.name + '/' " :parentObject="awesum.currentDatabase" :displayName="'Database Name'" :propertyName="'name'" />
+    <div class="content">
+
+    <EditTextComponent :required="true" :requiresEditAndSave="true" :maxLength="100" :forbiddenChars="'/'"  :redirectUrlAfterSave="'/' + $t(resources.Settings.key) + '/' + awesum.currentServerApp.name + '/' " :parentObject="awesum.currentDatabase" :displayName="'Database Name'" :propertyName="'name'" />
 
     
 

@@ -56,6 +56,7 @@ const resourcesInternal =
   No_Error_Found: new ResourceValue('No Error Found'),
   Name_Cannot_Be_Settings: new ResourceValue('Name Cannot Be Settings'),
   Required: new ResourceValue('Required'),
+  Must_be_less_than_: new ResourceValue('Must be less than '),
   Must_be_less_than_100: new ResourceValue('Must be less than 100'),
   Cannot_Contain_Slash: new ResourceValue('Cannot contain slash'),
   

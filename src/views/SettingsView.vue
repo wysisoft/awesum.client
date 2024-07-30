@@ -21,6 +21,8 @@ export default {
   setup() {
     const submitButton = null! as HTMLButtonElement;
     const cancelButton = null! as HTMLButtonElement;
+    const resetEverythingValueInput = null! as HTMLInputElement;
+
 
     let leaderCode = ref('');
 
@@ -34,6 +36,7 @@ export default {
       showModal,
       submitButton,
       cancelButton,
+      resetEverythingValueInput,
       modalType,
       leaderCode
     };
@@ -43,6 +46,8 @@ export default {
   mounted() {
     this.submitButton = (this.$refs.submitButton as HTMLButtonElement)!;
     this.cancelButton = (this.$refs.cancelButton as HTMLButtonElement)!;
+    this.resetEverythingValueInput = (this.$refs.resetEverythingValueInput as HTMLInputElement)!;
+
   },
 
   methods: {
@@ -132,8 +137,9 @@ async submitFollowRequest() {
 
 <template>
   <div class="pageView" style="background-image: none;background-color: inherit;">
-    <div class="content">
       <h1>{{ $t(resources.Settings.key) }}</h1>
+    <div class="content">
+
       <div class="settingsArea">
         <div>Awesum Id: {{ awesum.serverApp.manualId == '' ? 'Log in and sync to receive ID' : awesum.serverApp.manualId
           }}</div>
@@ -255,13 +261,13 @@ colorStops: [
           <span v-if="modalType=='client'">Are you sure you want to totally delete everything? If so, enter the result of 4 * 10 - 3 + 1</span>
           <span v-if="modalType=='server'">Are you sure you want to totally delete everything? If so, enter the result of 4 * 10 - 3 + 1</span>
           <br />
-          <input type="number" v-model="resetEverythingValue" id="resetEverythingValueInput" />
+          <input type="number" v-model="resetEverythingValue" ref="resetEverythingValueInput" id="resetEverythingValueInput" />
 
         </div>
         <div class="modal-footer" style="justify-content:space-between">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" ref="cancelButton">Cancel</button>
           <button type="button" class="btn btn-primary" v-if="resetEverythingValue == 38" ref="submitButton"
-            @vue:mounted="submitButton!.focus()" @vue:unmounted="cancelButton.focus()"
+            @vue:mounted="submitButton!.focus()" @vue:unmounted="resetEverythingValueInput.focus()"
             @click="resetEverything">Submit</button>
         </div>
       </Modal>
@@ -293,4 +299,11 @@ colorStops: [
     </div>
   </div>
 </template>
-<style scoped></style>
+<style scoped>
+:deep(.QRCodeVue3) img {
+  border:.1vmin solid black;
+  width:30vmin;
+}
+
+
+</style>

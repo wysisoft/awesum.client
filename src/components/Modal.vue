@@ -37,8 +37,6 @@ export default {
         let returnToElement = document.activeElement as HTMLElement;
         this.$el.addEventListener('show.bs.modal', () => {
             returnToElement = document.activeElement as HTMLElement;
-            document.getElementById(this.focusedElementId).focus()
-            this.$emit('shown');
         })
         this.$el.addEventListener('shown.bs.modal', () => {
             document.getElementById(this.focusedElementId).focus()

@@ -53,9 +53,10 @@ methods: {
 
 <template>
   <div class="pageView" style="background-image: none;background-color: inherit;">
+    <h1>{{ $t(resources.Spelling.key) }}</h1>
+
     <div class="content">
 
-      <h1>{{ $t(resources.Spelling.key) }}</h1>
 
       <button class="btn btn-primary" v-on:click="addUnit()">{{ $t(resources.Add_Unit.key) }}</button>
 

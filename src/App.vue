@@ -19,10 +19,10 @@ export default {
   },
   methods: {
     showEdit() {
-      return this.$router.currentRoute.value.fullPath.startsWith('/' + I18nGlobal.t(Global.resources.Apps.key));
+      return this.$router.currentRoute.value.fullPath.startsWith('/' + I18nGlobal.t(Global.resources.Apps.key) + '/');
     },
     showPlay() {
-      return this.$router.currentRoute.value.fullPath.startsWith('/' + I18nGlobal.t(Global.resources.Settings.key));
+      return this.$router.currentRoute.value.fullPath.startsWith('/' + I18nGlobal.t(Global.resources.Settings.key) + '/');
     },
     toggleFullScreen() {
       this.toggle();
@@ -199,7 +199,7 @@ export default {
 
 
 #appViewContent {
-  flex-grow: 1;
+  height: 93.2vmin;
 }
 
 .appVueTopButton {
