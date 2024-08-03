@@ -38,8 +38,8 @@ export default {
 </script>
 
 <template>
-   
-  
+
+
   <div id="appDiv">
 
     <div id="balloonCanvas"
@@ -58,9 +58,10 @@ export default {
     <div v-if="awesum.buttonPressed && $router.currentRoute.value.name != 'Start' &&
       $router.currentRoute.value.name != 'Name'" id="appViewHeader" style="position:relative">
       <div id="appViewHeaderButtons">
-        <router-link to="/" class="btn btn-link">
-          <FaHouse />
-          <span>{{ $t(resources.Home.key) }}</span>
+        <router-link custom to="/"><button class="btn btn-link" role="link">
+            <FaHouse />
+            <span>{{ $t(resources.Home.key) }}</span>
+          </button>
         </router-link>
         <!-- <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#addPairingModal">
           <FaBars />
@@ -71,41 +72,43 @@ export default {
           <span>{{ $t(resources.Areas.key) }}</span>
         </router-link> -->
 
-        <button to="" class="btn btn-link" @click="toggleFullScreen">
+        <button class="btn btn-link" @click="toggleFullScreen" role="link">
           <faCompress v-if="isFullscreen" />
           <faExpand v-else />
           <span>{{ $t(resources.Fullscreen.key) }}</span>
         </button>
-        <router-link to="/Settings" class="btn btn-link">
-          <faGears />
-          <span>{{ $t(resources.Settings.key) }}</span>
+        <router-link custom to="/Settings">
+          <button class="btn btn-link" role="link">
+            <faGears />
+            <span>{{ $t(resources.Settings.key) }}</span>
+          </button>
         </router-link>
-        <router-link v-if="showEdit()"
+        <router-link custom v-if="showEdit()"
           :to="Global.replaceAtFront($router.currentRoute.value.fullPath, '/' + $t(resources.Apps.key), '/' + $t(resources.Settings.key))"
-          class="btn btn-link">
+          ><button class="btn btn-link" role="link">
           <faPenToSquare />
           <span>{{ $t(resources.Edit.key) }}</span>
+        </button>
         </router-link>
-        <router-link v-if="showPlay()"
-          :to="Global.replaceAtFront($router.currentRoute.value.fullPath, '/' + $t(resources.Settings.key), '/' + $t(resources.Apps.key))"
-          class="btn btn-link">
-          <CgPlayButtonR/>
-          <span>{{ $t(resources.Play.key) }}</span>
+        <router-link custom v-if="showPlay()"
+          :to="Global.replaceAtFront($router.currentRoute.value.fullPath, '/' + $t(resources.Settings.key), '/' + $t(resources.Apps.key))">
+          <button class="btn btn-link" role="link">
+          <CgPlayButtonR />
+          <span>{{ $t(resources.Play.key) }}</span></button>
         </router-link>
-        <button v-if="awesum.clientApp.email"
-          @click="awesum.refresh()"
-          class="btn btn-link">
+        <button role="link" v-if="awesum.clientApp.email" @click="awesum.refresh()" class="btn btn-link">
           <ChRefresh />
           <span>{{ $t(resources.Refresh.key) }}</span>
         </button>
-        
+
         <div id="appViewLoginDiv">
-          <router-link to="/Login" class="btn btn-link" style="padding-right:0vmin;">
+          <router-link custom to="/Login" ><button  class="btn btn-link" role="link" style="padding-right:0vmin;" >
             <faUser />
             <div id="loginTextDiv">
               <span v-if="awesum.clientApp.email">{{ awesum.clientApp.email }}</span>
               <span v-else>Log In</span>
             </div>
+          </button>
           </router-link>
         </div>
       </div>
@@ -120,7 +123,7 @@ export default {
 
     <div id="appViewContent">
 
-      <RouterView :key="$route.path"/>
+      <RouterView :key="$route.path" />
 
     </div>
   </div>
@@ -235,4 +238,5 @@ export default {
 #appDiv .progress {
   border-radius: 0;
   position: relative;
-}</style>
+}
+</style>

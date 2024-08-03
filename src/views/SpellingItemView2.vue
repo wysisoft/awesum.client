@@ -12,9 +12,10 @@ import * as ConfettiGenerator from "confetti-js"
 export default {
   setup() {
     const spellingDiv = ref(null as any as HTMLElement);
-
+    let currentLetter = ref('');
     return {
-      spellingDiv
+      spellingDiv,
+      currentLetter
     };
   },
   mounted() {
@@ -25,7 +26,7 @@ export default {
 
     for (const iterator of lettersTemp) {
       for (const letter of iterator) {
-        if(letter != ',')
+        if (letter != ',')
           letters.push(letter);
       }
     }
@@ -62,10 +63,36 @@ export default {
       parentDiv.style.left = (i * 12) + 'vmin';
       parentDiv.style.top = '0vmin';
 
+      parentDiv.onfocus = (e: FocusEvent) => {
+          this.currentLetter = document.activeElement!.innerHTML;
+        }
+        parentDiv.onkeydown = (e: KeyboardEvent) => {
+          if (e.key === 'ArrowDown') {
+            (e.target as HTMLButtonElement)!.style.top = (parseFloat((e.target as HTMLButtonElement)!.style.top) - 10) + 'vmin';
+          }
+          if (e.key === 'ArrowUp') {
+            (e.target as HTMLButtonElement)!.style.top = (parseFloat((e.target as HTMLButtonElement)!.style.top) + 10) + 'vmin';
+          }
+        }
+
+        //if mouse wheel down, move the button down
+      parentDiv.onwheel = (e: WheelEvent) => {
+        var el = e.target as HTMLButtonElement;
+        if(el.tagName != 'BUTTON') {
+          el = el.parentElement as HTMLButtonElement;
+        } 
+        if (e.deltaY > 0) {
+          el.style.top = (parseFloat(el.style.top) + 10) + 'vmin';
+        } else {
+          el.style.top = (parseFloat(el.style.top) - 10) + 'vmin';
+        }
+      }
+
+
       this.spellingDiv.appendChild(parentDiv);
 
       for (const arr of letters) {
-        
+
         var letterDiv = document.createElement('div');
         parentDiv.appendChild(letterDiv);
 
@@ -79,7 +106,7 @@ export default {
         letterDiv.style.borderRadius = '.5vmin';
         letterDiv.style.marginBottom = '.5vmin';
         letterDiv.innerHTML = arr;
-
+        
       }
     }
   },
@@ -124,10 +151,11 @@ export default {
 </script>
 
 <template>
-  <div class="view">
+  <div class="view" style="display: flex;justify-items: center;height: 100%;flex-direction: column;align-items: center;">
 
-    <div id="spellingDiv" ref="spellingDiv" style="position: relative; top:40vmin;left:40vmin;">
-    <div></div>
+    <div id="spellingDiv" ref="spellingDiv" style="top:40vmin;overflow: hidden; height: 30vmin; position: relative;width:100%;">
+      <div style="height:10vmin;width:100%;border:.1vmin solid black;margin-top:9vmin;">
+    </div>
     </div>
 
   </div>
