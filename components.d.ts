@@ -7,23 +7,17 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    CaCubeView: typeof import('@kalimahapps/vue-icons/ca')['CaCubeView']
     CgPlayButtonR: typeof import('@kalimahapps/vue-icons/cg')['CgPlayButtonR']
     ChRefresh: typeof import('@kalimahapps/vue-icons/ch')['ChRefresh']
     EditAudioComponent: typeof import('./src/components/EditAudioComponent.vue')['default']
     EditTextComponent: typeof import('./src/components/EditTextComponent.vue')['default']
-    FaBackward: typeof import('@kalimahapps/vue-icons/fa')['FaBackward']
     FaCompress: typeof import('@kalimahapps/vue-icons/fa')['FaCompress']
     FaExpand: typeof import('@kalimahapps/vue-icons/fa')['FaExpand']
-    FaForward: typeof import('@kalimahapps/vue-icons/fa')['FaForward']
     FaGears: typeof import('@kalimahapps/vue-icons/fa')['FaGears']
     FaHouse: typeof import('@kalimahapps/vue-icons/fa')['FaHouse']
     FaPenToSquare: typeof import('@kalimahapps/vue-icons/fa')['FaPenToSquare']
     FaUser: typeof import('@kalimahapps/vue-icons/fa')['FaUser']
-    FaVolumeHigh: typeof import('@kalimahapps/vue-icons/fa')['FaVolumeHigh']
-    FaWandMagicSparkles: typeof import('@kalimahapps/vue-icons/fa')['FaWandMagicSparkles']
     FeCameraOff: typeof import('@kalimahapps/vue-icons/fe')['FeCameraOff']
-    FlFilledSave: typeof import('@kalimahapps/vue-icons/fl')['FlFilledSave']
     Modal: typeof import('./src/components/Modal.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

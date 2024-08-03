@@ -13,9 +13,16 @@ export default {
   setup() {
     const spellingDiv = ref(null as any as HTMLElement);
     let currentLetter = ref('');
+    let mouseDown = ref(false)
+    let mousePos = ref(0)
+    let button = ref(null as any as HTMLButtonElement);
+
     return {
       spellingDiv,
-      currentLetter
+      currentLetter,
+      mouseDown,
+      mousePos,
+      button
     };
   },
   mounted() {
@@ -64,32 +71,80 @@ export default {
       parentDiv.style.top = '0vmin';
 
       parentDiv.onfocus = (e: FocusEvent) => {
-          this.currentLetter = document.activeElement!.innerHTML;
-        }
-        parentDiv.onkeydown = (e: KeyboardEvent) => {
-          if (e.key === 'ArrowDown') {
-            (e.target as HTMLButtonElement)!.style.top = (parseFloat((e.target as HTMLButtonElement)!.style.top) - 10) + 'vmin';
+        this.currentLetter = document.activeElement!.innerHTML;
+      }
+      parentDiv.onkeydown = (e: KeyboardEvent) => {
+        if (e.key === 'ArrowDown') {
+          if (parseFloat((e.target as HTMLButtonElement)!.style.top) >= -parseFloat((e.target as HTMLButtonElement)!.style.height) + 8.6 * 3
+          ) {
+            (e.target as HTMLButtonElement)!.style.top = (parseFloat((e.target as HTMLButtonElement)!.style.top) - 8.6) + 'vmin';
           }
-          if (e.key === 'ArrowUp') {
-            (e.target as HTMLButtonElement)!.style.top = (parseFloat((e.target as HTMLButtonElement)!.style.top) + 10) + 'vmin';
-          }
+          e.stopPropagation()
+          e.preventDefault();
         }
-
-        //if mouse wheel down, move the button down
-      parentDiv.onwheel = (e: WheelEvent) => {
-        var el = e.target as HTMLButtonElement;
-        if(el.tagName != 'BUTTON') {
-          el = el.parentElement as HTMLButtonElement;
-        } 
-        if (e.deltaY > 0) {
-          el.style.top = (parseFloat(el.style.top) + 10) + 'vmin';
-        } else {
-          el.style.top = (parseFloat(el.style.top) - 10) + 'vmin';
+        if (e.key === 'ArrowUp') {
+          if (parseFloat((e.target as HTMLButtonElement)!.style.top) <= 0) {
+            (e.target as HTMLButtonElement)!.style.top = (parseFloat((e.target as HTMLButtonElement)!.style.top) + 8.6) + 'vmin';
+          }
+          e.stopPropagation()
+          e.preventDefault();
         }
       }
 
+      parentDiv.onmousedown = (e: MouseEvent) => {
+        this.mouseDown = true;
+        this.mousePos = e.clientY;
+        this.button = e.target as HTMLButtonElement;
+        while (this.button.tagName != 'BUTTON') {
+          this.button = this.button.parentElement as HTMLButtonElement;
+        }
+      }
+
+      window.onmouseup = (e: MouseEvent) => {
+        this.mouseDown = false;
+      }
+
+      window.onmousemove = (e: MouseEvent) => {
+        if (this.mouseDown && Math.abs(e.clientY - this.mousePos) > 10) {
+          var diff = 100 * (e.clientY - this.mousePos) / window.innerHeight;
+          document.title = diff.toString();
+          this.mousePos = e.clientY;
+          if (diff > 0 && parseFloat((this.button as HTMLButtonElement)!.style.top) <= 0
+          ) {
+            this.button.style.top = parseFloat(this.button.style.top) +  8.6 + 'vmin';
+          }
+          if (diff < 0 && parseFloat((this.button as HTMLButtonElement)!.style.top) >= -parseFloat((this.button as HTMLButtonElement)!.style.height) + 8.6 * 3) {
+            this.button.style.top = parseFloat(this.button.style.top) -  8.6 + 'vmin';
+          }
+        }
+      }
+
+      //if mouse wheel down, move the button down
+      parentDiv.onwheel = (e: WheelEvent) => {
+        var el = e.target as HTMLButtonElement;
+        if (el.tagName != 'BUTTON') {
+          el = el.parentElement as HTMLButtonElement;
+        }
+        if (e.deltaY > 0) {
+          if (parseFloat((el as HTMLButtonElement)!.style.top) >= -parseFloat((el as HTMLButtonElement)!.style.height) + 8.6 * 3
+          ) {
+            (el as HTMLButtonElement)!.style.top = (parseFloat((el as HTMLButtonElement)!.style.top) - 8.6) + 'vmin';
+          }
+          e.stopPropagation()
+          e.preventDefault();
+        }
+        else {
+          if (parseFloat((el as HTMLButtonElement)!.style.top) <= 0) {
+            (el as HTMLButtonElement)!.style.top = (parseFloat((el as HTMLButtonElement)!.style.top) + 8.6) + 'vmin';
+          }
+          e.stopPropagation()
+          e.preventDefault();
+        }
+      }
 
       this.spellingDiv.appendChild(parentDiv);
+
+      parentDiv.style.height = letters.length * 8.6 + 'vmin';
 
       for (const arr of letters) {
 
@@ -104,9 +159,11 @@ export default {
         letterDiv.style.backgroundColor = 'white';
         letterDiv.style.border = '.1vmin solid black';
         letterDiv.style.borderRadius = '.5vmin';
-        letterDiv.style.marginBottom = '.5vmin';
+        letterDiv.style.marginBottom = '.6vmin';
         letterDiv.innerHTML = arr;
-        
+
+
+
       }
     }
   },
@@ -153,9 +210,10 @@ export default {
 <template>
   <div class="view" style="display: flex;justify-items: center;height: 100%;flex-direction: column;align-items: center;">
 
-    <div id="spellingDiv" ref="spellingDiv" style="top:40vmin;overflow: hidden; height: 30vmin; position: relative;width:100%;">
-      <div style="height:10vmin;width:100%;border:.1vmin solid black;margin-top:9vmin;">
-    </div>
+    <div id="spellingDiv" ref="spellingDiv"
+      style="top:40vmin;overflow: hidden; height: 30vmin; position: relative;width:100%;">
+      <div style="height:8.7vmin;width:100%;border:.1vmin solid black;margin-top:9.8vmin;">
+      </div>
     </div>
 
   </div>
