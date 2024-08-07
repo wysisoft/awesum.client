@@ -150,7 +150,7 @@ export class AwesumDb extends Dexie {
                 unitId: 1,
                 letters: 'a,b,c,d,e\nr,w,c,k,v\ni,a,e,o,u\nc,w,t,y,g\nc,k,l,m,n',
                 sound: 'TTS',
-                text: 'constitution',
+                text: 'constitutional',
                 order: 0,
                 type: ItemType.spelling,
                 databaseId: 1,
@@ -201,7 +201,7 @@ export class AwesumDb extends Dexie {
         Global.awesum.clientApp = new ClientApp(c, this.clientApp);
         if (Global.awesum.clientApp) {
             var s = linq(await this.serverApps.where('id').equals(Global.awesum.clientApp!.id).toArray()).single();
-            Global.setApp(s);
+            Global.awesum.serverApp = s as ServerApp;//Global.setApp(s);
         }
 
         Global.awesum.serverApps = useDexieLiveQuery(
@@ -215,9 +215,9 @@ export class AwesumDb extends Dexie {
         ) as any as Array<ServerDatabaseInterface>;
 
         Global.awesum.currentDatabases = useDexieLiveQueryWithDeps(() => {
-            return this.serverDatabases.where({ appId: Global.awesum.currentServerApp.id }).reverse().sortBy('order');
+            return Global.awesum.currentServerApp ? this.serverDatabases.where({ appId: Global.awesum.currentServerApp.id }).reverse().sortBy('order') : null;
         }, {
-            initialValue: await this.serverDatabases.where({ appId: Global.awesum.currentServerApp.id }).reverse().sortBy('order'), immediate: true
+            initialValue: Global.awesum.currentServerApp ? await this.serverDatabases.where({ appId: Global.awesum.currentServerApp.id }).reverse().sortBy('order') : null, immediate: true
         }) as any as Array<ServerDatabaseInterface>;
 
         Global.awesum.currentDatabaseTypes = useDexieLiveQueryWithDeps(() => {
@@ -241,8 +241,12 @@ export class AwesumDb extends Dexie {
             debugger;
         });
 
-        this.serverApps.hook('reading', obj => { return new ServerApp(obj, this.serverApps) });
-        this.serverDatabases.hook('reading', obj => { return new ServerDatabase(obj, this.serverDatabases) });
-        this.serverDatabaseTypes.hook('reading', obj => { return new ServerDatabaseType(obj, this.serverDatabaseTypes) });
+
+db.serverApps.hook("creating", function (primKey:number, obj:ServerApp, trans) {obj.version++;obj.lastModified=new Date().toISOString()}).hook("updating", function (mods, primKey, obj, trans) {obj.version++;obj.lastModified=new Date().toISOString()});
+db.serverDatabases.hook("creating", function (primKey, obj:ServerApp, trans) {obj.version++;obj.lastModified=new Date().toISOString()}).hook("updating", function (mods, primKey, obj, trans) {obj.version++;obj.lastModified=new Date().toISOString()});
+db.serverDatabaseTypes.hook("creating", function (primKey, obj:ServerApp, trans) {obj.version++;obj.lastModified=new Date().toISOString()}).hook("updating", function (mods, primKey, obj, trans) {obj.version++;obj.lastModified=new Date().toISOString()});
+db.serverDatabaseUnits.hook("creating", function (primKey, obj:ServerApp, trans) {obj.version++;obj.lastModified=new Date().toISOString()}).hook("updating", function (mods, primKey, obj, trans) {obj.version++;obj.lastModified=new Date().toISOString()});
+db.serverDatabaseItems.hook("creating", function (primKey, obj:ServerApp, trans) {obj.version++;obj.lastModified=new Date().toISOString()}).hook("updating", function (mods, primKey, obj, trans) {obj.version++;obj.lastModified=new Date().toISOString()});
+
     }
 }

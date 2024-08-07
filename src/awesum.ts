@@ -314,12 +314,12 @@ export const awesum = reactive({
     }
   },
   async refresh() {
-    debugger;
-    var apps = await Global.awesumDb.serverApps.where('uniqueId').equals(Global.awesum.clientApp.uniqueId).toArray();
-    for (const app of apps) {
-      await this.pushApp(app);
-    }
+      await this.pushApp(awesum.serverApp);
 
-
+      for (const app of awesum.serverApps) {
+        if(app.uniqueId  != awesum.serverApp){
+          await this.pullApp(app)
+        }
   }
+}
 });

@@ -3,6 +3,8 @@ import { useFullscreen } from '@vueuse/core'
 import type { ServerDatabaseUnit } from './clientClasses/ServerDatabaseUnit';
 import { Global } from './global';
 import { I18nGlobal } from './i18nGlobal';
+import { ref } from 'vue';
+import { ItemType } from './itemType';
 
 
 
@@ -10,12 +12,44 @@ export default {
 
   setup() {
     const { isFullscreen, toggle } = useFullscreen()
+const breadcrumb = ref(null as any as HTMLElement);
+
 
     return {
       isFullscreen,
       toggle,
-      Global
+      Global,
+      breadcrumb
     };
+  },
+  mounted() {
+    this.breadcrumb = this.$refs.breadcrumb as HTMLElement;
+
+    if(this.awesum.currentDatabaseItem){
+      var li = document.createElement('li');
+      li.innerText = this.awesum.currentDatabaseItem.text;
+      this.breadcrumb.prepend(li);
+    }
+    if(this.awesum.currentDatabaseUnit){
+      var li = document.createElement('li');
+      li.innerText = this.awesum.currentDatabaseUnit.name;
+      this.breadcrumb.prepend(li);
+    }
+    if(this.awesum.currentItemType){
+      var li = document.createElement('li');
+      li.innerText = ItemType[this.awesum.currentItemType.type];
+      this.breadcrumb.prepend(li);
+    }
+    if(this.awesum.currentDatabase){
+      var li = document.createElement('li');
+      li.innerText = this.awesum.currentDatabase.name
+      this.breadcrumb.prepend(li);
+    }
+    if(this.awesum.currentServerApp){
+      var li = document.createElement('li');
+      li.innerText = this.awesum.currentServerApp.name
+      this.breadcrumb.prepend(li);
+    }
   },
   methods: {
     showEdit() {
@@ -38,8 +72,6 @@ export default {
 </script>
 
 <template>
-
-
   <div id="appDiv">
 
     <div id="balloonCanvas"
@@ -55,14 +87,13 @@ export default {
     </div>
 
 
-    <div v-if="awesum.buttonPressed && $router.currentRoute.value.name != 'Start' &&
-      $router.currentRoute.value.name != 'Name'" id="appViewHeader" style="position:relative">
+    <div id="appViewHeader" style="position:relative">
       <div id="appViewHeaderButtons">
-        <router-link custom to="/"><button class="btn btn-link" role="link">
-            <FaHouse />
-            <span>{{ $t(resources.Home.key) }}</span>
-          </button>
-        </router-link>
+        <button v-if="awesum.buttonPressed && $router.currentRoute.value.name != 'Start' &&
+          $router.currentRoute.value.name != 'Name'" @click="$router.push('/')" class="btn">
+          <FaHouse />
+          <span>{{ $t(resources.Home.key) }}</span>
+        </button>
         <!-- <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#addPairingModal">
           <FaBars />
           <span>{{ $t(resources.Units.key) }}</span>
@@ -77,39 +108,39 @@ export default {
           <faExpand v-else />
           <span>{{ $t(resources.Fullscreen.key) }}</span>
         </button>
-        <router-link custom to="/Settings">
-          <button class="btn btn-link" role="link">
-            <faGears />
-            <span>{{ $t(resources.Settings.key) }}</span>
-          </button>
-        </router-link>
-        <router-link custom v-if="showEdit()"
-          :to="Global.replaceAtFront($router.currentRoute.value.fullPath, '/' + $t(resources.Apps.key), '/' + $t(resources.Settings.key))"
-          ><button class="btn btn-link" role="link">
+
+        <button class="btn" @click="$router.push('/' + $t(resources.Settings.key))">
+          <faGears />
+          <span>{{ $t(resources.Settings.key) }}</span>
+        </button>
+
+        <button v-if="showEdit()"
+          @click="$router.push(Global.replaceAtFront($router.currentRoute.value.fullPath, '/' + $t(resources.Apps.key), '/' + $t(resources.Settings.key)))"
+          class="btn">
           <faPenToSquare />
           <span>{{ $t(resources.Edit.key) }}</span>
         </button>
-        </router-link>
-        <router-link custom v-if="showPlay()"
-          :to="Global.replaceAtFront($router.currentRoute.value.fullPath, '/' + $t(resources.Settings.key), '/' + $t(resources.Apps.key))">
-          <button class="btn btn-link" role="link">
+
+
+        <button class="btn" v-if="showPlay()"
+          @click="$router.push(Global.replaceAtFront($router.currentRoute.value.fullPath, '/' + $t(resources.Settings.key), '/' + $t(resources.Apps.key)))">
           <CgPlayButtonR />
-          <span>{{ $t(resources.Play.key) }}</span></button>
-        </router-link>
-        <button role="link" v-if="awesum.clientApp.email" @click="awesum.refresh()" class="btn btn-link">
+          <span>{{ $t(resources.Play.key) }}</span>
+        </button>
+
+        <button v-if="awesum.clientApp.email" @click="awesum.refresh()" class="btn">
           <ChRefresh />
           <span>{{ $t(resources.Refresh.key) }}</span>
         </button>
 
         <div id="appViewLoginDiv">
-          <router-link custom to="/Login" ><button  class="btn btn-link" role="link" style="padding-right:0vmin;" >
+          <button class="btn" style="padding-right:0vmin;" @click="$router.push('/' + $t(resources.Login.key))">
             <faUser />
             <div id="loginTextDiv">
               <span v-if="awesum.clientApp.email">{{ awesum.clientApp.email }}</span>
               <span v-else>Log In</span>
             </div>
           </button>
-          </router-link>
         </div>
       </div>
       <div v-if="awesum.progressBarPercentage > 0" class="progress"
@@ -120,6 +151,12 @@ export default {
       </div>
 
     </div>
+
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb" ref="breadcrumb">
+        
+      </ol>
+    </nav>
 
     <div id="appViewContent">
 

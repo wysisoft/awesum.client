@@ -60,14 +60,9 @@ export default {
 <template>
   <div class="pageView" style="background-image: none;background-color: inherit;">
     <h1>{{ awesum.currentDatabaseItem.text }}</h1>
-
     <div class="content">
-
-      <EditTextComponent :requiresEditAndSave="true"
-        :redirectUrlAfterSave="'/' + $t(resources.Settings.key) + '/' + awesum.currentServerApp.name + '/' + awesum.currentDatabase.name + '/' + $t(resources.Spelling.key)"
-        :parentObject="awesum.currentDatabaseUnit" :displayName="'Unit Name'" :propertyName="'name'" />
-
-      
+      <EditTextComponent 
+        :parentObject="awesum.currentDatabaseItem" :displayName="'Item Text'" :propertyName="'text'" />
     </div>
   </div>
 </template>

@@ -6,6 +6,9 @@ import { ItemLevel } from '@/itemLevel';
 import Fireworks from 'fireworks-js';
 import JSConfetti from 'js-confetti';
 import { ref } from 'vue';
+import { I18nGlobal } from '@/i18nGlobal';
+import { resources } from '@/resources/Resources';
+
 //@ts-ignore
 import * as ConfettiGenerator from "confetti-js"
 
@@ -13,6 +16,7 @@ export default {
   setup() {
     const spellingDiv = ref(null as any as HTMLElement);
     const footerDiv = ref(null as any as HTMLElement);
+    const spellingOutlineDiv = ref(null as any as HTMLElement);
 
     let mouseDown = ref(false)
     let footerMouseDown = ref(false)
@@ -30,26 +34,93 @@ export default {
       selectedChars,
       footerDiv,
       footerMouseDown,
-      footerMousePos
+      footerMousePos,
+      spellingOutlineDiv
     };
   },
   mounted() {
+
     this.spellingDiv = this.$refs.spellingDiv as HTMLElement;
     this.footerDiv = this.$refs.footerDiv as HTMLElement;
 
+    //if mouse wheel down, move the button down
+    this.footerDiv.onwheel = (e: WheelEvent) => {
+
+
+      if (diff > 0 && parseFloat((this.footerDiv as HTMLButtonElement)!.style.left) <= -5
+      ) {
+
+
+      }
+      if (diff < 0 && parseFloat((this.footerDiv as HTMLButtonElement)!.style.left) > -parseFloat((this.footerDiv as HTMLButtonElement)!.style.width) + 85) {
+
+      }
+
+
+      if (e.deltaY > 0) {
+        if (parseFloat((this.footerDiv as HTMLButtonElement)!.style.left) <= -5
+        ) {
+
+          this.footerDiv.style.left = parseFloat(this.footerDiv.style.left) + 5 + 'vmin';
+        }
+      }
+      else {
+        if (parseFloat((this.footerDiv as HTMLButtonElement)!.style.left) > -parseFloat((this.footerDiv as HTMLButtonElement)!.style.width) + 85) {
+
+          this.footerDiv.style.left = parseFloat(this.footerDiv.style.left) - 5 + 'vmin';
+        }
+      }
+
+    }
+
+    this.footerDiv.onkeydown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight') {
+
+        if (parseFloat((this.footerDiv as HTMLButtonElement)!.style.left) > -parseFloat((this.footerDiv as HTMLButtonElement)!.style.width) + 85) {
+
+          this.footerDiv.style.left = parseFloat(this.footerDiv.style.left) - 5 + 'vmin';
+        }
+        e.stopPropagation()
+        e.preventDefault();
+
+      }
+      else if (e.key === 'ArrowLeft') {
+        if (parseFloat((this.footerDiv as HTMLButtonElement)!.style.left) <= -5
+        ) {
+
+          this.footerDiv.style.left = parseFloat(this.footerDiv.style.left) + 5 + 'vmin';
+        }
+        e.stopPropagation()
+        e.preventDefault();
+      }
+    }
+
+    this.spellingOutlineDiv = this.$refs.spellingOutlineDiv as HTMLElement;
+
     var items = awesum.currentDatabaseItems;
+
+
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       var footerButton = document.createElement('BUTTON');
+      footerButton.onclick = () => {
+        this.$router.push('/' + I18nGlobal.t(resources.Apps.key) + '/' + awesum.currentServerApp.name + '/' + awesum.currentDatabase.name + '/' + I18nGlobal.t(resources.Spelling.key) + '/' + awesum.currentDatabaseUnit.name + '/' + item.order);
+      }
+      footerButton.style.width = '5vmin';
       footerButton.innerHTML = item.order.toString();
       this.footerDiv.appendChild(footerButton);
     }
+
+
 
     for (let i = 0; i < 100; i++) {
       var footerButton = document.createElement('BUTTON');
       footerButton.innerHTML = i.toString();
       this.footerDiv.appendChild(footerButton);
     }
+
+    this.footerDiv.style.width = (items.length + 100) * 5 + 'vmin';
+
 
     this.footerDiv.onmousedown = (e: MouseEvent) => {
       this.footerMouseDown = true;
@@ -87,15 +158,17 @@ export default {
     var word = awesum.currentDatabaseItem.text;
 
     this.spellingDiv.style.width = (word.length * 7.5 + 1) + 'vmin';
+    this.spellingOutlineDiv.style.width = (word.length * 7.5 + 3) + 'vmin';
 
     for (let i = 0; i < word.length; i++) {
       letters.push(word[i]);
 
       const letter = word[i];
       var parentDiv = document.createElement('button');
-      parentDiv.classList.add('btn');
-      parentDiv.classList.add('btn-link');
       parentDiv.type = 'button';
+      parentDiv.style.background = 'none';
+      parentDiv.style.border = 'none';
+      parentDiv.style.lineHeight = 'normal';
 
       parentDiv.style.position = 'absolute';
       parentDiv.style.left = (i * 7.5) + 'vmin';
@@ -103,7 +176,7 @@ export default {
 
       parentDiv.onkeydown = (e: KeyboardEvent) => {
         if (e.key === 'ArrowDown') {
-          if (parseFloat((e.target as HTMLButtonElement)!.style.top) > -parseFloat((e.target as HTMLButtonElement)!.style.height) + 7.6 * 2
+          if (parseFloat((e.target as HTMLButtonElement)!.style.top) > -parseFloat((e.target as HTMLButtonElement)!.style.height) + 20
           ) {
             (e.target as HTMLButtonElement)!.style.top = (parseFloat((e.target as HTMLButtonElement)!.style.top) - 7.6) + 'vmin';
           }
@@ -130,38 +203,6 @@ export default {
           var prev = e.target.previousElementSibling;
           if (prev) {
             prev.focus();
-          }
-          e.stopPropagation()
-          e.preventDefault();
-        }
-        else if (e.key === 'Enter') {
-          var next = e.target.nextElementSibling;
-          if (next) {
-            next.focus();
-          }
-          e.stopPropagation()
-          e.preventDefault();
-        }
-        else if (e.key === 'Backspace') {
-          var prev = e.target.previousElementSibling;
-          if (prev) {
-            prev.focus();
-          }
-          e.stopPropagation()
-          e.preventDefault();
-        }
-        else if (e.key === 'Delete') {
-          var next = e.target.nextElementSibling;
-          if (next) {
-            next.focus();
-          }
-          e.stopPropagation()
-          e.preventDefault();
-        }
-        else if (e.key === ' ') {
-          var next = e.target.nextElementSibling;
-          if (next) {
-            next.focus();
           }
           e.stopPropagation()
           e.preventDefault();
@@ -194,20 +235,22 @@ export default {
 
       window.onmouseup = (e: MouseEvent) => {
         this.mouseDown = false;
+        this.footerMouseDown = false;
+
       }
 
       window.onmousemove = (e: MouseEvent) => {
-        if (this.footerMouseDown && Math.abs(e.clientX - this.footerMousePos) > 200) {
-
-          var diff = 100 * (e.clientX - this.footerMousePos);
-          if (diff > 0 && parseFloat((this.footerDiv as HTMLButtonElement)!.style.left) <= -7.6
+        if (this.footerMouseDown && Math.abs(e.clientX - this.footerMousePos) > 100) {
+          var diff = (e.clientX - this.footerMousePos);
+          document.title = diff + ' - ' + parseFloat((this.footerDiv as HTMLButtonElement)!.style.width);
+          if (diff > 0 && parseFloat((this.footerDiv as HTMLButtonElement)!.style.left) <= -5
           ) {
 
-            this.footerDiv.style.top = parseFloat(this.footerDiv.style.top) + 7.6 + 'vmin';
+            this.footerDiv.style.left = parseFloat(this.footerDiv.style.left) + 5 + 'vmin';
           }
-          if (diff < 0 && parseFloat((this.footerDiv as HTMLButtonElement)!.style.left) > -parseFloat((this.footerDiv as HTMLButtonElement)!.style.height) + 7.6 * 2) {
+          if (diff < 0 && parseFloat((this.footerDiv as HTMLButtonElement)!.style.left) > -parseFloat((this.footerDiv as HTMLButtonElement)!.style.width) + 85) {
 
-            this.footerDiv.style.top = parseFloat(this.footerDiv.style.top) - 7.6 + 'vmin';
+            this.footerDiv.style.left = parseFloat(this.footerDiv.style.left) - 5 + 'vmin';
           }
 
           this.footerMousePos = e.clientX;
@@ -215,7 +258,7 @@ export default {
         }
 
         if (this.mouseDown && Math.abs(e.clientY - this.mousePos) > 200) {
-          var diff = 100 * (e.clientY - this.mousePos);
+          var diff = (e.clientY - this.mousePos);
           if (diff > 0 && parseFloat((this.button as HTMLButtonElement)!.style.top) <= -7.6
           ) {
 
@@ -267,7 +310,7 @@ export default {
       parentDiv.style.height = (letters.length + 1) * 7.6 + 'vmin';
       parentDiv.style.paddingLeft = '.5vmin';
       parentDiv.style.paddingRight = '.5vmin';
-      parentDiv.style.top = '-7.6vmin';
+      parentDiv.style.top = '0vmin';
 
 
       var letterDiv = document.createElement('div');
@@ -303,6 +346,15 @@ export default {
       this.sliderChanged(parentDiv);
 
     }
+
+    window.onkeydown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowRight' && e.ctrlKey && awesum.canGoForward()) {
+        awesum.goForward();
+      }
+      if (e.key === 'ArrowLeft' && e.ctrlKey && awesum.canGoBack()) {
+        awesum.goBack();
+      }
+    }
   },
 
   methods: {
@@ -312,11 +364,12 @@ export default {
       var letterTop = 0;
       for (let i = 0; i < chars.length; i++) {
         if (Math.abs(-parseFloat(el.style.top) - letterTop + 7.6) < 1) {
-          chars[i].style.backgroundColor = 'white';
+          chars[i].style.opacity = '1';
+
           this.selectedChars[charIndex] = chars[i].innerHtml;
         }
         else {
-          chars[i].style.backgroundColor = 'red';
+          chars[i].style.opacity = '.3';
         }
 
         letterTop += 7.6;
@@ -374,9 +427,13 @@ export default {
       </button>
     </div>
 
-    <div id="spellingDiv" ref="spellingDiv" style="overflow: hidden; height: 49vmin; position: relative;">
-      <div style="height:8.7vmin;width:100%;border:.1vmin solid black;margin-top:9.8vmin;">
-      </div>
+    <div id="spellingDiv" ref="spellingDiv"
+      style="overflow: hidden; height: 49vmin; position: relative;user-select: none;">
+
+    </div>
+
+    <div ref="spellingOutlineDiv"
+      style="height:7.7vmin;border:.1vmin solid black;position:absolute;top:37.6vmin;user-select:none;">
     </div>
 
     <button @click="awesum.goBack" id="backButton" class="backButton" style="position:absolute;left:1vmin;top:20vmin;">
@@ -387,9 +444,9 @@ export default {
       <FaForward />
     </button>
 
-    <div style="margin-top:10vmin;overflow:hidden;white-space: nowrap;width:90vmin;">
-      <div ref="footerDiv" style="position:relative">
-      </div>
+    <div style="margin-top:10vmin;overflow:hidden;white-space: nowrap;width:90vmin;user-select: none;">
+      <button ref="footerDiv" style="position:relative;left:0;background: none;border:none;">
+      </button>
     </div>
 
   </div>

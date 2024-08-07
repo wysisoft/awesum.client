@@ -17,7 +17,7 @@ import SpellingView from "@/views/SpellingView.vue";
 import SpellingUnitView from "@/views/SpellingUnitView.vue";
 import SpellingSettingsView from "@/views/SpellingSettingsView.vue";
 
-import SpellingItemSettingsView from "@/views/SpellingSettingsView.vue";
+import SpellingItemSettingsView from "@/views/SpellingItemSettingsView.vue";
 
 
 
@@ -207,6 +207,7 @@ Global.router = createRouter({
 })
 
 Global.router.beforeEach(async (to, from, next) => {
+
 
   //all the reasons why we might want to redirect or 
   if (
