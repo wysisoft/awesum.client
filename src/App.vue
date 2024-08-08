@@ -5,51 +5,23 @@ import { Global } from './global';
 import { I18nGlobal } from './i18nGlobal';
 import { ref } from 'vue';
 import { ItemType } from './itemType';
-
+import * as Breadcrumb from './components/Breadcrumb.vue'
 
 
 export default {
-
+components: {
+  Breadcrumb
+},
   setup() {
     const { isFullscreen, toggle } = useFullscreen()
-const breadcrumb = ref(null as any as HTMLElement);
 
 
     return {
       isFullscreen,
       toggle,
-      Global,
-      breadcrumb
+      Global
+      
     };
-  },
-  mounted() {
-    this.breadcrumb = this.$refs.breadcrumb as HTMLElement;
-
-    if(this.awesum.currentDatabaseItem){
-      var li = document.createElement('li');
-      li.innerText = this.awesum.currentDatabaseItem.text;
-      this.breadcrumb.prepend(li);
-    }
-    if(this.awesum.currentDatabaseUnit){
-      var li = document.createElement('li');
-      li.innerText = this.awesum.currentDatabaseUnit.name;
-      this.breadcrumb.prepend(li);
-    }
-    if(this.awesum.currentItemType){
-      var li = document.createElement('li');
-      li.innerText = ItemType[this.awesum.currentItemType.type];
-      this.breadcrumb.prepend(li);
-    }
-    if(this.awesum.currentDatabase){
-      var li = document.createElement('li');
-      li.innerText = this.awesum.currentDatabase.name
-      this.breadcrumb.prepend(li);
-    }
-    if(this.awesum.currentServerApp){
-      var li = document.createElement('li');
-      li.innerText = this.awesum.currentServerApp.name
-      this.breadcrumb.prepend(li);
-    }
   },
   methods: {
     showEdit() {
@@ -152,11 +124,7 @@ const breadcrumb = ref(null as any as HTMLElement);
 
     </div>
 
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb" ref="breadcrumb">
-        
-      </ol>
-    </nav>
+<Breadcrumb :key="$route.path" />    
 
     <div id="appViewContent">
 

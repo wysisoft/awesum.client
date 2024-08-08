@@ -241,12 +241,18 @@ export class AwesumDb extends Dexie {
             debugger;
         });
 
+        
+this.serverApps.hook("creating",  (primKey, obj, transaction) => {obj.version++});
+this.serverDatabases.hook("creating",  (primKey, obj, transaction) => {obj.version++});
+this.serverDatabaseTypes.hook("creating",  (primKey, obj, transaction) => {obj.version++});
+this.serverDatabaseUnits.hook("creating",  (primKey, obj, transaction) => {obj.version++});
+this.serverDatabaseItems.hook("creating",  (primKey, obj, transaction) => {obj.version++});
 
-db.serverApps.hook("creating", function (primKey:number, obj:ServerApp, trans) {obj.version++;obj.lastModified=new Date().toISOString()}).hook("updating", function (mods, primKey, obj, trans) {obj.version++;obj.lastModified=new Date().toISOString()});
-db.serverDatabases.hook("creating", function (primKey, obj:ServerApp, trans) {obj.version++;obj.lastModified=new Date().toISOString()}).hook("updating", function (mods, primKey, obj, trans) {obj.version++;obj.lastModified=new Date().toISOString()});
-db.serverDatabaseTypes.hook("creating", function (primKey, obj:ServerApp, trans) {obj.version++;obj.lastModified=new Date().toISOString()}).hook("updating", function (mods, primKey, obj, trans) {obj.version++;obj.lastModified=new Date().toISOString()});
-db.serverDatabaseUnits.hook("creating", function (primKey, obj:ServerApp, trans) {obj.version++;obj.lastModified=new Date().toISOString()}).hook("updating", function (mods, primKey, obj, trans) {obj.version++;obj.lastModified=new Date().toISOString()});
-db.serverDatabaseItems.hook("creating", function (primKey, obj:ServerApp, trans) {obj.version++;obj.lastModified=new Date().toISOString()}).hook("updating", function (mods, primKey, obj, trans) {obj.version++;obj.lastModified=new Date().toISOString()});
+this.serverApps.hook("updating",  (modifications,primKey, obj, transaction) => {obj.version++});
+this.serverDatabases.hook("updating",  (modifications,primKey, obj, transaction) => {obj.version++});
+this.serverDatabaseTypes.hook("updating",  (modifications,primKey, obj, transaction) => {obj.version++});
+this.serverDatabaseUnits.hook("updating",  (modifications,primKey, obj, transaction) => {obj.version++});
+this.serverDatabaseItems.hook("updating",  (modifications,primKey, obj, transaction) => {obj.version++});
 
     }
 }

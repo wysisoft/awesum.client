@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    Breadcrumb: typeof import('./src/components/Breadcrumb.vue')['default']
     CgPlayButtonR: typeof import('@kalimahapps/vue-icons/cg')['CgPlayButtonR']
     ChRefresh: typeof import('@kalimahapps/vue-icons/ch')['ChRefresh']
     EditAudioComponent: typeof import('./src/components/EditAudioComponent.vue')['default']

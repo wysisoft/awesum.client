@@ -36,6 +36,7 @@ import { ItemType } from "@/itemType";
 import AppView from "@/views/AppView.vue";
 import { ItemLevel } from '@/itemLevel';
 import { ServerDatabaseUnit } from '@/clientClasses/ServerDatabaseUnit';
+import { awesum } from '../awesum';
 
 declare module 'vue-router' {
   interface RouteMeta {
@@ -207,6 +208,12 @@ Global.router = createRouter({
 })
 
 Global.router.beforeEach(async (to, from, next) => {
+
+  awesum.currentServerApp = null;
+  awesum.currentDatabase = null;
+  awesum.currentItemType = null;
+  awesum.currentDatabaseUnit = null;
+  awesum.currentDatabaseItem = null;
 
 
   //all the reasons why we might want to redirect or 

@@ -191,22 +191,22 @@ export default {
           e.stopPropagation()
           e.preventDefault();
         }
-        else if (e.key === 'ArrowRight') {
-          var next = e.target.nextElementSibling;
-          if (next) {
-            next.focus();
-          }
-          e.stopPropagation()
-          e.preventDefault();
-        }
-        else if (e.key === 'ArrowLeft') {
-          var prev = e.target.previousElementSibling;
-          if (prev) {
-            prev.focus();
-          }
-          e.stopPropagation()
-          e.preventDefault();
-        }
+        // else if (e.key === 'ArrowRight') {
+        //   var next = e.target.nextElementSibling;
+        //   if (next) {
+        //     next.focus();
+        //   }
+        //   e.stopPropagation()
+        //   e.preventDefault();
+        // }
+        // else if (e.key === 'ArrowLeft') {
+        //   var prev = e.target.previousElementSibling;
+        //   if (prev) {
+        //     prev.focus();
+        //   }
+        //   e.stopPropagation()
+        //   e.preventDefault();
+        // }
         else {
           var chars = e.target.childNodes;
           var letterTop = 0;
@@ -257,7 +257,7 @@ export default {
 
         }
 
-        if (this.mouseDown && Math.abs(e.clientY - this.mousePos) > 200) {
+        if (this.mouseDown && Math.abs(e.clientY - this.mousePos) > 100) {
           var diff = (e.clientY - this.mousePos);
           if (diff > 0 && parseFloat((this.button as HTMLButtonElement)!.style.top) <= -7.6
           ) {
